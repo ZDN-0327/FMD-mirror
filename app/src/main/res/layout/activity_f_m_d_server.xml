@@ -150,14 +150,6 @@
                 android:ems="10"
                 android:text="@string/Settings_FMDServer_Logout_Button" />
 
-            <Button
-                android:id="@+id/buttonDeleteData"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_normal"
-                android:ems="10"
-                android:text="@string/Settings_FMDServer_Delete_Account" />
-
             <!-- Push -->
 
             <include layout="@layout/activity_f_m_d_server_section_push" />
@@ -304,6 +296,51 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/margin_small"
                 android:text="@string/Enable" />
+
+            <!-- Privacy -->
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                style="@style/FMD.Text.SectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/Settings_FMDServer_Privacy_Title" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:text="@string/Settings_FMDServer_Privacy_Description" />
+
+            <Button
+                android:id="@+id/buttonDeleteData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:ems="10"
+                android:text="@string/Settings_FMDServer_Delete_Account" />
+
+            <Button
+                android:id="@+id/buttonDeleteLocations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:ems="10"
+                android:text="@string/Settings_FMDServer_Delete_Locations" />
+
+            <Button
+                android:id="@+id/buttonDeletePictures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:ems="10"
+                android:text="@string/Settings_FMDServer_Delete_Pictures" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

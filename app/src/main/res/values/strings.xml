@@ -340,5 +340,9 @@
 
     <!-- Varia -->
     <string name="MH_Pin_Accepted">Pin accepted!</string>
+    <string name="Settings_FMDServer_Privacy_Title">Privacy</string>
+    <string name="Settings_FMDServer_Privacy_Description">You can delete specific data or all of it if you prefer.</string>
+    <string name="Settings_FMDServer_Delete_Locations">Delete all stored Locations</string>
+    <string name="Settings_FMDServer_Delete_Pictures">Delete all stored Pictures</string>
 
 </resources>
