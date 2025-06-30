@@ -83,13 +83,16 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
 
         findViewById(R.id.buttonChangePassword).setOnClickListener(this::onChangePasswordClicked);
         findViewById(R.id.buttonLogout).setOnClickListener(this::onLogoutClicked);
-        findViewById(R.id.buttonDeleteData).setOnClickListener(this::onDeleteClicked);
 
         findViewById(R.id.buttonOpenPushDistributor).setOnClickListener(this::onOpenPushDistributorClicked);
         findViewById(R.id.buttonCopyPushDistributor).setOnClickListener(this::onCopyPushDistributorClicked);
         findViewById(R.id.buttonCopyPushUrl).setOnClickListener(this::onCopyPushUrlClicked);
         findViewById(R.id.buttonRegisterPush).setOnClickListener(this::onRegisterPushClicked);
         findViewById(R.id.buttonOpenUnifiedPush).setOnClickListener(this::onOpenUnifiedPushClicked);
+
+        findViewById(R.id.buttonDeleteData).setOnClickListener(this::onDeleteClicked);
+        findViewById(R.id.buttonDeleteLocations).setOnClickListener(this::onDeleteLocations);
+        findViewById(R.id.buttonDeletePictures).setOnClickListener(this::onDeletePictures);
 
         editTextCheckInterval = findViewById(R.id.editTextCheckInterval);
         editTextCheckInterval.setText(settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS).toString());
@@ -231,6 +234,27 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 .setTitle(getString(R.string.Settings_FMDServer_Delete_Account))
                 .setMessage(R.string.Settings_FMDServer_Alert_DeleteData_Desc)
                 .setPositiveButton(getString(R.string.Ok), (dialog, whichButton) -> runDelete())
+                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void onDeleteLocations(View view){
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.Settings_FMDServer_Delete_Locations))
+                .setMessage(R.string.Settings_FMDServer_Alert_Delete_Locations_Desc)
+                .setPositiveButton(getString(R.string.Ok), (dialog, whichButton) ->
+                        fmdServerRepo.deleteLocations(error ->
+                                Toast.makeText(view.getContext(), " ", Toast.LENGTH_LONG).show()))                .setNegativeButton(getString(R.string.cancel), null)
+                .show();
+    }
+
+    private void onDeletePictures(View view){
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(getString(R.string.Settings_FMDServer_Delete_Pictures))
+                .setMessage(R.string.Settings_FMDServer_Alert_Delete_Pictures_Desc)
+                .setPositiveButton(getString(R.string.Ok), (dialog, whichButton) ->
+                        fmdServerRepo.deletePictures(error ->
+                                Toast.makeText(view.getContext(), " ", Toast.LENGTH_LONG).show()))
                 .setNegativeButton(getString(R.string.cancel), null)
                 .show();
     }

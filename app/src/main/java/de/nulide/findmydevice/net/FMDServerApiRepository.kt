@@ -4,6 +4,7 @@ import android.content.Context
 import com.android.volley.Request.Method
 import com.android.volley.RequestQueue
 import com.android.volley.Response
+import com.android.volley.Response.ErrorListener
 import com.android.volley.VolleyError
 import de.nulide.findmydevice.data.EncryptedSettingsRepository
 import de.nulide.findmydevice.data.Settings
@@ -36,7 +37,9 @@ class FMDServerApiRepository private constructor(spec: FMDServerApiRepoSpec) {
         private const val URL_ACCESS_TOKEN = "/requestAccess"
         private const val URL_COMMAND = "/command"
         private const val URL_LOCATION = "/location"
+        private const val URL_DELETE_LOCATIONS = "/locations/delete"
         private const val URL_PICTURE = "/picture"
+        private const val URL_DELETE_PICTURES = "/pictures/delete"
         private const val URL_DEVICE = "/device"
         private const val URL_PUSH = "/push"
         private const val URL_SALT = "/salt"
@@ -622,6 +625,43 @@ class FMDServerApiRepository private constructor(spec: FMDServerApiRepoSpec) {
 
         val request = JsonPostRequest(
             Method.POST, baseUrl + URL_LOCATION, jsonObject,
+            { _ -> },
+            onError,
+        )
+        queue.add(request)
+    }
+
+    fun deleteLocations(onError: ErrorListener) {
+        doRequestWithCachedToken<Unit>(
+            doRequest = { accessToken, _, onError2 ->
+                deleteDataInternal(accessToken, URL_DELETE_LOCATIONS, onError2)
+            },
+            onResponse = { _ -> },
+            onError,
+        )
+    }
+
+    fun deletePictures(onError: ErrorListener){
+        doRequestWithCachedToken<Unit>(
+            doRequest = { accessToken, _, onError2 ->
+                deleteDataInternal(accessToken, URL_DELETE_PICTURES, onError2)
+            },
+            onResponse = { _ -> },
+            onError,
+        )
+    }
+
+    private fun deleteDataInternal(accessToken: String, endpoint: String, onError: ErrorListener){
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("IDT", accessToken)
+            jsonObject.put("Data", "")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+
+        val request = JsonPostRequest(
+            Method.POST, baseUrl + endpoint, jsonObject,
             { _ -> },
             onError,
         )
