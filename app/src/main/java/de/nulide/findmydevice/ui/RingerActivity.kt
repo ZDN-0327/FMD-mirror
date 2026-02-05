@@ -16,6 +16,7 @@ import de.nulide.findmydevice.commands.RING_DURATION_MAX_SECS
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.RingerUtils
+import de.nulide.findmydevice.utils.RingerUtils.streamType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -91,11 +92,11 @@ class RingerActivity : FmdActivity() {
         val notificationManager = getSystemService(NotificationManager::class.java)
 
         oldRingerMode = audioManager.ringerMode
-        oldAlarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM)
+        oldAlarmVolume = audioManager.getStreamVolume(streamType())
 
         audioManager.ringerMode = AudioManager.RINGER_MODE_NORMAL
-        val maxVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM)
-        audioManager.setStreamVolume(AudioManager.STREAM_ALARM, maxVolume, 0)
+        val maxVolume = audioManager.getStreamMaxVolume(streamType())
+        audioManager.setStreamVolume(streamType(), maxVolume, 0)
 
         oldInterruptionFiler = notificationManager.currentInterruptionFilter
         oldNotificationPolicy = notificationManager.notificationPolicy
@@ -111,7 +112,7 @@ class RingerActivity : FmdActivity() {
             audioManager.ringerMode = it
         }
         oldAlarmVolume?.let {
-            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, it, 0)
+            audioManager.setStreamVolume(streamType(), it, 0)
         }
 
         oldInterruptionFiler?.let {
