@@ -67,15 +67,10 @@ class NotificationReplyTransport(
         }
     }
 
-    override fun closeChannel() {
-        super.closeChannel()
-
+    private fun tryDismissNotification() {
         if (destination == null) {
             return
         }
-
-        // Only the NotificationListenService is allowed to dismiss another app's notification.
-        NotificationListenService.instance?.cancelNotification(destination.key)
 
         // As an additional fallback:
         // Try to dismiss the notification via a "mark as read" action, if it exists.
@@ -92,6 +87,9 @@ class NotificationReplyTransport(
                 }
             }
         }
+
+        // Only the NotificationListenService is allowed to dismiss another app's notification.
+        NotificationListenService.instance?.cancelNotification(destination.key)
     }
 
     private fun sendQuickReply(context: Context, notification: Notification, message: String) {
@@ -125,6 +123,13 @@ class NotificationReplyTransport(
                     intent,
                     resultsBundle
                 )
+
+                // Dismiss the notification BEFORE sending the response.
+                // If we first send a response and then dismiss, the messenger app may post a NEW notification
+                // that includes the original message, causing infinite command execution loops.
+                // The pending intent to sent the response should still work, despite this ordering.
+                tryDismissNotification()
+
                 action.actionIntent.send(context, 0, intent)
                 return
             }
