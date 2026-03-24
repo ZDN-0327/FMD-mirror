@@ -192,7 +192,23 @@ fun requestCellInfo(context: Context, onCellParas: (List<CellParameters>) -> Uni
 
     val onCellInfoUpdate = { cellInfos: List<CellInfo> ->
         val paras = cellInfos
-            .mapNotNull { CellParameters.fromCellInfo(it) }
+            .mapNotNull {
+                // TODO: Debug https://gitlab.com/fmd-foss/fmd-android/-/work_items/399
+                if (it is CellInfoLte && it.cellIdentity.mcc != UNAVAILABLE) {
+                    val id = it.cellIdentity
+                    val TAG = "DEBUG-399"
+                    context.log().d(TAG, "----- NEW CELL -----")
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        context.log().d(TAG, "getMccString='${id.getMccString()}'")
+                        context.log().d(TAG, "getMncString='${id.getMncString()}'")
+                    }
+                    context.log().d(TAG, "getMcc='${id.getMcc()}'")
+                    context.log().d(TAG, "getMnc='${id.getMnc()}'")
+                }
+                // end debug
+
+                CellParameters.fromCellInfo(it)
+            }
             .filter { it.hasEnoughData() }
             .toList()
         onCellParas(paras)
