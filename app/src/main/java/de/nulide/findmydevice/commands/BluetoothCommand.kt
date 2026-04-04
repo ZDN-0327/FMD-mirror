@@ -48,19 +48,22 @@ class BluetoothCommand(context: Context) : Command(context) {
             return
         }
 
+        var msg = ""
         if (args.isEmpty()) {
-            val msg = if (bluetoothAdapter.isEnabled) {
+            msg = if (bluetoothAdapter.isEnabled) {
                 context.getString(R.string.cmd_bluetooth_response_is_on)
             } else {
                 context.getString(R.string.cmd_bluetooth_response_is_off)
             }
-            transport.send(context, msg)
         } else if (args.contains("on")) {
             bluetoothAdapter.enable()
-            transport.send(context, context.getString(R.string.cmd_bluetooth_response_on))
+            msg = context.getString(R.string.cmd_bluetooth_response_on)
         } else if (args.contains("off")) {
             bluetoothAdapter.disable()
-            transport.send(context, context.getString(R.string.cmd_bluetooth_response_off))
+            msg = context.getString(R.string.cmd_bluetooth_response_off)
         }
+        msg += "\n\n"
+        msg += context.getString(R.string.cmd_deprecation)
+        transport.send(context, msg)
     }
 }

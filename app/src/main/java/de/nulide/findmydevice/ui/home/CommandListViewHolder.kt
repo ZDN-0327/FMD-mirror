@@ -37,6 +37,15 @@ class CommandListViewHolder(
             textViewLongDescription.visibility = View.GONE
         }
 
+        // Bluetooth deprecation warning
+        val textViewDeprecation = itemView.findViewById<TextView>(R.id.deprecation)
+        if (item.keyword == "bluetooth") {
+            textViewDeprecation.text = context.getString(R.string.cmd_deprecation)
+            textViewDeprecation.visibility = View.VISIBLE
+        } else {
+            textViewDeprecation.visibility = View.GONE
+        }
+
         // Required permissions
         val permReqTitle = itemView.findViewById<TextView>(R.id.permissions_required_title)
         val permReqList = itemView.findViewById<LinearLayout>(R.id.permissions_required_list)
