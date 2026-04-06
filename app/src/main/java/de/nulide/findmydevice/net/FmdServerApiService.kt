@@ -64,7 +64,7 @@ interface FmdServerApiService {
     fun login(
         username: String,
         password: String,
-        listener: Listener<Unit>,
+        listener: Listener<ProtoVersion>,
         errorListener: ErrorListener,
     )
 
@@ -75,7 +75,7 @@ interface FmdServerApiService {
         username: String,
         password: String,
         registrationToken: String,
-        listener: Listener<Unit>,
+        listener: Listener<ProtoVersion>,
         errorListener: ErrorListener,
     )
 

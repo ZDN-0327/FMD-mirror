@@ -94,7 +94,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         username: String,
         password: String,
         registrationToken: String,
-        listener: Listener<Unit>,
+        listener: Listener<ProtoVersion>,
         errorListener: ErrorListener,
     ) {
         loadBaseUrl()
@@ -121,7 +121,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
                     settingsRepo.set(Settings.SET_FMDSERVER_ID, response["DeviceId"])
                     settingsRepo.set(Settings.SET_FMD_CRYPT_HPW, hashedPW)
                     settingsRepo.setKeys(keys)
-                    listener.onResponse(Unit)
+                    listener.onResponse(FMD_SERVER_PROTO_V1)
                 } catch (e: JSONException) {
                     context.log().w(TAG, "registerAccount: ${e.stackTraceToString()}")
                     errorListener.onError("Response has no DeviceId field")
@@ -360,7 +360,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
     override fun login(
         username: String,
         password: String,
-        listener: Listener<Unit>,
+        listener: Listener<ProtoVersion>,
         errorListener: ErrorListener,
     ) {
         loadBaseUrl()
@@ -373,7 +373,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         username: String,
         password: String,
         saltBase64: String,
-        listener: Listener<Unit>,
+        listener: Listener<ProtoVersion>,
         errorListener: ErrorListener,
     ) {
         val authPassword = CypherUtils.hashPasswordForLogin(password, saltBase64)
@@ -397,7 +397,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
                             set(Settings.SET_FMD_CRYPT_HPW, authPassword)
                             setKeys(fmdKeyPair)
                         }
-                        listener.onResponse(Unit)
+                        listener.onResponse(FMD_SERVER_PROTO_V1)
                     })
             })
     }

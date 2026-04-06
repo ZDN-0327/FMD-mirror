@@ -8,8 +8,10 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 
-const val FMD_SERVER_PROTO_V1 = 1
-const val FMD_SERVER_PROTO_V2 = 2
+typealias ProtoVersion = Int
+
+const val FMD_SERVER_PROTO_V1: ProtoVersion = 1
+const val FMD_SERVER_PROTO_V2: ProtoVersion = 2
 
 internal const val ACCESS_TOKEN_VALIDITY_SECS = 7 * 24 * 60 * 60 // 1 week
 
@@ -26,7 +28,7 @@ class FmdServerRepository(
     /*
     fun getApiService(): FmdServerApiService {
         // TODO: Store proto version during register/login
-        val accountProtocolVersion = (settingsRepo.get(Settings.SET_FMD_CRYPT_PROTO) as Number).toLong()
+        val accountProtocolVersion = (settingsRepo.get(Settings.SET_FMD_CRYPT_PROTO) as Number).toInt() as ProtoVersion
 
         if (accountProtocolVersion == FMD_SERVER_PROTO_V1) {
             val spec = FmdServerApiV1RepoSpec(context)
