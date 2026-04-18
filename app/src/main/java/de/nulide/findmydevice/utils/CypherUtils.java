@@ -2,8 +2,6 @@ package de.nulide.findmydevice.utils;
 
 import android.util.Base64;
 
-import androidx.annotation.VisibleForTesting;
-
 import org.bouncycastle.crypto.generators.Argon2BytesGenerator;
 import org.bouncycastle.crypto.params.Argon2Parameters;
 import org.bouncycastle.util.Arrays;
@@ -52,6 +50,7 @@ public class CypherUtils {
 
     public static final int AES_GCM_IV_SIZE_BYTES = 12; // byte = 96 bit
     public static final int AES_GCM_KEY_SIZE_BYTES = 32; // byte = 256 bit
+    public static final int AES_GCM_TAG_SIZE_BYTES = 16;
     public static final int AES_GCM_TAG_SIZE_BITS = 128; // bit = 16 byte
 
     private static final int RSA_KEY_SIZE_BITS = 3072;
@@ -125,6 +124,10 @@ public class CypherUtils {
         return hashPasswordArgon2(password, salt, ARGON2_M);
     }
 
+    public static Argon2Result hashPasswordArgon2(byte[] passwordBytes, byte[] salt) {
+        return hashPasswordArgon2(passwordBytes, salt, ARGON2_M);
+    }
+
     private static Argon2Result hashPasswordArgon2(String password, byte[] salt, int M) {
         // Inspired by https://github.com/spring-projects/spring-security/blob/6.1.0/crypto/src/main/java/org/springframework/security/crypto/argon2/Argon2PasswordEncoder.java
         // and https://www.baeldung.com/java-argon2-hashing#2-implement-argon2-hashing-with-bouncy-castle
@@ -134,6 +137,10 @@ public class CypherUtils {
             throw new RuntimeException("Missing context string");
         }
         byte[] passwordBytes = password.getBytes(StandardCharsets.UTF_8);
+        return hashPasswordArgon2(passwordBytes, salt, M);
+    }
+
+    private static Argon2Result hashPasswordArgon2(byte[] passwordBytes, byte[] salt, int M) {
         byte[] out = new byte[ARGON2_HASH_LENGTH];
 
         Argon2Parameters params = new Argon2Parameters.Builder(Argon2Parameters.ARGON2_id)
