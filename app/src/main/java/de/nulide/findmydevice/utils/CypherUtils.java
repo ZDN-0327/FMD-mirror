@@ -50,10 +50,9 @@ public class CypherUtils {
     // https://pages.nist.gov/800-63-4/sp800-63b.html#passwordver
     public static final int MIN_PASSWORD_LENGTH = 8;
 
-    private static final int AES_GCM_IV_SIZE_BYTES = 12; // byte = 96 bit
-    @VisibleForTesting
-    protected static final int AES_GCM_KEY_SIZE_BYTES = 32; // byte = 256 bit
-    private static final int AES_GCM_TAG_SIZE_BITS = 128; // bit = 16 byte
+    public static final int AES_GCM_IV_SIZE_BYTES = 12; // byte = 96 bit
+    public static final int AES_GCM_KEY_SIZE_BYTES = 32; // byte = 256 bit
+    public static final int AES_GCM_TAG_SIZE_BITS = 128; // bit = 16 byte
 
     private static final int RSA_KEY_SIZE_BITS = 3072;
 
@@ -63,7 +62,7 @@ public class CypherUtils {
     private static final int ARGON2_M = 131072;
     private static final int ARGON2_M_LOCAL = 32768;
     private static final int ARGON2_HASH_LENGTH = 32; // byte = 256 bit
-    private static final int ARGON2_SALT_LENGTH = 16; // byte = 128 bit
+    public static final int ARGON2_SALT_LENGTH = 16; // byte = 128 bit
 
     // Contextualise all usages of Argon2 to provide some hacky key separation
     private static final String CONTEXT_STRING_ASYM_KEY_WRAP = "context:asymmetricKeyWrap";
@@ -122,7 +121,7 @@ public class CypherUtils {
         return hashPasswordArgon2(password, saltBytes);
     }
 
-    private static Argon2Result hashPasswordArgon2(String password, byte[] salt) {
+    public static Argon2Result hashPasswordArgon2(String password, byte[] salt) {
         return hashPasswordArgon2(password, salt, ARGON2_M);
     }
 
@@ -355,6 +354,10 @@ public class CypherUtils {
     // ------ Section: symmetric key ------
 
     public static byte[] encryptWithAes(byte[] msgBytes, byte[] aesKey) {
+        return encryptWithAes(msgBytes, null, aesKey);
+    }
+
+    public static byte[] encryptWithAes(byte[] msgBytes, byte[] adBytes, byte[] aesKey) {
         if (aesKey.length != AES_GCM_KEY_SIZE_BYTES) {
             // This is a bug
             throw new RuntimeException("Bad AES key size:" + aesKey.length);
@@ -366,6 +369,9 @@ public class CypherUtils {
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, gcmSpec);
+            if (adBytes != null) {
+                cipher.updateAAD(adBytes);
+            }
             byte[] ctBytes = cipher.doFinal(msgBytes);
 
             return Arrays.concatenate(ivBytes, ctBytes);
@@ -378,7 +384,11 @@ public class CypherUtils {
         return null;
     }
 
-    protected static byte[] decryptWithAes(byte[] msgBytes, byte[] aesKey) {
+    public static byte[] decryptWithAes(byte[] msgBytes, byte[] aesKey) {
+        return decryptWithAes(msgBytes, null, aesKey);
+    }
+
+    public static byte[] decryptWithAes(byte[] msgBytes, byte[] adBytes, byte[] aesKey) {
         try {
             byte[] ivBytes = Arrays.copyOfRange(msgBytes, 0, AES_GCM_IV_SIZE_BYTES);
             byte[] ctBytes = Arrays.copyOfRange(msgBytes, AES_GCM_IV_SIZE_BYTES, msgBytes.length);
@@ -388,6 +398,9 @@ public class CypherUtils {
 
             Cipher cipher = Cipher.getInstance("AES/GCM/NoPadding");
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, gcmSpec);
+            if (adBytes != null) {
+                cipher.updateAAD(adBytes);
+            }
             return cipher.doFinal(ctBytes);
 
         } catch (NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException |
