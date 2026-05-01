@@ -1,6 +1,8 @@
 package de.nulide.findmydevice.net
 
 import android.content.Context
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
@@ -12,9 +14,11 @@ import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
 import de.nulide.findmydevice.workers.CommandExecutionWorker
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class ServerCommandDownloader(
-    private val context: Context,
+    private val context: Context
 ) {
 
     companion object {
@@ -48,8 +52,10 @@ class ServerCommandDownloader(
         context.log().e(TAG, msg)
 
         if (shouldRetry) {
-            // TODO: coroutine with basic backoff + sleep
-            download()
+            ProcessLifecycleOwner.get().lifecycleScope.launch {
+                delay(1000L * tryCount)
+                download()
+            }
         }
     }
 
