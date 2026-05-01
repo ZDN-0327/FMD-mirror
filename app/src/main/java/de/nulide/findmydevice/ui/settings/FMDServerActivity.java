@@ -33,7 +33,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.unifiedpush.android.connector.UnifiedPush;
 import org.unifiedpush.android.connector.data.ResolvedDistributor;
 
-import java.security.KeyPair;
+import java.util.Objects;
 
 import de.nulide.findmydevice.R;
 import de.nulide.findmydevice.data.BackgroundLocationType;
@@ -47,7 +47,6 @@ import de.nulide.findmydevice.services.FmdBatteryLowService;
 import de.nulide.findmydevice.services.ServerConnectivityCheckService;
 import de.nulide.findmydevice.services.ServerLocationUploadService;
 import de.nulide.findmydevice.ui.FmdActivity;
-import de.nulide.findmydevice.utils.CypherUtils;
 import de.nulide.findmydevice.utils.FmdLogKt;
 import de.nulide.findmydevice.utils.UnregisterUtil;
 import de.nulide.findmydevice.utils.Utils;
@@ -294,8 +293,11 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         LayoutInflater inflater = getLayoutInflater();
         final AlertDialog.Builder alert = new MaterialAlertDialogBuilder(this);
         alert.setTitle(getString(R.string.Settings_FMDServer_Change_Password_Button));
+        alert.setCancelable(false);
+
         View registerLayout = inflater.inflate(R.layout.dialog_password_change, null);
         alert.setView(registerLayout);
+
         EditText oldPasswordInput = registerLayout.findViewById(R.id.editTextFMDOldPassword);
         EditText passwordInput = registerLayout.findViewById(R.id.editTextPassword);
         alert.setView(registerLayout);
@@ -313,6 +315,9 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                     runChangePassword(oldPassword, password);
                 }
             }
+        });
+
+        alert.setNegativeButton(R.string.cancel, (dialog, whichButton) -> {
         });
         alert.show();
     }
@@ -346,37 +351,25 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         Utils.openUrl(this, "https://f-droid.org/en/packages/org.unifiedpush.distributor.sunup");
     }
 
-    private void runChangePassword(String oldPassword, String password) {
+    private void runChangePassword(String oldPassword, String newPassword) {
         showLoadingIndicator(this);
+
         // do expensive async crypto and hashing in a background thread (not on the UI thread)
         new Thread(() -> {
-            try {
-                KeyPair keyPair = CypherUtils.decryptPrivateKeyWithPassword((String) settings.get(Settings.SET_FMD_CRYPT_PRIVKEY), oldPassword);
-                if (keyPair == null) {
-                    Toast.makeText(this, R.string.pw_change_wrong_password, Toast.LENGTH_LONG).show();
-                    loadingDialog.cancel();
-                    return;
-                }
-                String newPrivKey = CypherUtils.encryptPrivateKeyWithPassword(keyPair.getPrivate(), password);
-                String hashedPW = CypherUtils.hashPasswordForLogin(password);
-
-                runOnUiThread(() -> {
-                    fmdServerRepo.changePassword(hashedPW, newPrivKey,
-                            (response -> {
-                                loadingDialog.cancel();
-                                Toast.makeText(this, R.string.pw_change_success, Toast.LENGTH_LONG).show();
-                            }),
-                            (error) -> {
-                                Toast.makeText(this, R.string.pw_change_network_failed, Toast.LENGTH_LONG).show();
-                                loadingDialog.cancel();
-                            });
-                });
-            } catch (Exception bdp) {
-                runOnUiThread(() -> {
-                    Toast.makeText(this, R.string.pw_change_wrong_password, Toast.LENGTH_LONG).show();
-                    loadingDialog.cancel();
-                });
-            }
+            fmdServerRepo.changePassword(oldPassword, newPassword,
+                    (response -> runOnUiThread(() -> {
+                        loadingDialog.cancel();
+                        Toast.makeText(this, R.string.pw_change_success, Toast.LENGTH_LONG).show();
+                    })),
+                    (error -> runOnUiThread(() -> {
+                        loadingDialog.cancel();
+                        if (Objects.equals(error.getMessage(), "WRONG_PASSWORD")) {
+                            Toast.makeText(this, R.string.pw_change_wrong_password, Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(this, R.string.pw_change_network_failed, Toast.LENGTH_LONG).show();
+                        }
+                    }))
+            );
         }).start();
     }
 
