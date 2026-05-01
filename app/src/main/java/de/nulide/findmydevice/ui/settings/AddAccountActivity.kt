@@ -151,7 +151,6 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
                         settingsRepo.setKeys(keys)
                         val hashedPW = CypherUtils.hashPasswordForLogin(password)
                         settingsRepo.set(Settings.SET_FMD_CRYPT_HPW, hashedPW)
-                        settingsRepo.set(Settings.SET_FMDSERVER_PASSWORD_SET, true)
 
                         fmdServerRepo.registerAccount(
                             username,
@@ -173,6 +172,8 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
         val loginLayout = layoutInflater.inflate(R.layout.dialog_login, null)
 
         val idInput = loginLayout.findViewById<EditText>(R.id.editTextFMDID)
+        idInput.setText(settingsRepo.get(Settings.SET_FMDSERVER_ID) as String) // cached for convenience
+
         val passwordInput = loginLayout.findViewById<EditText>(R.id.editTextPassword)
 
         val loginDialog = MaterialAlertDialogBuilder(context)
