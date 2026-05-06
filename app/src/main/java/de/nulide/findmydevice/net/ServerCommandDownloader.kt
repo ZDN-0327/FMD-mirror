@@ -7,7 +7,6 @@ import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
-import com.android.volley.VolleyError
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
@@ -38,15 +37,15 @@ class ServerCommandDownloader(
             return
         }
 
-        val fmdServerRepo = FMDServerApiRepository.getInstance(FMDServerApiRepoSpec(context))
+        val fmdServerRepo = FmdServerRepository(context).getApiService()
         fmdServerRepo.getCommand(::onResponse, ::onError)
     }
 
-    private fun onError(error: VolleyError) {
+    private fun onError(error: ServerError) {
         tryCount += 1
         val shouldRetry = tryCount < 3
 
-        val statusCode = error.networkResponse?.statusCode ?: 0
+        val statusCode = error.statusCode ?: 0
         val msg =
             "Error downloading command: statusCode=$statusCode msg=${error.message} attempt=$tryCount retrying=$shouldRetry"
         context.log().e(TAG, msg)
