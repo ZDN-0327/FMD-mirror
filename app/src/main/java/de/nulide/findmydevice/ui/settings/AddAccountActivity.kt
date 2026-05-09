@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import android.webkit.URLUtil
 import android.webkit.WebView
 import android.widget.Button
 import android.widget.EditText
@@ -242,17 +243,27 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
 
     override fun afterTextChanged(editable: Editable) {
         if (editable === editTextServerUrl.text) {
-            val url = editTextServerUrl.text.toString().removeSuffix("/")
-            settingsRepo.set(Settings.SET_FMDSERVER_URL, url)
-            if (url.isEmpty()) {
-                btnRegister.isEnabled = false
-                btnLogin.isEnabled = false
-            } else {
-                btnRegister.isEnabled = true
-                btnLogin.isEnabled = true
-            }
-            getAndShowServerVersionWithDelay(this, url)
+            onNewUrlEntered(editTextServerUrl.text.toString().removeSuffix("/"))
         }
+    }
+
+    private fun onNewUrlEntered(url: String) {
+        if (!URLUtil.isValidUrl(url)) {
+            textViewServerVersion.text = getString(R.string.invalid_url)
+            btnRegister.isEnabled = false
+            btnLogin.isEnabled = false
+            return
+        }
+
+        settingsRepo.set(Settings.SET_FMDSERVER_URL, url)
+        if (url.isEmpty()) {
+            btnRegister.isEnabled = false
+            btnLogin.isEnabled = false
+        } else {
+            btnRegister.isEnabled = true
+            btnLogin.isEnabled = true
+        }
+        getAndShowServerVersionWithDelay(this, url)
     }
 
     private fun onRegisterOrLoginSuccess(unit: Unit) {
