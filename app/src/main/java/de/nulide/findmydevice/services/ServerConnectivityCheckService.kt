@@ -35,7 +35,7 @@ class ServerConnectivityCheckService : FmdJobService() {
         fun scheduleJob(context: Context) {
             val settings = SettingsRepository.getInstance(context)
             val interval =
-                (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS) as Number).toLong()
+                (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS) as Long)
             scheduleJob(context, interval)
         }
 
@@ -69,7 +69,7 @@ class ServerConnectivityCheckService : FmdJobService() {
         fun shouldNudgeAboutConnectivityCheck(context: Context): Boolean {
             val settings = SettingsRepository.getInstance(context)
             val interval =
-                (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS) as Number).toLong()
+                (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS) as Long)
             return settings.serverAccountExists() && interval <= 0L
         }
 
@@ -129,10 +129,10 @@ class ServerConnectivityCheckService : FmdJobService() {
                 }
 
                 val lastSuccessMillis =
-                    (settings.get(Settings.SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME) as Number).toLong()
+                    (settings.get(Settings.SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME) as Long)
 
                 val notifyAfterHours =
-                    (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_NOTIFY_AFTER_HOURS) as Number).toLong()
+                    (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_NOTIFY_AFTER_HOURS) as Long)
                 val notifyAfterMillis = notifyAfterHours * 60 * 60 * 1000
 
                 // Notify the user if the last successful connection is too long ago

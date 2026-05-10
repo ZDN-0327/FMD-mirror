@@ -575,7 +575,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
                     // This only needs to be strictly increasing, to prevent replay attacks.
                     // It doesn't need to be "current", i.e. we don't care how far away from "now" this timestamp is.
                     val lastCmdMillis =
-                        (settingsRepo.get(Settings.SET_FMDSERVER_LAST_CMD_MILLIS) as Number).toLong()
+                        (settingsRepo.get(Settings.SET_FMDSERVER_LAST_CMD_MILLIS) as Long)
                     if (time <= lastCmdMillis) {
                         val errorMsg = "Timestamp is not increasing: $time <= $lastCmdMillis"
                         context.log().e(TAG, errorMsg)

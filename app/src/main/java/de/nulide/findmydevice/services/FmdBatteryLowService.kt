@@ -89,7 +89,7 @@ class FmdBatteryLowService : FmdJobService() {
 
         // Gson quirk: Gson may interpret long values as doubles.
         // This workaround ensures that the value is interpreted as a long.
-        val lastUpload = (settings.get(Settings.SET_LAST_LOW_BAT_UPLOAD) as Number).toLong()
+        val lastUpload = (settings.get(Settings.SET_LAST_LOW_BAT_UPLOAD) as Long)
         val now = System.currentTimeMillis()
 
         // Don't upload too often
