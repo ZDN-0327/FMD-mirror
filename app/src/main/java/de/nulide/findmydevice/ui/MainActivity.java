@@ -1,6 +1,5 @@
 package de.nulide.findmydevice.ui;
 
-import static org.unifiedpush.android.connector.ConstantsKt.INSTANCE_DEFAULT;
 import static de.nulide.findmydevice.net.ServerRequiredVersionCheckKt.isMinRequiredVersion;
 import static de.nulide.findmydevice.services.UnifiedPushServiceKt.isRegisteredWithUnifiedPush;
 import static de.nulide.findmydevice.ui.SetupWarningsActivityKt.shouldShowSetupWarnings;
@@ -20,8 +19,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationBarView;
 
-import org.unifiedpush.android.connector.UnifiedPush;
-
 import de.nulide.findmydevice.BuildConfig;
 import de.nulide.findmydevice.R;
 import de.nulide.findmydevice.data.Settings;
@@ -31,7 +28,6 @@ import de.nulide.findmydevice.net.ServerCommandDownloader;
 import de.nulide.findmydevice.services.TempContactExpiredService;
 import de.nulide.findmydevice.ui.home.CommandListFragment;
 import de.nulide.findmydevice.ui.home.TransportListFragment;
-import de.nulide.findmydevice.ui.onboarding.UpdateboardingModernCryptoActivity;
 import de.nulide.findmydevice.ui.settings.FMDServerActivity;
 import de.nulide.findmydevice.ui.settings.SettingsFragment;
 import de.nulide.findmydevice.warnings.PushWarningsKt;
@@ -83,13 +79,6 @@ public class MainActivity extends FmdActivity {
 
         if (((Long) settings.get(Settings.SET_APP_CRASHED_LOG_ENTRY)) == 1) {
             Intent intent = new Intent(this, CrashedActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
-
-        if (!(Boolean) settings.get(Settings.SET_UPDATEBOARDING_MODERN_CRYPTO_COMPLETED)) {
-            Intent intent = new Intent(this, UpdateboardingModernCryptoActivity.class);
             startActivity(intent);
             finish();
             return;
