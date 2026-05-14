@@ -22,12 +22,12 @@ import java.util.Locale
 class AppearanceActivity : FmdActivity() {
 
     private lateinit var viewBinding: ActivityAppearanceBinding
-    private lateinit var settings: SettingsRepository
+    private lateinit var settingsRepo: SettingsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        settings = SettingsRepository.getInstance(this)
+        settingsRepo = SettingsRepository.getInstance(this)
 
         viewBinding = ActivityAppearanceBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
@@ -102,10 +102,10 @@ class AppearanceActivity : FmdActivity() {
     }
 
     fun setupTheme() {
-        val current = settings.get(Settings.SET_THEME) as String
-        val resId = if (current == Settings.VAL_THEME_LIGHT) {
+        val current = settingsRepo.settings.themeMode
+        val resId = if (current == Settings.THEME_LIGHT) {
             R.string.appearance_theme_light
-        } else if (current == Settings.VAL_THEME_DARK) {
+        } else if (current == Settings.THEME_DARK) {
             R.string.appearance_theme_dark
         } else {
             R.string.appearance_theme_follow_system
@@ -117,9 +117,9 @@ class AppearanceActivity : FmdActivity() {
 
     fun setupThemePicker(current: String) {
         val options = arrayOf(
-            Settings.VAL_THEME_FOLLOW_SYSTEM,
-            Settings.VAL_THEME_LIGHT,
-            Settings.VAL_THEME_DARK
+            Settings.THEME_FOLLOW_SYSTEM,
+            Settings.THEME_LIGHT,
+            Settings.THEME_DARK
         )
         val optionsStrings = arrayOf(
             getString(R.string.appearance_theme_follow_system),
@@ -134,7 +134,7 @@ class AppearanceActivity : FmdActivity() {
                 .setSingleChoiceItems(optionsStrings, checkedIdx) { _, idx ->
                     if (idx != checkedIdx) {
                         val new = options[idx]
-                        settings.set(Settings.SET_THEME, new)
+                        settingsRepo.update { copy(themeMode = new) }
                         recreate()
                     }
                 }
@@ -148,12 +148,12 @@ class AppearanceActivity : FmdActivity() {
             viewBinding.switchDynamicColors.visibility = View.GONE
         }
 
-        val isChecked = settings.get(Settings.SET_DYNAMIC_COLORS) as Boolean
+        val isChecked = settingsRepo.settings.themeDynamicColors
 
         viewBinding.switchDynamicColors.isChecked = isChecked
         viewBinding.switchDynamicColors.setOnCheckedChangeListener { _, newChecked ->
             if (newChecked != isChecked) {
-                settings.set(Settings.SET_DYNAMIC_COLORS, newChecked)
+                settingsRepo.update { copy(themeDynamicColors = newChecked) }
                 // Recreate the application in order for parent activities to pick up the change.
                 // XXX: This could also be solved by manually recreating the MainActivity, but this is easier for now.
                 ProcessPhoenix.triggerRebirth(this)

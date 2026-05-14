@@ -8,7 +8,6 @@ import android.content.Context
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.Utils
 import de.nulide.findmydevice.utils.log
@@ -79,23 +78,23 @@ class FmdBatteryLowService : FmdJobService() {
     }
 
     private fun handleLowBatteryUpload(context: Context) {
-        val settings = SettingsRepository.getInstance(context)
+        val settingsRepo = SettingsRepository.getInstance(context)
         context.log().i(TAG, "Handling low battery")
 
-        if (!(settings.get(Settings.SET_FMD_LOW_BAT_SEND) as Boolean)) {
+        if (!settingsRepo.settings.serverLowBatUpload) {
             context.log().i(TAG, "Disabled in settings, not uploading location.")
             return
         }
 
         // Gson quirk: Gson may interpret long values as doubles.
         // This workaround ensures that the value is interpreted as a long.
-        val lastUpload = (settings.get(Settings.SET_LAST_LOW_BAT_UPLOAD) as Long)
+        val lastUpload = settingsRepo.settings.lastLocTimeMillis
         val now = System.currentTimeMillis()
 
         // Don't upload too often
         if (lastUpload + UPLOAD_MIN_INTERVAL_MILLIS < now) {
+            // Rely on a successful notification fix that updates lastLocTimeMillis
             context.log().i(TAG, "Low battery: uploading location.")
-            settings.set(Settings.SET_LAST_LOW_BAT_UPLOAD, now)
             scheduleCommand(context)
         } else {
             context.log().i(TAG, "Last low battery upload too recent, skipping.")
@@ -103,8 +102,8 @@ class FmdBatteryLowService : FmdJobService() {
     }
 
     private fun scheduleCommand(context: Context) {
-        val settings = SettingsRepository.getInstance(context)
-        val fmdTriggerWord = settings.get(Settings.SET_FMD_COMMAND) as String
+        val settingsRepo = SettingsRepository.getInstance(context)
+        val fmdTriggerWord = settingsRepo.settings.commandKeyword
 
         val inputData = workDataOf(
             CommandExecutionWorker.KEY_COMMAND to "$fmdTriggerWord locate",

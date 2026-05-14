@@ -6,7 +6,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.EncryptedSettingsRepository
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.permissions.DeviceAdminPermission
 import de.nulide.findmydevice.transports.Transport
 import de.nulide.findmydevice.utils.log
@@ -39,7 +38,7 @@ class DeleteCommand(context: Context) : Command(context) {
         args: List<String>,
         transport: Transport<T>,
     ) {
-        if (!(settings.get(Settings.SET_WIPE_ENABLED) as Boolean)) {
+        if (!settingsRepo.settings.deleteEnabled) {
             val msg = context.getString(R.string.cmd_delete_response_disabled)
             context.log().i(TAG, msg)
             transport.send(context, msg)
@@ -47,7 +46,7 @@ class DeleteCommand(context: Context) : Command(context) {
         }
 
         if (args.isEmpty()) {
-            val triggerWord = settings.get(Settings.SET_FMD_COMMAND) as String
+            val triggerWord = settingsRepo.settings.commandKeyword
             val fullUsage = "$triggerWord $usage"
             val msg = context.getString(R.string.cmd_delete_response_pwd_missing, fullUsage)
             context.log().i(TAG, msg)

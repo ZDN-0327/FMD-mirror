@@ -16,7 +16,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.commands.AccessResponse
 import de.nulide.findmydevice.commands.ParserResult
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.permissions.PostNotificationsPermission
 import de.nulide.findmydevice.receiver.CopyInAppTextReceiver
@@ -82,8 +81,8 @@ fun onTestCommandClicked(activity: AppCompatActivity) {
     val dialogLayout = LayoutInflater.from(context).inflate(R.layout.dialog_in_app_command, null)
     val editTextCommand = dialogLayout.findViewById<EditText>(R.id.editTextCommand)
 
-    val settings = SettingsRepository.getInstance(context)
-    val fmdTriggerWord = settings.get(Settings.SET_FMD_COMMAND) as String
+    val settingsRepo = SettingsRepository.getInstance(context)
+    val fmdTriggerWord = settingsRepo.settings.commandKeyword
     editTextCommand.setText("$fmdTriggerWord ")
 
     MaterialAlertDialogBuilder(context)

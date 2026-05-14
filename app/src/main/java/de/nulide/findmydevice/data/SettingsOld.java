@@ -11,7 +11,7 @@ import de.nulide.findmydevice.utils.RingerUtils;
 
 
 @Keep
-public class Settings extends HashMap<Integer, Object> {
+public class SettingsOld extends HashMap<Integer, Object> {
 
     public static final int SETTINGS_VERSION = 4;
 
@@ -71,7 +71,7 @@ public class Settings extends HashMap<Integer, Object> {
     public static final String VAL_THEME_DARK = "dark";
     public static final int SET_DYNAMIC_COLORS = 602;
 
-    public Settings() {
+    public SettingsOld() {
     }
 
     // Warning: for numbers, all default values must be either Long or Double!

@@ -8,7 +8,6 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import de.nulide.findmydevice.R
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
@@ -71,7 +70,7 @@ class ServerCommandDownloader(
         context.log().i(TAG, "Received remote command '$remoteCommand'")
 
         // The CommandParser needs the keyword prepended
-        val commandKeyword = settingsRepo.get(Settings.SET_FMD_COMMAND).toString()
+        val commandKeyword = settingsRepo.settings.commandKeyword
         val fullCommand = "$commandKeyword $remoteCommand"
 
         // Schedule work request to execute the command
@@ -91,7 +90,7 @@ class ServerCommandDownloader(
     }
 
     private fun showLoginBruteForceWarning() {
-        val account = settingsRepo.get(Settings.SET_FMDSERVER_ID) as String
+        val account = settingsRepo.settings.serverUsername
         val msg: String = context.getString(R.string.server_login_attempts_text, account)
         context.log().w(TAG, msg)
 

@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.commands.RING_DURATION_DEFAULT_SECS
 import de.nulide.findmydevice.commands.RING_DURATION_MAX_SECS
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.RingerUtils
 import kotlinx.coroutines.Dispatchers
@@ -56,8 +55,8 @@ class RingerActivity : FmdActivity() {
         val buttonStopRinging = findViewById<Button>(R.id.buttonStopRinging)
         buttonStopRinging.setOnClickListener { finish() }
 
-        val settings = SettingsRepository.Companion.getInstance(this)
-        ringtone = RingerUtils.getRingtone(this, settings.get(Settings.SET_RINGER_TONE) as String)
+        val settingsRepo = SettingsRepository.getInstance(this)
+        ringtone = RingerUtils.getRingtone(this, settingsRepo.settings.ringerTone)
 
         val bundle = intent.extras
         var durationSec: Int = bundle?.getInt(EXTRA_RING_DURATION) ?: RING_DURATION_DEFAULT_SECS

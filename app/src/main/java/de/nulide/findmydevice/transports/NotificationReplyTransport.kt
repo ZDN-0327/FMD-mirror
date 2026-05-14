@@ -15,7 +15,6 @@ import de.nulide.findmydevice.commands.AccessResponse
 import de.nulide.findmydevice.commands.ParserResult
 import de.nulide.findmydevice.commands.hasPermission
 import de.nulide.findmydevice.data.AccessRepository
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.permissions.NotificationAccessPermission
 import de.nulide.findmydevice.services.NotificationListenService
@@ -33,7 +32,7 @@ class NotificationReplyTransport(
         private val TAG = NotificationReplyTransport::class.simpleName
     }
 
-    private val settings = SettingsRepository.getInstance(context)
+    private val settingsRepo = SettingsRepository.getInstance(context)
     private val access = AccessRepository.getInstance(context)
 
     @get:DrawableRes
@@ -42,9 +41,10 @@ class NotificationReplyTransport(
     @get:StringRes
     override val title = R.string.transport_notification_reply_title
 
-    private val keyword = settings.get(Settings.SET_FMD_COMMAND) as String
-    override val description =
-        context.getString(R.string.transport_notification_reply_description, keyword)
+    override val description = context.getString(
+        R.string.transport_notification_reply_description,
+        settingsRepo.settings.commandKeyword
+    )
 
     override val descriptionAuth =
         context.getString(R.string.transport_notification_reply_description_auth)

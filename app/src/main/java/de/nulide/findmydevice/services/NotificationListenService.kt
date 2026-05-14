@@ -7,7 +7,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
 import de.nulide.findmydevice.FmdApplication
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.workers.CommandExecutionWorker
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +22,7 @@ class NotificationListenService : NotificationListenerService() {
         var instance: NotificationListenService? = null
     }
 
-    private lateinit var settings: SettingsRepository
+    private lateinit var settingsRepo: SettingsRepository
 
     private val coroutineScope = CoroutineScope(Dispatchers.IO + Job())
 
@@ -43,7 +42,7 @@ class NotificationListenService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        settings = SettingsRepository.getInstance(this)
+        settingsRepo = SettingsRepository.getInstance(this)
 
         // SMS is handled separately
         val packageName = sbn.packageName
@@ -62,7 +61,7 @@ class NotificationListenService : NotificationListenerService() {
             .toString()
 
         // Early sanity check + abort
-        val fmdTriggerWord = (settings.get(Settings.SET_FMD_COMMAND) as String)
+        val fmdTriggerWord = settingsRepo.settings.commandKeyword
         if (!message.startsWith(fmdTriggerWord, ignoreCase = true)) {
             return
         }

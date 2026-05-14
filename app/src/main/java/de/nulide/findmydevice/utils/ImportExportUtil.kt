@@ -12,7 +12,8 @@ import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.ALLOWLIST_FILENAME
 import de.nulide.findmydevice.data.AccessRepository
 import de.nulide.findmydevice.data.AllowlistRepository
-import de.nulide.findmydevice.data.SETTINGS_FILENAME
+import de.nulide.findmydevice.data.SETTINGS_FILENAME_V1
+import de.nulide.findmydevice.data.SETTINGS_FILENAME_V2
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.database.ACCESS_DB_FILENAME
 import kotlinx.coroutines.Dispatchers
@@ -67,7 +68,7 @@ class SettingsImportExporter(
             val zipOutputStream = ZipOutputStream(outputStream, password.toCharArray())
 
             val filesToAdd = listOf(
-                File(context.filesDir, SETTINGS_FILENAME),
+                File(context.filesDir, SETTINGS_FILENAME_V2),
                 context.getDatabasePath(ACCESS_DB_FILENAME),
             )
 
@@ -92,49 +93,8 @@ class SettingsImportExporter(
         uri: Uri,
         password: String?,
     ): Boolean = withContext(Dispatchers.IO) {
-        // We cannot use the file ending (.zip/.json) to detect the file,
-        // since the URI path may not have those (e.g. when the file comes from Nextcloud as a content provider).
-        // Thus we just need to try one format, and if it fails, try the other.
-
-        var success = importV1SettingsJson(uri)
-        if (success) {
-            return@withContext true
-        }
-
-        success = importV2Zip(uri, password)
-        if (success) {
-            return@withContext true
-        }
-
-        return@withContext false
+        return@withContext importV2Zip(uri, password)
     }
-
-    // Old "settings.json"
-    private fun importV1SettingsJson(uri: Uri): Boolean {
-        var inputStream: InputStream? = null
-        try {
-            context.log().i(TAG, "Trying to import as JSON")
-            inputStream = context.contentResolver.openInputStream(uri)
-            if (inputStream == null) {
-                context.log().i(TAG, "Failed to open InputStream from URI")
-                return false
-            }
-
-            SettingsRepository.getInstance(context).importFromStream(inputStream)
-
-            // Apparently the import was successful
-            context.log().i(TAG, "JSON import successful")
-            return true
-        } catch (e: Exception) {
-            // continue
-        } finally {
-            inputStream?.close()
-        }
-        return false
-    }
-
-    // We need to open a new stream (or would need to reset the old stream).
-    // Otherwise the ZIP reader starts reading wherever the JSON reader stopped.
 
     // New format, "fmd-export.zip" (contains settings.json and other data)
     private suspend fun importV2Zip(
@@ -163,8 +123,14 @@ class SettingsImportExporter(
             while (true) {
                 val entry = zipInputStream.nextEntry ?: break
                 when (entry.fileName) {
-                    SETTINGS_FILENAME -> {
-                        SettingsRepository.getInstance(context).importFromStream(zipInputStream)
+                    SETTINGS_FILENAME_V1, SETTINGS_FILENAME_V2 -> {
+                        // Copy file in place,
+                        val outputFile = File(context.filesDir, entry.fileName)
+                        outputFile.outputStream().use { output -> zipInputStream.copyTo(output) }
+                        SettingsRepository.getInstance(context).apply {
+                            load() // reload from disk
+                            migrateSettings()
+                        }
                         settingsFound = true
                     }
 

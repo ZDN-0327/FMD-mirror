@@ -6,7 +6,6 @@ import android.service.notification.StatusBarNotification
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import de.nulide.findmydevice.data.AllowlistRepository
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.data.UncaughtExceptionHandler.Companion.initUncaughtExceptionHandler
 import de.nulide.findmydevice.services.FmdBatteryLowService
@@ -57,11 +56,11 @@ class FmdApplication : Application() {
     }
 
     fun restartServices() {
-        val settings = SettingsRepository.getInstance(this)
-        if (settings.serverAccountExists()) {
+        val settingsRepo = SettingsRepository.getInstance(this)
+        if (settingsRepo.serverAccountExists()) {
             // Scheduling a job that is already running should be fine (?),
             // because they have the same, fixed JOB_ID.
-            if (settings.get(Settings.SET_FMD_LOW_BAT_SEND) as Boolean) {
+            if (settingsRepo.settings.serverLowBatUpload) {
                 FmdBatteryLowService.scheduleJobNow(this)
             }
             ServerLocationUploadService.scheduleRecurring(this)

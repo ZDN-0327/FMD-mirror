@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import de.nulide.findmydevice.R;
-import de.nulide.findmydevice.data.Settings;
 import de.nulide.findmydevice.data.SettingsRepository;
 import de.nulide.findmydevice.net.ServerError;
 
@@ -27,7 +26,7 @@ public class UnregisterUtil {
                 .setPositiveButton(context.getString(R.string.server_unregister_continue_anyway),
                         (DialogInterface dialog, int which) -> {
                             SettingsRepository settings = SettingsRepository.Companion.getInstance(context);
-                            settings.set(Settings.SET_FMDSERVER_ID, ""); // force local logout
+                            settings.removeServerAccount(true);
                             onContinueClickedListener.onContinueClicked();
                             dialog.dismiss();
                         })

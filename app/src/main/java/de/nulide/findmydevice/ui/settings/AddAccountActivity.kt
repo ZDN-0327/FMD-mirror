@@ -20,7 +20,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.nulide.findmydevice.BuildConfig
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.RegistrationTokenRepository
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.net.FmdServerApiService
 import de.nulide.findmydevice.net.FmdServerRepository
@@ -92,7 +91,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
         btnRegister = findViewById(R.id.buttonRegister)
         btnRegister.setOnClickListener { view: View -> this.onRegisterClicked(view) }
 
-        val lastKnownServerUrl = settingsRepo.get(Settings.SET_FMDSERVER_URL) as String
+        val lastKnownServerUrl = settingsRepo.settings.serverUrl
 
         // This must be after btnRegister and btnLogin are assigned,
         // because it causes a call to afterTextChanged, which then accesses btnRegister.
@@ -102,13 +101,13 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
     }
 
     private fun prefillRegistrationToken(editText: EditText) {
-        val serverUrl = settingsRepo.get(Settings.SET_FMDSERVER_URL) as String
+        val serverUrl = settingsRepo.settings.serverUrl
         val cachedToken = registrationTokensRepo.get(serverUrl)
         editText.setText(cachedToken)
     }
 
     private fun cacheRegistrationToken(token: String) {
-        val serverUrl = settingsRepo.get(Settings.SET_FMDSERVER_URL) as String
+        val serverUrl = settingsRepo.settings.serverUrl
         registrationTokensRepo.set(serverUrl, token)
     }
 
@@ -166,7 +165,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
         val loginLayout = layoutInflater.inflate(R.layout.dialog_login, null)
 
         val idInput = loginLayout.findViewById<EditText>(R.id.editTextFMDID)
-        idInput.setText(settingsRepo.get(Settings.SET_FMDSERVER_ID) as String) // cached for convenience
+        idInput.setText(settingsRepo.settings.serverUsername) // cached for convenience
 
         val passwordInput = loginLayout.findViewById<EditText>(R.id.editTextPassword)
 
@@ -255,7 +254,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
             return
         }
 
-        settingsRepo.set(Settings.SET_FMDSERVER_URL, url)
+        settingsRepo.update { copy(serverUrl = url) }
         if (url.isEmpty()) {
             btnRegister.isEnabled = false
             btnLogin.isEnabled = false
@@ -276,10 +275,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
                 return@runOnUiThread
             }
 
-            settingsRepo.set(
-                Settings.SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME,
-                System.currentTimeMillis()
-            )
+            settingsRepo.update { copy(serverConnCheckLastSeenMillis = System.currentTimeMillis()) }
 
             ServerLocationUploadService.scheduleRecurring(context)
             ServerConnectivityCheckService.scheduleJob(context)

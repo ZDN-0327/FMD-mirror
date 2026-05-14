@@ -31,7 +31,7 @@ public class ServerLocationUploadService extends FmdJobService {
 
     private static final int JOB_ID = 108; // for recurring jobs only
 
-    private SettingsRepository settings;
+    private SettingsRepository settingsRepo;
 
     @Override
     public @Nullable String getTAG() {
@@ -49,7 +49,7 @@ public class ServerLocationUploadService extends FmdJobService {
         FmdLogKt.log(context).d(TAG, "Scheduling upload service");
         SettingsRepository settings = SettingsRepository.Companion.getInstance(context);
 
-        int locTypeInt = ((Long) settings.get(Settings.SET_FMDSERVER_LOCATION_TYPE)).intValue();
+        int locTypeInt = settings.getSettings().getServerBackgroundLocationType();
         BackgroundLocationType locType = new BackgroundLocationType(locTypeInt);
 
         if (locType.isEmpty()) {
@@ -88,9 +88,10 @@ public class ServerLocationUploadService extends FmdJobService {
     public boolean onStartJob(JobParameters params) {
         super.onStartJob(params);
 
-        settings = SettingsRepository.Companion.getInstance(this);
+        settingsRepo = SettingsRepository.Companion.getInstance(this);
+        Settings settings = settingsRepo.getSettings();
 
-        if (!settings.serverAccountExists()) {
+        if (!settingsRepo.serverAccountExists()) {
             FmdLogKt.log(this).i(TAG, "No account, stopping and cancelling job.");
             cancelJob(this);
             return false;
@@ -103,18 +104,18 @@ public class ServerLocationUploadService extends FmdJobService {
         }
 
         long now = System.currentTimeMillis();
-        long lastUploadTimeMillis = (Long) settings.get(Settings.SET_LAST_KNOWN_LOCATION_TIME);
-        long uploadIntervalMillis = ((Long) settings.get(Settings.SET_FMDSERVER_UPDATE_TIME)) * 60 * 1000L;
+        long lastUploadTimeMillis = settings.getLastLocTimeMillis();
+        long uploadIntervalMillis = settings.getServerBackgroundUploadIntervalMins() * 60 * 1000L;
         if (lastUploadTimeMillis + uploadIntervalMillis / 2 > now) {
             FmdLogKt.log(this).i(TAG, "Skipping upload, last upload was recent");
             jobFinished();
             return false;
         }
 
-        int locTypeInt = ((Long) settings.get(Settings.SET_FMDSERVER_LOCATION_TYPE)).intValue();
+        int locTypeInt = settings.getServerBackgroundLocationType();
         BackgroundLocationType locType = new BackgroundLocationType(locTypeInt);
 
-        String locateCommand = settings.get(Settings.SET_FMD_COMMAND) + " locate";
+        String locateCommand = settings.getCommandKeyword() + " locate";
         if (locType.getCell()) {
             locateCommand += " cell";
         }
@@ -155,7 +156,7 @@ public class ServerLocationUploadService extends FmdJobService {
     }
 
     private void scheduleNextOccurrence() {
-        long intervalMinutes = (Long) settings.get(Settings.SET_FMDSERVER_UPDATE_TIME);
+        long intervalMinutes = settingsRepo.getSettings().getServerBackgroundUploadIntervalMins();
         if (intervalMinutes <= 0) {
             FmdLogKt.log(this).i(TAG, "Raising interval from " + intervalMinutes + " mins to 1 min");
             intervalMinutes = 1;

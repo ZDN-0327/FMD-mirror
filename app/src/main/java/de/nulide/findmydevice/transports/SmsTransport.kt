@@ -11,14 +11,12 @@ import de.nulide.findmydevice.commands.AccessResponse
 import de.nulide.findmydevice.commands.ParserResult
 import de.nulide.findmydevice.commands.hasPermission
 import de.nulide.findmydevice.data.AccessRepository
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.data.TEMP_USAGE_VALIDITY_MILLIS
 import de.nulide.findmydevice.data.TemporaryAllowlistRepository
 import de.nulide.findmydevice.permissions.SmsPermission
 import de.nulide.findmydevice.services.TempContactExpiredService
 import de.nulide.findmydevice.ui.access.AccessControlActivity
-import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
 
 
@@ -32,7 +30,7 @@ class SmsTransport(
         private val TAG = SmsTransport::class.simpleName
     }
 
-    private val settings = SettingsRepository.getInstance(context)
+    private val settingsRepo = SettingsRepository.getInstance(context)
     private val accessRepo = AccessRepository.getInstance(context)
     private val tempAllowlistRepo = TemporaryAllowlistRepository.getInstance(context)
 
@@ -42,7 +40,7 @@ class SmsTransport(
     @get:StringRes
     override val title = R.string.transport_sms_title
 
-    private val keyword = settings.get(Settings.SET_FMD_COMMAND) as String
+    private val keyword = settingsRepo.settings.commandKeyword
     override val description = context.getString(R.string.transport_sms_description, keyword)
 
     override val descriptionAuth =

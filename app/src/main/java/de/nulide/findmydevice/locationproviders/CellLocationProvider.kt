@@ -5,7 +5,6 @@ import android.content.Context
 import androidx.annotation.RequiresPermission
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.FmdLocation
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.net.BeaconDbRepository
 import de.nulide.findmydevice.net.OpenCelliDRepository
@@ -66,8 +65,8 @@ class CellLocationProvider<T>(
     }
 
     private fun queryOpenCelliD(paras: CellParameters) {
-        val settings = SettingsRepository.getInstance(context)
-        val apiAccessToken = settings.get(Settings.SET_OPENCELLID_API_KEY) as String
+        val settingsRepo = SettingsRepository.getInstance(context)
+        val apiAccessToken = settingsRepo.settings.openCellIdApiToken
         if (apiAccessToken.isEmpty()) {
             val msg = "Cannot query OpenCelliD: Missing API Token"
             context.log().i(TAG, msg)
@@ -92,7 +91,7 @@ class CellLocationProvider<T>(
                     timeMillis = paras.timeMillis,
                 )
 
-                settings.storeLastKnownLocation(loc)
+                settingsRepo.storeLastKnownLocation(loc)
                 transport.sendNewLocation(context, loc)
                 ocidFinished = true
                 onFinished()

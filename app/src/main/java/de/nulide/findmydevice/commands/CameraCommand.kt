@@ -5,7 +5,6 @@ import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import de.nulide.findmydevice.R
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.permissions.CameraPermission
 import de.nulide.findmydevice.transports.Transport
 import de.nulide.findmydevice.ui.DummyCameraxActivity
@@ -36,7 +35,7 @@ class CameraCommand(context: Context) : Command(context) {
         args: List<String>,
         transport: Transport<T>,
     ) {
-        if (!settings.serverAccountExists()) {
+        if (!settingsRepo.serverAccountExists()) {
             context.log().w(TAG, "Cannot take picture: no FMD Server account")
             transport.send(context, context.getString(R.string.cmd_camera_response_no_fmd_server))
             return
@@ -62,7 +61,7 @@ class CameraCommand(context: Context) : Command(context) {
         context.log().d(TAG, "Starting camera activity")
         context.startActivity(dummyCameraActivity)
 
-        val serverUrl = settings.get(Settings.SET_FMDSERVER_URL) as String
+        val serverUrl = settingsRepo.settings.serverUrl
         transport.send(context, context.getString(R.string.cmd_camera_response_success, serverUrl))
     }
 }

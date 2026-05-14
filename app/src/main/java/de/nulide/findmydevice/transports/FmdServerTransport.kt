@@ -11,7 +11,6 @@ import de.nulide.findmydevice.commands.AccessResponse
 import de.nulide.findmydevice.commands.ParserResult
 import de.nulide.findmydevice.commands.hasPermission
 import de.nulide.findmydevice.data.FmdLocation
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.net.FmdServerRepository
 import de.nulide.findmydevice.permissions.Permission
@@ -31,7 +30,7 @@ class FmdServerTransport(
     }
 
     private val repo = FmdServerRepository(context).getApiService()
-    private val settings = SettingsRepository.getInstance(context)
+    private val settingsRepo = SettingsRepository.getInstance(context)
 
     @get:DrawableRes
     override val icon = R.drawable.ic_cloud
@@ -54,9 +53,9 @@ class FmdServerTransport(
     override fun getDestinationString() = destination
 
     override suspend fun isAllowed(parsed: ParserResult.Success): AccessResponse {
-        val username = settings.get(Settings.SET_FMDSERVER_ID) as String
-        val url = (settings.get(Settings.SET_FMDSERVER_URL) as String).toUri()
-        val grantedPerms = settings.get(Settings.SET_FMDSERVER_PERMISSIONS) as Long
+        val username = settingsRepo.settings.serverUsername
+        val url = settingsRepo.settings.serverUrl.toUri()
+        val grantedPerms = settingsRepo.settings.serverPermissions
 
         val hasPermission = grantedPerms.hasPermission(parsed.command.permission)
         context.log().i(
@@ -74,7 +73,6 @@ class FmdServerTransport(
 
     override fun sendNewLocation(context: Context, location: FmdLocation) {
         // no call to super(), we need to completely replace this for FMD Server
-        settings.set(Settings.SET_FMDSERVER_LAST_LOCATION_UPLOAD_TIME, location.timeMillis)
         repo.sendLocation(location)
     }
 }

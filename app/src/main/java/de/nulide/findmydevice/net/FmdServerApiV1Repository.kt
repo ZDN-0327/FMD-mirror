@@ -8,7 +8,6 @@ import com.android.volley.VolleyError
 import de.nulide.findmydevice.data.EncryptedSettingsRepository
 import de.nulide.findmydevice.data.FmdKeyPair
 import de.nulide.findmydevice.data.FmdLocation
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.CypherUtils
 import de.nulide.findmydevice.utils.PatchedVolley
@@ -66,15 +65,12 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
      * This should be called every time where the settings could have changed.
      */
     private fun loadBaseUrl() {
-        val tempBaseUrl = settingsRepo.get(Settings.SET_FMDSERVER_URL) as String
+        val tempBaseUrl = settingsRepo.settings.serverUrl
         // ensure the base URL doesn't end in /
         if (tempBaseUrl.endsWith("/")) {
-            settingsRepo.set(
-                Settings.SET_FMDSERVER_URL,
-                tempBaseUrl.trim('/')
-            )
+            settingsRepo.update { copy(serverUrl = tempBaseUrl.trim('/')) }
         }
-        baseUrl = settingsRepo.get(Settings.SET_FMDSERVER_URL) as String + "/api/v1"
+        baseUrl = settingsRepo.settings.serverUrl + "/api/v1"
     }
 
     fun getServerVersion(
@@ -107,7 +103,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         settingsRepo.setKeys(keys)
 
         val hashedPW = CypherUtils.hashPasswordForLogin(password)
-        settingsRepo.set(Settings.SET_FMD_CRYPT_HPW, hashedPW)
+        settingsRepo.update { copy(serverHashedAuthPw = hashedPW) }
 
         val jsonObject = JSONObject()
         try {
@@ -125,7 +121,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
             Method.PUT, baseUrl + URL_DEVICE, jsonObject,
             { response: JSONObject ->
                 try {
-                    settingsRepo.set(Settings.SET_FMDSERVER_ID, response["DeviceId"])
+                    settingsRepo.update { copy(serverUsername = response["DeviceId"] as String) }
                     listener.onResponse(Unit)
                 } catch (e: JSONException) {
                     context.log().w(TAG, "registerAccount: ${e.stackTraceToString()}")
@@ -172,8 +168,8 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         errorListener: ErrorListener,
     ) {
         getAccessToken(
-            settingsRepo.get(Settings.SET_FMDSERVER_ID) as String,
-            settingsRepo.get(Settings.SET_FMD_CRYPT_HPW) as String,
+            settingsRepo.settings.serverUsername,
+            settingsRepo.settings.serverHashedAuthPw,
             listener,
             errorListener,
         )
@@ -388,8 +384,8 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
                             // Then encode them again for storage.
                             val fmdKeyPair = FmdKeyPair(keyPair, password)
                             settingsRepo.apply {
-                                set(Settings.SET_FMDSERVER_ID, username)
-                                set(Settings.SET_FMD_CRYPT_HPW, authPassword)
+                                update { copy(serverUsername = username) }
+                                update { copy(serverHashedAuthPw = authPassword) }
                                 setKeys(fmdKeyPair)
                             }
                             listener.onResponse(Unit)
@@ -482,7 +478,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         listener: Listener<Unit>,
         errorListener: ErrorListener,
     ) {
-        val encryptedPrivKey = settingsRepo.get(Settings.SET_FMD_CRYPT_PRIVKEY) as String
+        val encryptedPrivKey = settingsRepo.settings.serverEncPrivKeyV1
         val keyPair = CypherUtils.decryptPrivateKeyWithPassword(encryptedPrivKey, oldPassword)
         if (keyPair == null) {
             errorListener.onError("WRONG_PASSWORD")
@@ -522,8 +518,8 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
             { response ->
                 if (response.has("Data")) {
                     // Save only once we know that server has accepted the change
-                    settingsRepo.set(Settings.SET_FMD_CRYPT_PRIVKEY, newPrivKey)
-                    settingsRepo.set(Settings.SET_FMD_CRYPT_HPW, newHashedPW)
+                    settingsRepo.update { copy(serverEncPrivKeyV1 = newPrivKey) }
+                    settingsRepo.update { copy(serverHashedAuthPw = newHashedPW) }
                     listener.onResponse(Unit)
                 } else {
                     errorListener.onError("change password response has no Data field")
@@ -574,22 +570,21 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
 
                     // This only needs to be strictly increasing, to prevent replay attacks.
                     // It doesn't need to be "current", i.e. we don't care how far away from "now" this timestamp is.
-                    val lastCmdMillis =
-                        (settingsRepo.get(Settings.SET_FMDSERVER_LAST_CMD_MILLIS) as Long)
+                    val lastCmdMillis = settingsRepo.settings.serverLastCmdMillis
                     if (time <= lastCmdMillis) {
                         val errorMsg = "Timestamp is not increasing: $time <= $lastCmdMillis"
                         context.log().e(TAG, errorMsg)
                         return@JsonObjectRequest errorListener.onError(errorMsg)
                     }
 
-                    val publicKeyPem = settingsRepo.get(Settings.SET_FMD_CRYPT_PUBKEY) as String
+                    val publicKeyPem = settingsRepo.settings.serverPubKeyV1
                     if (!CypherUtils.verifySig(publicKeyPem, "$time:$command", sig)) {
                         val errorMsg = "Failed to verify the signature of command '$command'"
                         context.log().e(TAG, errorMsg)
                         return@JsonObjectRequest errorListener.onError(errorMsg)
                     }
 
-                    settingsRepo.set(Settings.SET_FMDSERVER_LAST_CMD_MILLIS, time)
+                    settingsRepo.update { copy(serverLastCmdMillis = time) }
                     listener.onResponse(command)
                 } catch (e: JSONException) {
                     context.log().w(TAG, "getCommandInternal: ${e.stackTraceToString()}")

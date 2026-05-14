@@ -21,7 +21,6 @@ import com.google.android.material.navigation.NavigationBarView;
 
 import de.nulide.findmydevice.BuildConfig;
 import de.nulide.findmydevice.R;
-import de.nulide.findmydevice.data.Settings;
 import de.nulide.findmydevice.data.SettingsRepository;
 import de.nulide.findmydevice.net.MinRequiredVersionResult;
 import de.nulide.findmydevice.net.ServerCommandDownloader;
@@ -38,7 +37,7 @@ public class MainActivity extends FmdActivity {
 
     private static final String KEY_ACTIVE_FRAGMENT_TAG = "activeFragmentTag";
 
-    SettingsRepository settings;
+    SettingsRepository settingsRepo;
 
     private TaggedFragment commandsFragment, transportFragment, settingsFragment;
     private TaggedFragment activeFragment;
@@ -68,16 +67,16 @@ public class MainActivity extends FmdActivity {
         setupEdgeToEdgeAppBar(findViewById(R.id.appBar));
         setupEdgeToEdgeAppBar(findViewById(R.id.fragment_container)); // shift the container down, too
 
-        settings = SettingsRepository.Companion.getInstance(this);
+        settingsRepo = SettingsRepository.Companion.getInstance(this);
 
         // Around the CrashedActivity it can happen that the two activities run in different processes.
         // In different processes, the SettingsRepository instance is different.
         // This can result in an endless "Continue to MainActivity" loop, because one repo sets the
         // flag to 0, but the other repo does not load the updated file.
         // To make sure we load the status correctly, reload from disk.
-        settings.load();
+        settingsRepo.load();
 
-        if (((Long) settings.get(Settings.SET_APP_CRASHED_LOG_ENTRY)) == 1) {
+        if (settingsRepo.getSettings().getCrashLogEntry()) {
             Intent intent = new Intent(this, CrashedActivity.class);
             startActivity(intent);
             finish();
@@ -104,7 +103,7 @@ public class MainActivity extends FmdActivity {
             }
         }
 
-        if (settings.serverAccountExists()) {
+        if (settingsRepo.serverAccountExists()) {
             checkServerVersion();
 
             new ServerCommandDownloader(this).download();
@@ -118,8 +117,7 @@ public class MainActivity extends FmdActivity {
             }
         }
 
-        if (BuildConfig.FLAVOR == "edge" &&
-                !(Boolean) settings.get(Settings.SET_FMD_EDGE_INFO_SHOWN)) {
+        if (BuildConfig.FLAVOR == "edge" && !settingsRepo.getSettings().getTutorialFmdEdge()) {
             showFmdEdgeInfoDialog(this);
         }
     }
@@ -200,7 +198,7 @@ public class MainActivity extends FmdActivity {
                 .setMessage(R.string.fmd_edge_info_message)
                 .setPositiveButton(getString(android.R.string.ok), null)
                 .setNeutralButton(getString(R.string.dont_show_again), (dialog, whichButton) -> {
-                    settings.set(Settings.SET_FMD_EDGE_INFO_SHOWN, true);
+                    settingsRepo.setEdgeInfoShown();
                     dialog.dismiss();
                 })
                 .setCancelable(false)

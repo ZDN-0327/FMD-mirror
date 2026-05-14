@@ -14,12 +14,12 @@ import de.nulide.findmydevice.data.SettingsRepository
 
 abstract class FmdActivity : AppCompatActivity() {
 
-    private lateinit var settings: SettingsRepository
+    private lateinit var settingsRepo: SettingsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        settings = SettingsRepository.getInstance(this)
+        settingsRepo = SettingsRepository.getInstance(this)
 
         applyTheme()
         applyDynamicColors()
@@ -40,11 +40,11 @@ abstract class FmdActivity : AppCompatActivity() {
     }
 
     fun applyTheme() {
-        val theme = settings.get(Settings.SET_THEME) as String
+        val theme = settingsRepo.settings.themeMode
 
-        val nightMode = if (theme == Settings.VAL_THEME_LIGHT) {
+        val nightMode = if (theme == Settings.THEME_LIGHT) {
             AppCompatDelegate.MODE_NIGHT_NO
-        } else if (theme == Settings.VAL_THEME_DARK) {
+        } else if (theme == Settings.THEME_DARK) {
             AppCompatDelegate.MODE_NIGHT_YES
         } else {
             AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
@@ -56,7 +56,7 @@ abstract class FmdActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
             return
         }
-        val isEnabled = settings.get(Settings.SET_DYNAMIC_COLORS) as Boolean
+        val isEnabled = settingsRepo.settings.themeDynamicColors
         if (isEnabled) {
             DynamicColors.applyToActivityIfAvailable(this)
         }

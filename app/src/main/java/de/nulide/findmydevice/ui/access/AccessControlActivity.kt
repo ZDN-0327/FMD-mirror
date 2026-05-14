@@ -15,7 +15,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.AccessRepository
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.database.NotificationPassword
 import de.nulide.findmydevice.database.PhoneNumber
@@ -32,7 +31,7 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
     }
 
     private lateinit var accessRepo: AccessRepository
-    private lateinit var settings: SettingsRepository
+    private lateinit var settingsRepo: SettingsRepository
 
     private val viewModel: AccessControlViewModel by viewModels { AccessControlViewModel.Factory }
 
@@ -40,7 +39,7 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
         super.onCreate(savedInstanceState)
 
         accessRepo = AccessRepository.getInstance(this)
-        settings = SettingsRepository.getInstance(this)
+        settingsRepo = SettingsRepository.getInstance(this)
 
         val initialPage = if (intent.extras?.getInt(EXTRA_NOTIF) != null) 2 else 0
 
@@ -158,15 +157,15 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
         val newNumber = PhoneNumber(0, name, normNumber)
         accessRepo.insertPhoneNumber(newNumber)
 
-        if (!(settings.get(Settings.SET_FIRST_TIME_CONTACT_ADDED) as Boolean)) {
-            val keyword = settings.get(Settings.SET_FMD_COMMAND) as String
+        if (!settingsRepo.settings.tutorialFirstContact) {
+            val keyword = settingsRepo.settings.commandKeyword
             val message =
                 getString(R.string.tip_first_contact_added, keyword, keyword, keyword)
             MaterialAlertDialogBuilder(this)
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton(android.R.string.ok) { _, _ ->
-                    settings.set<Boolean>(Settings.SET_FIRST_TIME_CONTACT_ADDED, true)
+                    settingsRepo.update { copy(tutorialFirstContact = true) }
                 }
                 .show()
         }

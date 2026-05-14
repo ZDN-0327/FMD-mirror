@@ -40,6 +40,7 @@ import de.nulide.findmydevice.R;
 import de.nulide.findmydevice.data.BackgroundLocationType;
 import de.nulide.findmydevice.data.EncryptedSettingsRepository;
 import de.nulide.findmydevice.data.Settings;
+import de.nulide.findmydevice.data.SettingsOld;
 import de.nulide.findmydevice.data.SettingsRepository;
 import de.nulide.findmydevice.net.FmdServerApiService;
 import de.nulide.findmydevice.net.FmdServerRepository;
@@ -63,7 +64,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
-    private SettingsRepository settings;
+    private SettingsRepository settingsRepo;
     private FmdServerApiService fmdServerRepo;
 
     private EditText editTextCheckInterval;
@@ -79,6 +80,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
     private AlertDialog loadingDialog;
     private DialogFragment permissionDialog;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,13 +89,14 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         setupEdgeToEdgeAppBar(findViewById(R.id.appBar));
         setupEdgeToEdgeScrollView(findViewById(R.id.scrollView));
 
-        settings = SettingsRepository.Companion.getInstance(this);
+        settingsRepo = SettingsRepository.Companion.getInstance(this);
         fmdServerRepo = new FmdServerRepository(this).getApiService();
+        Settings settings = settingsRepo.getSettings();
 
         TextView textViewServerUrl = findViewById(R.id.textViewServerUrl);
         TextView textViewUserId = findViewById(R.id.textViewUserId);
-        textViewServerUrl.setText((String) settings.get(Settings.SET_FMDSERVER_URL));
-        textViewUserId.setText((String) settings.get(Settings.SET_FMDSERVER_ID));
+        textViewServerUrl.setText(settings.getServerUrl());
+        textViewUserId.setText(settings.getServerUsername());
 
         findViewById(R.id.buttonOpenWebClient).setOnClickListener(this::onOpenWebClientClicked);
         findViewById(R.id.buttonCopyServerUrl).setOnClickListener(this::onCopyServerUrlClicked);
@@ -112,22 +115,22 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         findViewById(R.id.buttonOpenUnifiedPush).setOnClickListener(this::onOpenUnifiedPushClicked);
 
         editTextCheckInterval = findViewById(R.id.editTextCheckInterval);
-        editTextCheckInterval.setText(settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS).toString());
+        editTextCheckInterval.setText(Integer.toString(settings.getServerConnCheckIntervalHours()));
         editTextCheckInterval.addTextChangedListener(this);
 
         editTextNotifyAfterTime = findViewById(R.id.editTextNotifyAfterTime);
-        editTextNotifyAfterTime.setText(settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_NOTIFY_AFTER_HOURS).toString());
+        editTextNotifyAfterTime.setText(Integer.toString(settings.getServerConnCheckNotifyAfterHours()));
         editTextNotifyAfterTime.addTextChangedListener(this);
 
         editTextFMDServerUpdateTime = findViewById(R.id.editTextFMDServerUpdateTime);
-        editTextFMDServerUpdateTime.setText(settings.get(Settings.SET_FMDSERVER_UPDATE_TIME).toString());
+        editTextFMDServerUpdateTime.setText(Integer.toString(settings.getServerBackgroundUploadIntervalMins()));
         editTextFMDServerUpdateTime.addTextChangedListener(this);
 
         checkBoxFMDServerFused = findViewById(R.id.checkBoxFMDServerFused);
         checkBoxFMDServerGPS = findViewById(R.id.checkBoxFMDServerGPS);
         checkBoxFMDServerCell = findViewById(R.id.checkBoxFMDServerCell);
 
-        int locTypeInt = ((Long) settings.get(Settings.SET_FMDSERVER_LOCATION_TYPE)).intValue();
+        int locTypeInt = settings.getServerBackgroundLocationType();
         BackgroundLocationType locType = new BackgroundLocationType(locTypeInt);
 
         checkBoxFMDServerFused.setChecked(locType.getFused());
@@ -139,9 +142,9 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         checkBoxFMDServerCell.setOnCheckedChangeListener(this);
 
         checkBoxLowBat = findViewById(R.id.checkBoxFMDServerLowBatUpload);
-        checkBoxLowBat.setChecked((Boolean) settings.get(Settings.SET_FMD_LOW_BAT_SEND));
+        checkBoxLowBat.setChecked(settings.getServerLowBatUpload());
         checkBoxLowBat.setOnCheckedChangeListener(this);
-        if ((Boolean) settings.get(Settings.SET_FMD_LOW_BAT_SEND)) {
+        if (settings.getServerLowBatUpload()) {
             FmdBatteryLowService.scheduleJobNow(this);
         }
 
@@ -186,7 +189,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
             locType.setFused(checkBoxFMDServerFused.isChecked());
             locType.setGps(checkBoxFMDServerGPS.isChecked());
             locType.setCell(checkBoxFMDServerCell.isChecked());
-            settings.set(Settings.SET_FMDSERVER_LOCATION_TYPE, locType.encode());
+            settingsRepo.set(SettingsOld.SET_FMDSERVER_LOCATION_TYPE, locType.encode());
 
             if (!locType.isEmpty()) {
                 ServerLocationUploadService.scheduleRecurring(this);
@@ -194,7 +197,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 ServerLocationUploadService.cancelJob(this);
             }
         } else if (buttonView == checkBoxLowBat) {
-            settings.set(Settings.SET_FMD_LOW_BAT_SEND, isChecked);
+            settingsRepo.set(SettingsOld.SET_FMD_LOW_BAT_SEND, isChecked);
             if (isChecked) {
                 FmdBatteryLowService.scheduleJobNow(this);
             } else {
@@ -229,7 +232,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         }
 
         if (edited == editTextCheckInterval.getText()) {
-            settings.set(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS, value);
+            settingsRepo.set(SettingsOld.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS, value);
 
             if (value > 0) {
                 ServerConnectivityCheckService.scheduleJob(this);
@@ -237,9 +240,9 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 ServerConnectivityCheckService.cancelJob(this);
             }
         } else if (edited == editTextNotifyAfterTime.getText()) {
-            settings.set(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_NOTIFY_AFTER_HOURS, value);
+            settingsRepo.set(SettingsOld.SET_FMD_SERVER_CONNECTIVITY_CHECK_NOTIFY_AFTER_HOURS, value);
         } else if (edited == editTextFMDServerUpdateTime.getText()) {
-            settings.set(Settings.SET_FMDSERVER_UPDATE_TIME, value);
+            settingsRepo.set(SettingsOld.SET_FMDSERVER_UPDATE_TIME, value);
 
             // Reschedule with new interval
             if (checkBoxFMDServerGPS.isChecked() || checkBoxFMDServerCell.isChecked()) {
@@ -249,19 +252,19 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
     }
 
     private void onOpenWebClientClicked(View view) {
-        String url = (String) settings.get(Settings.SET_FMDSERVER_URL);
+        String url = settingsRepo.getSettings().getServerUrl();
         Utils.openUrl(this, url);
     }
 
     private void onCopyServerUrlClicked(View view) {
         String label = getString(R.string.Settings_FMD_Server_Server_URL).replace(":", "");
-        String text = (String) settings.get(Settings.SET_FMDSERVER_URL);
+        String text = settingsRepo.getSettings().getServerUrl();
         Utils.copyToClipboard(this, label, text);
     }
 
     private void onCopyUserIdClicked(View view) {
         String label = getString(R.string.Settings_FMD_Server_User_ID).replace(":", "");
-        String text = (String) settings.get(Settings.SET_FMDSERVER_ID);
+        String text = settingsRepo.getSettings().getServerUrl();
         Utils.copyToClipboard(this, label, text);
     }
 
@@ -279,7 +282,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 .setTitle(getString(R.string.Settings_FMDServer_Logout_Button))
                 .setMessage(R.string.Settings_FMDServer_Logout_Text)
                 .setPositiveButton(getString(R.string.Ok), (dialog, whichButton) -> {
-                    settings.removeServerAccount(false);
+                    settingsRepo.removeServerAccount(false);
                     // TODO: API to invalidate access tokens. Maybe combine with session management.
                     EncryptedSettingsRepository encryptedSettingsRepo = EncryptedSettingsRepository.Companion.getInstance(this);
                     encryptedSettingsRepo.setCachedAccessToken("");
@@ -293,7 +296,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
     }
 
     private void onChangePermissionsClicked(View view) {
-        long initialPermission = (long) settings.get(Settings.SET_FMDSERVER_PERMISSIONS);
+        long initialPermission = settingsRepo.getSettings().getServerPermissions();
         permissionDialog = FmdPermissionDialogFragment.Companion.newInstance(initialPermission);
         permissionDialog.show(getSupportFragmentManager(), "FmdPermissionDialogFragment");
     }
@@ -305,7 +308,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
 
     @Override
     public void onPermissionSaveClicked(long newValue) {
-        settings.set(Settings.SET_FMDSERVER_PERMISSIONS, newValue);
+        settingsRepo.set(SettingsOld.SET_FMDSERVER_PERMISSIONS, newValue);
         permissionDialog.dismiss();
     }
 
@@ -359,7 +362,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
     }
 
     private void onCopyPushUrlClicked(View view) {
-        String text = (String) settings.get(Settings.SET_FMDSERVER_PUSH_URL);
+        String text = settingsRepo.getSettings().getServerPushUrl();
         Utils.copyToClipboard(this, "Push URL", text);
     }
 
@@ -416,8 +419,8 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
 
         fmdServerRepo.checkConnection(
                 response -> {
-                    settings.set(
-                            Settings.SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME,
+                    settingsRepo.set(
+                            SettingsOld.SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME,
                             System.currentTimeMillis()
                     );
 
@@ -429,7 +432,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 error -> {
                     String message = error.toString();
                     if (error.getStatusCode() != null && error.getStatusCode() == 404) {
-                        String userName = (String) settings.get(Settings.SET_FMDSERVER_ID);
+                        String userName = settingsRepo.getSettings().getServerUsername();
                         message = getString(R.string.server_apparently_deleted_text, userName);
                     }
 
@@ -446,7 +449,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
     private void getServerVersion() {
         TextView serverVersion = findViewById(R.id.serverVersion);
 
-        String baseUrl = (String) settings.get(Settings.SET_FMDSERVER_URL);
+        String baseUrl = settingsRepo.getSettings().getServerUrl();
         new FmdServerRepository(this).getServerVersion(baseUrl, response -> {
             serverVersion.setText(getString(R.string.server_version) + ": " + response);
             serverVersion.setVisibility(View.VISIBLE);
@@ -467,7 +470,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         Button buttonInstallSunup = findViewById(R.id.buttonInstallSunup);
 
         String distributor = UnifiedPush.getAckDistributor(this);
-        String url = (String) settings.get(Settings.SET_FMDSERVER_PUSH_URL);
+        String url = settingsRepo.getSettings().getServerPushUrl();
 
         if (distributor != null && !distributor.isEmpty() && !url.isEmpty()) {
             sectionPushDistributor.setVisibility(View.VISIBLE);

@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import de.nulide.findmydevice.FmdApplication
 import de.nulide.findmydevice.data.AccessRepository
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.database.AccessItem
 import de.nulide.findmydevice.database.NotificationPassword
@@ -72,6 +71,6 @@ class AccessControlViewModel(
     }
 
     fun getCommandKeyword(): String {
-        return settingsRepo.get(Settings.SET_FMD_COMMAND) as String
+        return settingsRepo.settings.commandKeyword
     }
 }

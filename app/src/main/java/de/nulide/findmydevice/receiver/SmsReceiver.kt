@@ -8,7 +8,6 @@ import android.telephony.SmsMessage
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.workDataOf
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.log
 import de.nulide.findmydevice.workers.CommandExecutionWorker
@@ -46,8 +45,8 @@ class SmsReceiver : BroadcastReceiver() {
             }
 
             // Early sanity check + abort
-            val settings = SettingsRepository.getInstance(context)
-            val fmdTriggerWord = (settings.get(Settings.SET_FMD_COMMAND) as String).lowercase()
+            val settingsRepo = SettingsRepository.getInstance(context)
+            val fmdTriggerWord = settingsRepo.settings.commandKeyword.lowercase()
             if (!msg.lowercase().startsWith(fmdTriggerWord)) {
                 return
             }

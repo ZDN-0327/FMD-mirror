@@ -6,7 +6,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import de.nulide.findmydevice.R
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.databinding.ActivityOpenCellIdBinding
 import de.nulide.findmydevice.net.OpenCelliDRepository
@@ -28,7 +27,7 @@ class OpenCellIdActivity : FmdActivity(), TextWatcher {
 
     private lateinit var viewBinding: ActivityOpenCellIdBinding
 
-    private lateinit var settings: SettingsRepository
+    private lateinit var settingsRepo: SettingsRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,8 +37,8 @@ class OpenCellIdActivity : FmdActivity(), TextWatcher {
         setupEdgeToEdgeAppBar(findViewById(R.id.appBar))
         setupEdgeToEdgeScrollView(findViewById(R.id.scrollView))
 
-        settings = SettingsRepository.getInstance(this)
-        val apiToken = settings.get(Settings.SET_OPENCELLID_API_KEY) as String
+        settingsRepo = SettingsRepository.getInstance(this)
+        val apiToken = settingsRepo.settings.openCellIdApiToken
 
         viewBinding.editTextOpenCellIDAPIKey.setText(apiToken)
         viewBinding.editTextOpenCellIDAPIKey.addTextChangedListener(this)
@@ -68,7 +67,7 @@ class OpenCellIdActivity : FmdActivity(), TextWatcher {
     override fun afterTextChanged(edited: Editable) {
         if (edited === viewBinding.editTextOpenCellIDAPIKey.text) {
             val newToken = edited.toString().trim()
-            settings.set(Settings.SET_OPENCELLID_API_KEY, newToken)
+            settingsRepo.update { copy(openCellIdApiToken = newToken) }
             setupTestConnection(newToken.isEmpty())
         }
     }
@@ -108,7 +107,7 @@ class OpenCellIdActivity : FmdActivity(), TextWatcher {
         }
 
         val repo = OpenCelliDRepository.getInstance(OpenCelliDSpec(context))
-        val apiAccessToken = settings.get(Settings.SET_OPENCELLID_API_KEY) as String
+        val apiAccessToken = settingsRepo.settings.openCellIdApiToken
 
         viewBinding.textViewTestOpenCellIdResponse.text = ""
 

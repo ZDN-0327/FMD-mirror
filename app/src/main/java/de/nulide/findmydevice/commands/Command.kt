@@ -15,7 +15,7 @@ abstract class Command(val context: Context) {
         private val TAG = Command::class.simpleName
     }
 
-    val settings = SettingsRepository.getInstance(context)
+    val settingsRepo = SettingsRepository.getInstance(context)
 
     abstract val keyword: String
     abstract val usage: String

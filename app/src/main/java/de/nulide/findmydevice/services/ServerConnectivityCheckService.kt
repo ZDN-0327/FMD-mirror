@@ -7,8 +7,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.os.Build
 import de.nulide.findmydevice.R
-import de.nulide.findmydevice.data.Settings
-import de.nulide.findmydevice.data.Settings.SET_FMDSERVER_ID
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.net.FmdServerRepository
 import de.nulide.findmydevice.ui.settings.FMDServerActivity
@@ -33,20 +31,19 @@ class ServerConnectivityCheckService : FmdJobService() {
 
         @JvmStatic
         fun scheduleJob(context: Context) {
-            val settings = SettingsRepository.getInstance(context)
-            val interval =
-                (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS) as Long)
+            val settingsRepo = SettingsRepository.getInstance(context)
+            val interval = settingsRepo.settings.serverConnCheckIntervalHours
             scheduleJob(context, interval)
         }
 
         @JvmStatic
-        fun scheduleJob(context: Context, intervalHours: Long) {
-            if (intervalHours == 0L) {
+        fun scheduleJob(context: Context, intervalHours: Int) {
+            if (intervalHours == 0) {
                 context.log().i(TAG, "Not scheduling connectivity check service")
                 return
             }
 
-            val intervalMillis = intervalHours * 60 * 60 * 1000
+            val intervalMillis = intervalHours * 60 * 60 * 1000L
 
             val serviceComponent =
                 ComponentName(context, ServerConnectivityCheckService::class.java)
@@ -67,10 +64,9 @@ class ServerConnectivityCheckService : FmdJobService() {
         }
 
         fun shouldNudgeAboutConnectivityCheck(context: Context): Boolean {
-            val settings = SettingsRepository.getInstance(context)
-            val interval =
-                (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS) as Long)
-            return settings.serverAccountExists() && interval <= 0L
+            val settingsRepo = SettingsRepository.getInstance(context)
+            val interval = settingsRepo.settings.serverConnCheckIntervalHours
+            return settingsRepo.serverAccountExists() && interval <= 0L
         }
 
         /**
@@ -103,21 +99,21 @@ class ServerConnectivityCheckService : FmdJobService() {
     private fun doWork() {
         val context = this
 
-        val settings = SettingsRepository.getInstance(context)
+        val settingsRepo = SettingsRepository.getInstance(context)
         val fmdServerRepo = FmdServerRepository(context).getApiService()
         val now: Long = System.currentTimeMillis()
 
         fmdServerRepo.checkConnection(
             { _ ->
                 context.log().i(TAG, "Successfully connected to FMD Server")
-                settings.set(Settings.SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME, now)
+                settingsRepo.update { copy(serverConnCheckLastSeenMillis = now) }
                 jobFinished()
             },
             { error ->
                 context.log().e(TAG, "Failed to connect to FMD Server: ${error.message}")
 
                 if (error.statusCode == 404) {
-                    val userName = settings.get(SET_FMDSERVER_ID) as String
+                    val userName = settingsRepo.settings.serverUsername
                     Notifications.notify(
                         context,
                         getString(R.string.server_connectivity_lost_title),
@@ -128,11 +124,9 @@ class ServerConnectivityCheckService : FmdJobService() {
                     return@checkConnection
                 }
 
-                val lastSuccessMillis =
-                    (settings.get(Settings.SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME) as Long)
+                val lastSuccessMillis = settingsRepo.settings.serverConnCheckLastSeenMillis
 
-                val notifyAfterHours =
-                    (settings.get(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_NOTIFY_AFTER_HOURS) as Long)
+                val notifyAfterHours = settingsRepo.settings.serverConnCheckNotifyAfterHours
                 val notifyAfterMillis = notifyAfterHours * 60 * 60 * 1000
 
                 // Notify the user if the last successful connection is too long ago
@@ -146,7 +140,7 @@ class ServerConnectivityCheckService : FmdJobService() {
                         lastSuccessMillis.toString()
                     }
 
-                    val baseUrl = settings.get(Settings.SET_FMDSERVER_URL) as String
+                    val baseUrl = settingsRepo.settings.serverUrl
                     Notifications.notify(
                         context,
                         context.getString(R.string.server_connectivity_lost_title),

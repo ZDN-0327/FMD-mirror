@@ -2,7 +2,6 @@ package de.nulide.findmydevice.commands
 
 import android.content.Context
 import de.nulide.findmydevice.R
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.transports.Transport
 import de.nulide.findmydevice.utils.Notifications
@@ -57,8 +56,8 @@ class CommandHandler<T>
         rawCommand: String,
         onHandlingStarted: () -> Unit = {},
     ) {
-        val settings = SettingsRepository.getInstance(context)
-        val fmdTriggerWord = settings.get(Settings.SET_FMD_COMMAND) as String
+        val settingsRepo = SettingsRepository.getInstance(context)
+        val fmdTriggerWord = settingsRepo.settings.commandKeyword
 
         val cmds = availableCommands(context)
         val parser =

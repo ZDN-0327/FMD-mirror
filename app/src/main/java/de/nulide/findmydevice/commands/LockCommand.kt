@@ -6,7 +6,6 @@ import android.content.Intent
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import de.nulide.findmydevice.R
-import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.permissions.DeviceAdminPermission
 import de.nulide.findmydevice.permissions.OverlayPermission
 import de.nulide.findmydevice.transports.Transport
@@ -43,7 +42,7 @@ class LockCommand(context: Context) : Command(context) {
         var customMessage = args.joinToString(" ")
 
         if (customMessage.isEmpty()) {
-            customMessage = settings.get(Settings.SET_LOCKSCREEN_MESSAGE) as String
+            customMessage = settingsRepo.settings.lockScreenMessage
         }
 
         // Only show the full-screen activity if there is a message. This allows you to silently
