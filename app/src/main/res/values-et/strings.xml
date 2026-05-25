@@ -67,7 +67,6 @@
     <string name="Settings_FMD_Server_General">Üldseadistused</string>
     <string name="Settings_FMD_Server_Server_URL">Serveri võrguaadress:</string>
     <string name="Settings_FMD_Server_User_ID">Kasutajanimi:</string>
-    <string name="Settings_FMD_Server_ID_Desc">Leidmaks oma seadet FMD serveri abil vajad sa kasutajanime. Märgi see üles ja hoia turvaliselt kas moodsas salasõnalaekas või vana kooli seifis.</string>
     <string name="Settings_FMDServer_Logout_Text">Kas sa kindlasti soovid oma FMD serveri kasutajakonto siit seadmest välja logida?</string>
     <string name="Settings_FMDServer_Unregister_Success">Registreerimise eemaldamine ja andmete kustutamine õnnestus!</string>
     <string name="Settings_FMDServer_Push_Url">Tõuketeenuse võrguaadress: %s</string>

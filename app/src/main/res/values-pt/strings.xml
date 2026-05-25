@@ -42,7 +42,6 @@
     <string name="Settings_FMD_Server_General">Geral</string>
     <string name="Settings_FMD_Server_Server_URL">URL do servidor:</string>
     <string name="Settings_FMD_Server_User_ID">ID do utilizador:</string>
-    <string name="Settings_FMD_Server_ID_Desc">Precisará do ID do utilizador para encontrar o seu dispositivo com o FMD Server. Mantenha-o seguro.</string>
     <string name="Settings_FMD_Server_Connection_Status">Estado da conexão:</string>
     <string name="Settings_FMD_Server_Connection_Status_Success">Bem-sucedida</string>
     <string name="Settings_FMDServer_Change_Password_Button">Alterar palavra-passe</string>

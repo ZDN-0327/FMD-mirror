@@ -5,7 +5,6 @@
     <string name="Settings_FMD_Server_General">Загальне</string>
     <string name="Settings_FMD_Server_Server_URL">Посилання сервера:</string>
     <string name="Settings_FMD_Server_User_ID">Ідентифікатор користувача:</string>
-    <string name="Settings_FMD_Server_ID_Desc">Вам потрібен ідентифікатор користувача, щоб знайти ваш пристрій за допомогою сервера FMD. Запишіть його і зберігайте в безпеці.</string>
     <string name="Settings_FMDServer_Change_Password_Button">Змінити пароль</string>
     <string name="Settings_FMDServer_Logout_Button">Вийти</string>
     <string name="Settings_FMDServer_Alert_DeleteData_Desc">Це видалить усі дані із сервера! Ви впевнені?</string>

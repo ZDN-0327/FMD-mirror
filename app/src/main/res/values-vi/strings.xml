@@ -110,7 +110,6 @@
     <string name="Settings_no_ringtone_picker">Không tìm thấy trình chọn âm thanh!</string>
     <string name="Settings_FMD_Server_Server_URL">URL máy chủ:</string>
     <string name="Settings_FMD_Server_User_ID">ID người dùng:</string>
-    <string name="Settings_FMD_Server_ID_Desc">Bạn cần ID người dùng để tìm thiết bị của bạn với máy chủ FMD. Ghi lại và giữ an toàn.</string>
     <string name="Settings_FMD_Server_Connection_Status">Trạng thái kết nối:</string>
     <string name="Settings_FMD_Server_Connection_Status_Success">Thành công</string>
     <string name="Settings_FMDServer_Alert_DeleteData_Desc">Điều này sẽ xóa tất cả dữ liệu từ máy chủ! Bạn có chắc không?</string>

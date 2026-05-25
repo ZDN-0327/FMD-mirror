@@ -28,7 +28,6 @@
     <string name="Settings_Ringer_Tone_Description">Выберите рингтон для команды \"ring\".</string>
     <string name="Settings_Select_Ringtone">Выберите рингтон</string>
     <string name="Settings_FMD_Server_User_ID">Имя пользователя:</string>
-    <string name="Settings_FMD_Server_ID_Desc">Вам необходимо имя пользователя, чтобы найти ваше устройство с помощью Сервера FMD. Запишите и надёжно храните его.</string>
     <string name="Settings_FMDServer_Change_Password_Button">Сменить пароль</string>
     <string name="Settings_FMDServer_Logout_Button">Выйти</string>
     <string name="Settings_FMDServer_Alert_DeleteData_Desc">Это удалит все данные с сервера. Вы уверены?</string>
