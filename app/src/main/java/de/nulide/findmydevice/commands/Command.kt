@@ -45,9 +45,8 @@ abstract class Command(val context: Context) {
         val missing = missingRequiredPermissions()
         if (missing.isNotEmpty()) {
             val msg = context.getString(
-                R.string.cmd_missing_permissions,
-                args.joinToString(" "),
-                missing.joinToString(", ") { it.toString(context) }
+                R.string.cmd_missing_android_permissions,
+                keyword, missing.joinToString(", ") { it.toString(context) }
             )
             context.log().w(TAG, msg)
             transport.send(context, msg)
