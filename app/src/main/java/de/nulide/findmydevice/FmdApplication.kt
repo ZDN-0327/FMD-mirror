@@ -3,6 +3,9 @@ package de.nulide.findmydevice
 import android.app.Application
 import android.content.Context
 import android.service.notification.StatusBarNotification
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import de.nulide.findmydevice.data.AllowlistRepository
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.data.UncaughtExceptionHandler.Companion.initUncaughtExceptionHandler
@@ -11,11 +14,11 @@ import de.nulide.findmydevice.services.ServerConnectivityCheckService
 import de.nulide.findmydevice.services.ServerLocationUploadService
 import de.nulide.findmydevice.services.isRegisteredWithUnifiedPush
 import de.nulide.findmydevice.services.unregisterWithUnifiedPush
-import de.nulide.findmydevice.ui.onboarding.PinUpdate
 import de.nulide.findmydevice.ui.onboarding.UpdateboardingModernCryptoActivity
 import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
 import de.nulide.findmydevice.warnings.notifyWarnUnifiedPushRequired
+import kotlinx.coroutines.launch
 import org.unifiedpush.android.connector.INSTANCE_DEFAULT
 import org.unifiedpush.android.connector.UnifiedPush
 
@@ -50,9 +53,13 @@ class FmdApplication : Application() {
 
     private fun doUpdateMigrations(context: Context) {
         val settings = SettingsRepository.getInstance(context)
-        settings.migrateSettings()
+
+        ProcessLifecycleOwner.get().lifecycleScope.launch {
+            settings.migrateSettings()
+            AllowlistRepository.getInstance(context).migrateAllowlist()
+        }
+
         UpdateboardingModernCryptoActivity.notifyAboutCryptoRefreshIfRequired(context)
-        PinUpdate.migratePin(context)
     }
 
     fun restartServices() {
