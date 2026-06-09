@@ -1,11 +1,14 @@
 package de.nulide.findmydevice.database
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import de.nulide.findmydevice.commands.FmdPermission
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(
     tableName = "phone_number",
     indices = [
@@ -19,8 +22,8 @@ data class PhoneNumber(
 
     @ColumnInfo("number") val number: String,
 
-    @ColumnInfo("permissions") val permission: Long = FmdPermission.ALL,
-) : AccessItem {
+    @ColumnInfo("permissions") val permission: Long = FmdPermission.DEFAULT,
+) : AccessItem, Parcelable {
 
     override fun getItemPermission(): Long {
         return permission

@@ -20,6 +20,7 @@ import de.nulide.findmydevice.services.TempContactExpiredService
 import de.nulide.findmydevice.ui.access.AccessControlActivity
 import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
+import de.nulide.findmydevice.utils.normalizePhoneNumber
 
 
 class SmsTransport(
@@ -56,7 +57,7 @@ class SmsTransport(
         activity.startActivity(Intent(context, AccessControlActivity::class.java))
     })
 
-    override fun getDestinationString() = phoneNumber
+    override fun getDestinationString() = normalizePhoneNumber(context, phoneNumber) ?: phoneNumber
 
     override suspend fun isAllowed(parsed: ParserResult.Success): AccessResponse {
         var isKnownButDenied = false
@@ -98,14 +99,6 @@ class SmsTransport(
                 if (hasPermission) {
                     context.log()
                         .i(TAG, "$phoneNumber used FMD via SMS password '${smsPass.label}'")
-                    // TODO: update strings, remove PIN, add label
-                    send(context, context.getString(R.string.MH_Pin_Accepted))
-                    Notifications.notify(
-                        context,
-                        context.getString(R.string.usage_notification_pin_title),
-                        context.getString(R.string.usage_notification_pin_text, phoneNumber),
-                        Notifications.CHANNEL_PIN
-                    )
 
                     tempAllowlistRepo.add(phoneNumber, subscriptionId)
                     TempContactExpiredService.scheduleJob(
