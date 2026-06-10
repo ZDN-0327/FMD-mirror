@@ -327,4 +327,6 @@
     <string name="access_tab_sms_password"></string>
     <string name="Settings_Debugging"></string>
     <string name="fmd_permission_allowed_commands_description_server"></string>
+    <string name="Settings_OpenCellId" translatable="false"></string>
+    <string name="Notification_Server" translatable="false"></string>
 </resources>
