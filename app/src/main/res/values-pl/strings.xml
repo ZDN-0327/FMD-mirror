@@ -126,7 +126,7 @@
     <string name="pw_change_empty">Hasło nie może być puste.</string>
     <string name="pw_change_network_failed">Zmiana hasła nie powiodła się z powodu błędu sieci.</string>
     <string name="server_login_attempts_title">Nieudane próby logowania do serwera FMD</string>
-    <string name="server_login_attempts_text">Ktoś próbował zalogować się do Twojego konta na serwerze FMD \"%s\". Z powodu wielu błędnych haseł, konto zostało zablokowane na 10 minut.</string>
+    <string name="server_login_attempts_text">Ktoś próbował zalogować się do Twojego konta na serwerze FMD \"%s\". Z powodu wielu błędnych haseł, konto zostało zablokowane na 10 minut.</string>
     <string name="server_version_upgrade_required_title">Wymagana aktualizacja serwera FMD</string>
     <string name="server_version_upgrade_required_text">Serwer FMD z którego korzystasz ma wersję {CURRENT}, a ta aplikacja wymaga conajmniej wersji {MIN}. Kontrolowanie Twojego urządzenia przez serwer FMD może nie działać. Proszę zaktualizować serwer.</string>
     <string name="server_connectivity_lost_title">Stracono połączenie z serwerem FMD</string>
