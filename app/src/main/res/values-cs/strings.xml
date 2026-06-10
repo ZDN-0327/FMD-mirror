@@ -55,7 +55,6 @@
     <string name="Notification_FAIL">Chyby</string>
     <string name="Notification_Fail_Description">Oznámení, když něco selže, například spojení s FMD Serverem</string>
     <string name="Enable">Povolit</string>
-    <string name="MH_Pin_Accepted">PIN prijat!</string>
     <string name="LockScreen_Usage_detectd">LockScreenMessage: detekováno použití.</string>
     <string name="LockScreen_Backbutton_pressed">LockScreenMessage: stisknuto tlačítko zpět.</string>
     <string name="loading">Načítání…</string>
@@ -225,8 +224,6 @@
     <string name="Settings_FMDServer_Check_Notify_After_Description">FMD vás upozorní, pokud poslední úspěšné spojení s FMD Serverem proběhlo před více než X hodinami. Nastavení nemá žádný vliv, pokud je kontrola spojení zakázána.</string>
     <string name="server_connectivity_lost_title">Spojení s FMD Serverem ztraceno</string>
     <string name="server_connectivity_lost_text">FMD Server na %1$s již není dostupný. Poslední úspěšné spojení proběhlo %2$s.</string>
-    <string name="usage_notification_pin_title">Použit PIN FMD</string>
-    <string name="usage_notification_pin_text">Následující číslo použilo PIN: „%s“. Je doporučeno PIN změnit.</string>
     <string name="Settings_FMDServer_Check_Interval_Description">FMD kontroluje spojení s FMD Serverem každých X hodin. Nastavte na 0 pro zakázání kontroly spojení.</string>
     <string name="Settings_FMDServer_Check_Interval_Title">Interval kontroly spojení</string>
     <string name="cmd_delete_response_dry_run">Zkušební běh proběhl úspěšně, překakování skutečného odstranění zařízení.</string>
@@ -314,4 +311,7 @@
     <string name="access_password_exists">Toto heslo již existuje: %s</string>
     <string name="access_add_password_label_message">Zvolte si popisek, abyste mohli heslo identifikovat. Po uložení tohoto záznamu již heslo nebude znovu zobrazeno.</string>
     <string name="allowlist_delete_title_password">Odstranit heslo?</string>
+    <string name="Settings_OpenCellId" translatable="false"></string>
+    <string name="transport_fmd_server_title" translatable="false"></string>
+    <string name="Notification_Server" translatable="false"></string>
 </resources>
