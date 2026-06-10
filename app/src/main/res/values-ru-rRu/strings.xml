@@ -327,4 +327,6 @@
     <string name="access_tab_notification_password"></string>
     <string name="app_name" translatable="false"></string>
     <string name="access_tab_sms_password"></string>
+    <string name="transport_fmd_server_title" translatable="false"></string>
+    <string name="Notification_Server" translatable="false"></string>
 </resources>
