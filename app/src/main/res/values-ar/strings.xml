@@ -54,9 +54,7 @@
     <string name="notify_crypto_update_title">الإجراء مطلوب</string>
     <string name="OpenCellId_open_website">فتح موقع OpenCelliD</string>
     <string name="OpenCellId_test_opencellid">اختبار الإتصال مع OpenCelliD</string>
-    <string name="server_unregister_failed_body">فشل إلغاء التسجيل بسبب الخطأ التالي: {ERROR}
-\n
-\nيمكنك المتابعة على أي حال، ولكن ربما لم يتم حذف حسابك من الخادم. إذا تابعت، فسيتم حذف حسابك محليًا من هذا الجهاز.</string>
+    <string name="server_unregister_failed_body">فشل إلغاء التسجيل بسبب الخطأ التالي: {ERROR} \n \nيمكنك المتابعة على أي حال، ولكن ربما لم يتم حذف حسابك من الخادم. إذا تابعت، فسيتم حذف حسابك محليًا من هذا الجهاز.</string>
     <string name="Notification_Security">حماية</string>
     <string name="Notification_Pin_Usage_Description">الإشعارات عند الوصول إلى FMD عبر الرقم السري</string>
     <string name="Permission_IGNORE_BATTERY_OPTIMIZATION">من المفترض أن يعمل هذا التطبيق في الخلفية. ولضمان عمله حتى عندما يكون جهازك في وضع الاستعداد، يتعين عليك إيقاف تشغيل تحسين البطارية لهذا التطبيق.</string>
@@ -328,4 +326,7 @@
     <string name="transport_inapp_send_command_button_send"></string>
     <string name="Settings_Debugging"></string>
     <string name="fmd_permission_allowed_commands_description_server"></string>
+    <string name="Settings_OpenCellId" translatable="false"></string>
+    <string name="transport_fmd_server_title" translatable="false"></string>
+    <string name="Notification_Server" translatable="false"></string>
 </resources>
