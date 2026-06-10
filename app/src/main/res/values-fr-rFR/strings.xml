@@ -99,13 +99,7 @@
     <string name="cmd_lock_response">L\'appareil devrait maintenant être verrouillé.</string>
     <string name="cmd_stats_description_short">Obtenir les statistiques réseau</string>
     <string name="cmd_stats_description_long">Obtient les statistiques réseau à partir de l\'appareil. Par exemple, son adresse IP et une liste des réseaux Wifi environnants.</string>
-    <string name="cmd_stats_response">Statistiques réseau :
-\n
-\nAdresses IP de l\'appareil :
-\n%1$s
-\n
-\nRéseaux Wifi :
-\n%2$s</string>
+    <string name="cmd_stats_response">Statistiques réseau : \n \nAdresses IP de l\'appareil : \n%1$s \n \nRéseaux Wifi : \n%2$s</string>
     <string name="cmd_camera_description_long">Prend une photo avec la caméra avant/arrière et l\'envoie vers le serveur FMD. Actuellement, seul le transfert vers le serveur FMD est pris en charge. Vous pouvez également envoyer cette commande via d\'autres canaux de communication, et la photo sera téléversée vers le serveur FMD (si un compte existe).</string>
     <string name="cmd_delete_description_long">Cela efface toutes les données. Par la suite, vous ne pourrez plus communiquer avec l\'appareil. Pour prévenir une utilisation accidentelle et malveillante, cette commande requiert un mot de passe et doit être explicitement activée dans les paramètres.</string>
     <string name="cmd_locate_description_short">Localiser l\'appareil</string>
