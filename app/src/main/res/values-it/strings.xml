@@ -23,9 +23,7 @@
     <string name="server_version_error">Impossibile ottenere la versione del server</string>
     <string name="server_version_error_low_version">È richiesta almeno la versione del server {MIN}, ma il server selezionato ha la versione {CURRENT}. Continuare a proprio rischio e pericolo.</string>
     <string name="server_unregister_failed_title">Disiscrizione fallita</string>
-    <string name="server_unregister_failed_body">La disiscrizione non è riuscita con il seguente errore: {ERRORE}
-\n
-\nÈ possibile continuare comunque, ma l\'account potrebbe non essere stato eliminato dal server. Se si continua, l\'account verrà eliminato localmente da questo dispositivo.</string>
+    <string name="server_unregister_failed_body">La disiscrizione non è riuscita con il seguente errore: {ERRORE} \n \nÈ possibile continuare comunque, ma l\'account potrebbe non essere stato eliminato dal server. Se si continua, l\'account verrà eliminato localmente da questo dispositivo.</string>
     <string name="server_unregister_continue_anyway">Prosegui comunque</string>
     <string name="server_unregister_dont_continue">Non proseguire</string>
     <string name="copied">Copiato</string>
@@ -48,8 +46,7 @@
     <string name="Settings_FMDServer_Update_Interval_Description">Il tempo in minuti in cui FMD deve inviare nuovi dati sulla posizione al server.</string>
     <string name="Settings_FMDServer_Alert_PrivacyPolicy_Title">Info privacy</string>
     <string name="accept">Accetta</string>
-    <string name="Settings_FMDServer_Location_Type_Description">L\'origine/i da cui i dati della posizione vengono caricati a intervalli regolari in background.
-\nSe non viene selezionato niente, nessuna posizione viene caricata regolarmente. (È ancora possibile utilizzare l\'interfaccia web per forzare il caricamento. Questo richiede il push.)</string>
+    <string name="Settings_FMDServer_Location_Type_Description">L\'origine/i da cui i dati della posizione vengono caricati a intervalli regolari in background. \nSe non viene selezionato niente, nessuna posizione viene caricata regolarmente. (È ancora possibile utilizzare l\'interfaccia web per forzare il caricamento. Questo richiede il push.)</string>
     <string name="GPS">GPS</string>
     <string name="Cell">Cella</string>
     <string name="Settings_FMDServer_Alert_DeleteData_Desc">Questo cancellerà tutti i dati dal server Sei sicuro?</string>
