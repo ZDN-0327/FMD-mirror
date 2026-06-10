@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="Locked_Lock_Screen">FMD
-\n¡Este dispositivo está bloqueado!
-\nMensaje del propietari@:</string>
+    <string name="Locked_Lock_Screen">FMD \n¡Este dispositivo está bloqueado! \nMensaje del propietari@:</string>
     <string name="Enable">Activar</string>
     <string name="Settings_Lockscreenmessage_Description">Mensaje de pantalla de bloqueo: \nAl bloquear el dispositivo, este mensaje aparecerá en la pantalla de bloqueo.</string>
     <string name="Settings_FMDCommand_Description">El comando utilizado para comunicarse con el FMD.</string>
@@ -21,11 +19,7 @@
     <string name="Pin_Usage">Uso del PIN</string>
     <string name="Notification_Usage_Description">Notificaciones cuando FMD está recibiendo comandos</string>
     <string name="Notification_Pin_Usage_Description">Las notificaciones cuando se accede a FMD se realizan a través del PIN</string>
-    <string name="cmd_locate_response_opencellid_failed">Error al obtener la localización desde OpenCelliD. Esto puede ocurrir si la torre celular no está en la base de datos.
-\n
-\nPor favor, intente lo siguiente: %1$s
-\n
-\n%2$s</string>
+    <string name="cmd_locate_response_opencellid_failed">Error al obtener la localización desde OpenCelliD. Esto puede ocurrir si la torre celular no está en la base de datos. \n \nPor favor, intente lo siguiente: %1$s \n \n%2$s</string>
     <string name="LockScreen_Usage_detectd">LockScreenMessage: Uso detectado.</string>
     <string name="LockScreen_Backbutton_pressed">Mensaje de la Pantalla de Bloqueo: Botón de Retroceso pulsado.</string>
     <string name="Toast_Empty_FMDCommand">No se permite el comando vacío; se utiliza el valor predeterminado.</string>
@@ -81,9 +75,7 @@
     <string name="Settings_FMDServer_Info">Con el servidor FMD puedes enviar comandos a través de Internet, desde el servidor a la aplicación. También puede ver la ubicación del dispositivo en un mapa o ver las fotos tomadas por el dispositivo. Para obtener instrucciones de autoalojamiento, consulta el sitio web.</string>
     <string name="notify_crypto_update_title">Acción necesaria</string>
     <string name="notify_crypto_update_text">Es necesario actualizar algunos ajustes para seguir utilizando FMD. Haga clic para abrir.</string>
-    <string name="server_unregister_failed_body">La cancelación del registro falló con el siguiente error: {ERROR}
-\n
-\nAún puedes continuar, pero es posible que tu cuenta no haya sido eliminada del servidor. Si continúa, su cuenta se eliminará localmente de este dispositivo.</string>
+    <string name="server_unregister_failed_body">La cancelación del registro falló con el siguiente error: {ERROR} \n \nAún puedes continuar, pero es posible que tu cuenta no haya sido eliminada del servidor. Si continúa, su cuenta se eliminará localmente de este dispositivo.</string>
     <string name="server_unregister_dont_continue">No continuar</string>
     <string name="Notification_Security">Seguridad</string>
     <string name="Notification_FAIL">Fallos</string>
@@ -114,13 +106,7 @@
     <string name="cmd_nodisturb_response_off">Modo No molestar desactivado.</string>
     <string name="cmd_stats_description_short">Obtener estadísticas de red</string>
     <string name="cmd_stats_description_long">Obtenga estadísticas de red del dispositivo. Por ejemplo, su dirección IP y una lista de redes wifi cercanas.</string>
-    <string name="cmd_stats_response">Estadísticas de red:
-\n
-\nIPs de dispositivo:
-\n%1$s
-\n
-\nRedes Wifi:
-\n%2$s</string>
+    <string name="cmd_stats_response">Estadísticas de red: \n \nIPs de dispositivo: \n%1$s \n \nRedes Wifi: \n%2$s</string>
     <string name="perm_battery_optimizations_name">Ignorar las optimizaciones de batería</string>
     <string name="perm_device_admin_name">Administrador de dispositivos</string>
     <string name="perm_do_not_disturb_access_name">Acceso al modo No molestar</string>
@@ -340,4 +326,7 @@
     <string name="access_tab_sms_password"></string>
     <string name="Settings_Debugging"></string>
     <string name="fmd_permission_allowed_commands_description_server"></string>
+    <string name="transport_fmd_server_title" translatable="false"></string>
+    <string name="paste" translatable="false"></string>
+    <string name="Notification_Server" translatable="false"></string>
 </resources>
