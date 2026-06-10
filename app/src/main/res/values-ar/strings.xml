@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="help">مساعدة</string>
     <string name="Settings_Settings">الإعدادات</string>
     <string name="Settings_Import">إستيراد الإعدادات</string>
@@ -61,15 +61,12 @@
     <string name="Notification_Pin_Usage_Description">الإشعارات عند الوصول إلى FMD عبر الرقم السري</string>
     <string name="Permission_IGNORE_BATTERY_OPTIMIZATION">من المفترض أن يعمل هذا التطبيق في الخلفية. ولضمان عمله حتى عندما يكون جهازك في وضع الاستعداد، يتعين عليك إيقاف تشغيل تحسين البطارية لهذا التطبيق.</string>
     <string name="Notification_Fail_Description">إشعارات عند فشل شيء ما، مثل الاتصال بخادم FMD</string>
-    <string name="MH_Pin_Accepted">تم قبول الرقم السري!</string>
     <string name="LockScreen_Backbutton_pressed">رسالة شاشة القفل: تم الضغط على زر الرجوع.</string>
     <string name="LockScreen_Usage_detectd">رسالة قفل الشاشة: تم اكتشاف الاستخدام.</string>
     <string name="ringer_stop_ringing">ايقاف الرنين</string>
     <string name="cmd_locate_response_location_off">لا يمكن تحديد الموقع: الموقع الجغرافي غير مفعل.</string>
     <string name="Permission_POST_NOTIFICATIONS">سوف يرسل لك FMD أحيانًا إشعارات، على سبيل المثال لتحذيرك من أن شخصًا ما يحدد موقع جهازك.</string>
-    <string name="Locked_Lock_Screen">FMD
-\nهذا الهاتف مغلق!
-\nرسالة من المالك:</string>
+    <string name="Locked_Lock_Screen">FMD \nهذا الهاتف مغلق! \nرسالة من المالك:</string>
     <string name="Toast_Duplicate_contact">جهة الاتصال هذه موجودة بالفعل.</string>
     <string name="Delete">حذف</string>
     <string name="cmd_help_message_start">أوامر FMD:</string>
@@ -221,4 +218,114 @@
     <string name="server_connectivity_check_not_enabled_text">يمكن لـ FMD التحقق بانتظام من إمكانية الوصول إلى خادم FMD. هذه الميزة معطلة إفتراضيًا لأسباب تتعلق بالخصوصية، ولكننا نوصي بتفعيلها لأسباب تتعلق بتوفر الخدمة.</string>
     <string name="server_password_hint">إختر كلمة مرور يصعب تخمينها، ولكن يمكنك إستعادتها في حال فقدان جهازك. تمنحك هذه الكلمة إمكانية الوصول إلى الأوامر التي تُنفذ عن بُعد على جهازك. لا يستطيع مسؤول الخادم الوصول إلى كلمة مرورك أو إعادة تعيينها.</string>
     <string name="allowlist_invalid_number">رقم الهاتف هذا غير صالح!</string>
+    <string name="access_add_password_label_message"></string>
+    <string name="access_password_empty"></string>
+    <string name="invalid_url"></string>
+    <string name="perm_post_notification_name"></string>
+    <string name="allowlist_delete_title_phone_number"></string>
+    <string name="access_password_exists"></string>
+    <string name="push_registration_failed_title"></string>
+    <string name="save"></string>
+    <string name="Notification_Usage"></string>
+    <string name="multiple_unified_push_distributors_title"></string>
+    <string name="executing_text"></string>
+    <string name="server_username"></string>
+    <string name="log_view_clear_confirm"></string>
+    <string name="allowlist_delete_title_password"></string>
+    <string name="cmd_ringermode_response_empty"></string>
+    <string name="grant_write_secure_settings_title"></string>
+    <string name="server_fmd_id_hint"></string>
+    <string name="allowlist_reset_title"></string>
+    <string name="Settings_Access_Control"></string>
+    <string name="cmd_locate_response_beacondb_failed"></string>
+    <string name="cmd_flash_description_short"></string>
+    <string name="cmd_nodisturb_response_off"></string>
+    <string name="password_set"></string>
+    <string name="password_enter"></string>
+    <string name="server_apparently_deleted_text"></string>
+    <string name="cmd_missing_android_permissions"></string>
+    <string name="Settings_FMDServer_Push_Distributor"></string>
+    <string name="cmd_missing_fmd_permissions"></string>
+    <string name="allowlist_delete_message"></string>
+    <string name="import_success_message"></string>
+    <string name="Settings_FMDServer" translatable="false"></string>
+    <string name="password_min_length"></string>
+    <string name="access_phone_number_empty"></string>
+    <string name="export_password_message"></string>
+    <string name="cmd_ringermode_response"></string>
+    <string name="executing_title"></string>
+    <string name="Fused"></string>
+    <string name="export_password_message_empty_warning"></string>
+    <string name="log_view_clear"></string>
+    <string name="cmd_delete_response_dry_run"></string>
+    <string name="copy" translatable="false" tools:override="true"></string>
+    <string name="setup_recommendations_title"></string>
+    <string name="access_sms_password_add"></string>
+    <string name="access_sms_password_hint"></string>
+    <string name="server_connectivity_lost_text"></string>
+    <string name="access_sms_password_expiry"></string>
+    <string name="missing_push_title"></string>
+    <string name="debugging_recent_jobs" translatable="false"></string>
+    <string name="access_sms_password_granted_info"></string>
+    <string name="Settings_FMDServer_Push_Url"></string>
+    <string name="transport_inapp_send_command_command_placeholder"></string>
+    <string name="back"></string>
+    <string name="Notification_ExecutionService"></string>
+    <string name="access_notification_password_add"></string>
+    <string name="cmd_gps_response_is_on"></string>
+    <string name="Settings_FMDServer_Push_Title" translatable="false"></string>
+    <string name="Settings_FMDServer_Check_Notify_After_Title"></string>
+    <string name="transport_sms_title"></string>
+    <string name="fmd_permission_allowed_commands_title"></string>
+    <string name="OpenCellId_OpenCellId" translatable="false"></string>
+    <string name="import_failed_message"></string>
+    <string name="perm_notification_access_name"></string>
+    <string name="Settings_FMDServer_Push_Register"></string>
+    <string name="perm_write_secure_settings_name"></string>
+    <string name="import_success_message_warning"></string>
+    <string name="paste" translatable="false"></string>
+    <string name="Ok" translatable="false"></string>
+    <string name="missing_push_description"></string>
+    <string name="access_sms_password_used_by"></string>
+    <string name="OpenCellId_API_Key_Description" translatable="false"></string>
+    <string name="debugging_pending_jobs_auto_refresh" translatable="false"></string>
+    <string name="access_notification_password_hint"></string>
+    <string name="access_phone_number_hint"></string>
+    <string name="cmd_nodisturb_description_short"></string>
+    <string name="select"></string>
+    <string name="Notification_ExecutionService_Description"></string>
+    <string name="Settings_FMDServer_Push_Install_Sunup"></string>
+    <string name="allowlist_reset_text"></string>
+    <string name="password_match_command_keyword"></string>
+    <string name="password_change"></string>
+    <string name="cancel" translatable="false"></string>
+    <string name="transport_inapp_title"></string>
+    <string name="import_password_message"></string>
+    <string name="access_tab_phone_number"></string>
+    <string name="cmd_ringermode_description_long"></string>
+    <string name="cmd_locate_provider_disabled"></string>
+    <string name="perm_sms_name"></string>
+    <string name="export_password_enter_title"></string>
+    <string name="multiple_unified_push_distributors_description"></string>
+    <string name="cmd_bluetooth_response_is_on"></string>
+    <string name="label"></string>
+    <string name="tip_first_contact_added"></string>
+    <string name="push_registration_upload_failed_text"></string>
+    <string name="Settings_FMDServer_Push_Register_Again"></string>
+    <string name="fmd_edge_info_message"></string>
+    <string name="Settings_FMDServer_Push_Open_Help"></string>
+    <string name="cmd_ringermode_description_short"></string>
+    <string name="cmd_bluetooth_response_is_off"></string>
+    <string name="Settings_FMDServer_Push_Info_Sunup"></string>
+    <string name="cmd_gps_response_is_off"></string>
+    <string name="debugging_pending_jobs_title" translatable="false"></string>
+    <string name="cmd_stats_response"></string>
+    <string name="transport_notification_reply_description"></string>
+    <string name="access_tab_notification_password"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="perm_do_not_disturb_access_name"></string>
+    <string name="access_tab_sms_password"></string>
+    <string name="transport_inapp_send_command_button_send"></string>
+    <string name="Settings_Debugging"></string>
+    <string name="fmd_permission_allowed_commands_description_server"></string>
 </resources>
