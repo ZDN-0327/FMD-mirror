@@ -325,4 +325,8 @@
     <string name="export_success"></string>
     <string name="Settings_Debugging"></string>
     <string name="fmd_permission_allowed_commands_description_server"></string>
+    <string name="Settings_OpenCellId" translatable="false"></string>
+    <string name="paste" translatable="false"></string>
+    <string name="Ok" translatable="false"></string>
+    <string name="cancel" translatable="false"></string>
 </resources>
