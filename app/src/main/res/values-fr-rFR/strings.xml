@@ -187,8 +187,8 @@
     <string name="transport_inapp_title">Intégré à l\'application</string>
     <string name="transport_inapp_send_command_command_placeholder">Commande</string>
     <string name="export_success">Exportation réussie</string>
-    <string name="Settings_no_ringtone_picker">Sélecteur de sonnerie non trouvé !</string>
-    <string name="Settings_FMDServer_Unregister_Success">Désinscription et suppression des données réussis !</string>
+    <string name="Settings_no_ringtone_picker">Sélecteur de sonnerie non trouvé !</string>
+    <string name="Settings_FMDServer_Unregister_Success">Désinscription et suppression des données réussis !</string>
     <string name="pw_change_empty">Le mot de passe ne peut pas être vide.</string>
     <string name="pw_change_success">Mot de passe changé</string>
     <string name="pw_change_wrong_password">Mot de passe invalide</string>
@@ -198,7 +198,7 @@
     <string name="log_view_export">Exporter les journaux</string>
     <string name="Settings_Appearance">Apparence</string>
     <string name="appearance_language">Langue</string>
-    <string name="usage_notification_text_source">La commande « %1$s » a été exécutée par « %2$s ».</string>
+    <string name="usage_notification_text_source">La commande « %1$s » a été exécutée par « %2$s ».</string>
     <string name="Settings_FMD_Server_Connection_Status">État de la connexion :</string>
     <string name="Settings_FMD_Server_Connection_Status_Success">Succès</string>
     <string name="server_version_upgrade_required_title">Mise à jour du Serveur FMD requise</string>
@@ -222,11 +222,11 @@
     <string name="server_connectivity_lost_text">Le Serveur FMD %1$s ne peut plus être contacté. La dernière connexion réussie était à %2$s.</string>
     <string name="log_view_title">Journaux</string>
     <string name="log_view_clear">Supprimer les journaux</string>
-    <string name="log_view_clear_confirm">Voulez-vous vraiment supprimer toutes les entrées des journaux ?</string>
-    <string name="cmd_locate_response_opencellid_failed">Impossible d’obtenir la localisation depuis OpenCelliD. Cela peut arriver si l’antenne-relai n’est pas dans la base de données.\n\nVeuillez essayez de suivre le lien suivant : %1$s\n\n%2$s</string>
+    <string name="log_view_clear_confirm">Voulez-vous vraiment supprimer toutes les entrées des journaux ?</string>
+    <string name="cmd_locate_response_opencellid_failed">Impossible d’obtenir la localisation depuis OpenCelliD. Cela peut arriver si l’antenne-relai n’est pas dans la base de données.\n\nVeuillez essayez de suivre le lien suivant : %1$s\n\n%2$s</string>
     <string name="cmd_locate_response_gps_fail">Impossible de récupérer une nouvelle localisation GPS. Peut-être à cause d’un délai d’expiration.</string>
     <string name="Notification_InApp_Description">Notifications intégrées à l’application</string>
-    <string name="Settings_FMDServer_Logout_Text">Voulez-vous vraiment vous déconnecter de cotre compte Serveur FMD ?</string>
+    <string name="Settings_FMDServer_Logout_Text">Voulez-vous vraiment vous déconnecter de cotre compte Serveur FMD ?</string>
     <string name="server_registration_token_error">Requête réseau échouée avec le code HTTP 401. Cela peut arriver si le serveur nécessite un jeton d’enregistrement et que le jeton que vous avez fourni est incorrect.</string>
     <string name="appearance_theme_follow_system">Suivre le thème système</string>
     <string name="appearance_theme_light">Clair</string>
@@ -235,7 +235,7 @@
     <string name="appearance_theme_choose">Choisir le thème</string>
     <string name="cmd_delete_response_dry_run">Essai réussi, on passe la vraie réinitialisation de l’appareil.</string>
     <string name="server_login_attempts_title">Tentatives échouées de connexion au Serveur FMD</string>
-    <string name="server_login_attempts_text">Quelqu’un a essayé de se connecter à votre compte Serveur FMD « %s ». À cause de plusieurs mauvais mots de passe, le compte est maintenant bloqué pour 10 minutes.</string>
+    <string name="server_login_attempts_text">Quelqu’un a essayé de se connecter à votre compte Serveur FMD « %s ». À cause de plusieurs mauvais mots de passe, le compte est maintenant bloqué pour 10 minutes.</string>
     <string name="cmd_bluetooth_response_off">Bluetooth désactivé.</string>
     <string name="Notification_InApp">Canal d\'envoi intégré à l’application</string>
     <string name="Settings_FMDServer_Push_Description">Envoyer des commandes depuis le serveur FMD vers votre appareil nécessite une application publiant grâce à UnifiedPush.</string>
