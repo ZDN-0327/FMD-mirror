@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="loading">加载中…</string>
     <string name="help">帮助</string>
     <string name="copied">已复制</string>
@@ -205,11 +205,8 @@
     <string name="transport_fmd_server_description_auth">任何知道您的用户名和密码的人都可以登录 FMD 服务器并控制您的设备。</string>
     <string name="transport_inapp_description">从 FMD 内部向您的设备发送本地命令，FMD 会回复通知。适用于测试情况。</string>
     <string name="usage_notification_text_source">命令“%1$s”由“%2$s”执行。</string>
-    <string name="usage_notification_pin_title">已使用 FMD PIN</string>
-    <string name="usage_notification_pin_text">PIN 被以下号码使用：“%s”。建议更改 PIN。</string>
     <string name="setup_warnings_title">安装警告</string>
     <string name="crashed_title">崩溃报告</string>
-    <string name="MH_Pin_Accepted">已接受 PIN！</string>
     <string name="cmd_help_description_short">显示帮助</string>
     <string name="cmd_nodisturb_response_on">免打扰模式已打开。</string>
     <string name="cmd_nodisturb_description_short">打开和关闭免打扰模式</string>
@@ -271,4 +268,64 @@
     <string name="Settings_FMDServer_Push_Open_Help">关于推送服务的补充说明</string>
     <string name="Settings_FMDServer_Push_Info_Sunup">推荐使用 Sunup 作为 UnifiedPush 分发器应用。该应用配置简便，且采用 Mozilla 提供的推送服务器。</string>
     <string name="Settings_FMDServer_Update_Interval_Description_Constraint">不推荐将时间参数设置为低于 15 分钟。</string>
+    <string name="access_add_password_label_message"></string>
+    <string name="access_password_empty"></string>
+    <string name="invalid_url"></string>
+    <string name="allowlist_delete_title_phone_number"></string>
+    <string name="access_password_exists"></string>
+    <string name="push_registration_failed_title"></string>
+    <string name="save"></string>
+    <string name="multiple_unified_push_distributors_title"></string>
+    <string name="server_username"></string>
+    <string name="allowlist_delete_title_password"></string>
+    <string name="Settings_Access_Control"></string>
+    <string name="server_apparently_deleted_text"></string>
+    <string name="cmd_missing_android_permissions"></string>
+    <string name="cmd_missing_fmd_permissions"></string>
+    <string name="allowlist_delete_message"></string>
+    <string name="import_success_message"></string>
+    <string name="Settings_FMDServer" translatable="false"></string>
+    <string name="access_phone_number_empty"></string>
+    <string name="export_password_message"></string>
+    <string name="Fused"></string>
+    <string name="export_password_message_empty_warning"></string>
+    <string name="copy" translatable="false" tools:override="true"></string>
+    <string name="access_sms_password_add"></string>
+    <string name="access_sms_password_hint"></string>
+    <string name="access_sms_password_expiry"></string>
+    <string name="debugging_recent_jobs" translatable="false"></string>
+    <string name="access_sms_password_granted_info"></string>
+    <string name="back"></string>
+    <string name="access_notification_password_add"></string>
+    <string name="cmd_gps_response_is_on"></string>
+    <string name="Settings_FMDServer_Push_Title" translatable="false"></string>
+    <string name="fmd_permission_allowed_commands_title"></string>
+    <string name="OpenCellId_OpenCellId" translatable="false"></string>
+    <string name="import_failed_message"></string>
+    <string name="import_success_message_warning"></string>
+    <string name="paste" translatable="false"></string>
+    <string name="Ok" translatable="false"></string>
+    <string name="access_sms_password_used_by"></string>
+    <string name="OpenCellId_API_Key_Description" translatable="false"></string>
+    <string name="debugging_pending_jobs_auto_refresh" translatable="false"></string>
+    <string name="access_notification_password_hint"></string>
+    <string name="access_phone_number_hint"></string>
+    <string name="select"></string>
+    <string name="cancel" translatable="false"></string>
+    <string name="import_password_message"></string>
+    <string name="access_tab_phone_number"></string>
+    <string name="export_password_enter_title"></string>
+    <string name="multiple_unified_push_distributors_description"></string>
+    <string name="cmd_bluetooth_response_is_on"></string>
+    <string name="label"></string>
+    <string name="tip_first_contact_added"></string>
+    <string name="push_registration_upload_failed_text"></string>
+    <string name="cmd_bluetooth_response_is_off"></string>
+    <string name="cmd_gps_response_is_off"></string>
+    <string name="debugging_pending_jobs_title" translatable="false"></string>
+    <string name="access_tab_notification_password"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="access_tab_sms_password"></string>
+    <string name="Settings_Debugging"></string>
+    <string name="fmd_permission_allowed_commands_description_server"></string>
 </resources>

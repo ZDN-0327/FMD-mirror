@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="Locked_Lock_Screen">FMD \nЭто устройство заблокировано! \nСообщение от его владельца:</string>
     <string name="Enable">Включить</string>
     <string name="Settings_Lockscreenmessage_Description">Сообщение на экране блокировки: \nКогда устройство будет заблокировано, это сообщение появится на экране блокировки.</string>
@@ -9,7 +9,6 @@
     <string name="Toast_Duplicate_contact">Этот контакт уже существует.</string>
     <string name="cmd_locate_response_gps_will_follow">GPS координаты скоро будут отправлены.</string>
     <string name="cmd_help_message_start">Команды FMD:</string>
-    <string name="MH_Pin_Accepted">ПИН-код принят!</string>
     <string name="ringer_stop_ringing">ОСТАНОВИТЬ РИНГТОН</string>
     <string name="cmd_locate_response_location_off">Извините, определение местоположения отключено.</string>
     <string name="Settings_FMDConfig">Общие</string>
@@ -241,8 +240,6 @@
     <string name="Settings_FMDServer_Check_Notify_After_Title">Максимально разрешённое время без доступного соединения</string>
     <string name="log_view_clear">Очистить логи</string>
     <string name="log_view_clear_confirm">Вы действительно хотите удалить все записи лога?</string>
-    <string name="usage_notification_pin_title">Был использован ПИН-код FMD</string>
-    <string name="usage_notification_pin_text">ПИН-код был использован следующим мобильным номером: \"%s\". Рекомендуется сменить ПИН.</string>
     <string name="Settings_FMDServer_Push_Distributor">Распространитель: %s</string>
     <string name="Settings_FMDServer_Push_Url">Пуш ссылка: %s</string>
     <string name="Settings_FMDServer_Push_Register">Зарегистрировать</string>
@@ -312,4 +309,35 @@
     <string name="allowlist_delete_message">Как только эта строка будет удалена, то он больше не сможет получать доступ к FMD. Вы можете добавить его позже, если измените своё решение.</string>
     <string name="cmd_missing_fmd_permissions">Невозможно выполнить команду \"%s\": Вам не разрешено исполнять эту команду.</string>
     <string name="cmd_missing_android_permissions">Невозможно выполнить команду \"%1$s\": Следующее разрешение(я) не выданы приложению FMD: %2$s.</string>
+    <string name="access_add_password_label_message"></string>
+    <string name="access_password_empty"></string>
+    <string name="access_password_exists"></string>
+    <string name="allowlist_delete_title_password"></string>
+    <string name="Settings_FMDServer" translatable="false"></string>
+    <string name="access_phone_number_empty"></string>
+    <string name="copy" translatable="false" tools:override="true"></string>
+    <string name="access_sms_password_add"></string>
+    <string name="access_sms_password_hint"></string>
+    <string name="Settings_OpenCellId" translatable="false"></string>
+    <string name="access_sms_password_expiry"></string>
+    <string name="debugging_recent_jobs" translatable="false"></string>
+    <string name="access_sms_password_granted_info"></string>
+    <string name="back"></string>
+    <string name="access_notification_password_add"></string>
+    <string name="Settings_FMDServer_Push_Title" translatable="false"></string>
+    <string name="OpenCellId_OpenCellId" translatable="false"></string>
+    <string name="paste" translatable="false"></string>
+    <string name="Ok" translatable="false"></string>
+    <string name="access_sms_password_used_by"></string>
+    <string name="OpenCellId_API_Key_Description" translatable="false"></string>
+    <string name="debugging_pending_jobs_auto_refresh" translatable="false"></string>
+    <string name="access_notification_password_hint"></string>
+    <string name="access_phone_number_hint"></string>
+    <string name="cancel" translatable="false"></string>
+    <string name="access_tab_phone_number"></string>
+    <string name="label"></string>
+    <string name="debugging_pending_jobs_title" translatable="false"></string>
+    <string name="access_tab_notification_password"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="access_tab_sms_password"></string>
 </resources>

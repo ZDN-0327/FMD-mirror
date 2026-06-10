@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="Edit">Modifica</string>
     <string name="Permission_IGNORE_BATTERY_OPTIMIZATION">Questa applicazione dovrebbe funzionare in background. Per assicurarsi che funzioni anche quando il dispositivo è in standby, è necessario disattivare l\'ottimizzazione della batteria per questa applicazione.</string>
     <string name="Locked_Lock_Screen">FMD\nQuesto dispositivo è bloccato!\nMessaggio dal proprietario:</string>
@@ -11,7 +11,6 @@
     <string name="Toast_Duplicate_contact">Questo contatto esiste già.</string>
     <string name="cmd_locate_response_gps_will_follow">Le coordinate GPS verranno inviate a breve.</string>
     <string name="cmd_help_message_start">Comandi FMD:</string>
-    <string name="MH_Pin_Accepted">Pin corretto!</string>
     <string name="OpenCellId_help">FMD può utilizzare il servizio OpenCelliD per ottenere una posizione approssimativa basata sulla torre cellulare a cui il dispositivo è collegato. Per ogni richiesta di localizzazione è necessaria una connessione a Internet. È inoltre necessario creare un account su OpenCelliD e ottenere il proprio token di accesso all\'API.</string>
     <string name="OpenCellId_open_website">Apri sito OpenCellId</string>
     <string name="Settings_FMD_Server_General">Generale</string>
@@ -222,11 +221,9 @@
     <string name="server_version_upgrade_required_title">Necessario aggiornamento del server FMD</string>
     <string name="server_version_upgrade_required_text">Il server FMD in uso ha la versione {CURRENT}, ma questa applicazione richiede almeno {MIN}. Il controllo del dispositivo tramite il server FMD potrebbe non funzionare più. Aggiorna il server.</string>
     <string name="crashed_title">Rapporto anomalia</string>
-    <string name="usage_notification_pin_text">Il PIN è stato utilizzato da questo numero: \"%s\". Si raccomanda di cambiare PIN.</string>
     <string name="Settings_FMDServer_Check_Interval_Title">Intervallo Controllo Connettività</string>
     <string name="Settings_FMDServer_Check_Notify_After_Description">FMD vi avviserà se l\'ultima connessione riuscita al server FMD risale a più di tot ore fa. Questo non ha effetto se il controllo della connettività è disabilitato.</string>
     <string name="Settings_FMDServer_Check_Interval_Description">FMD controlla la connettività al server FMD ogni tot ore. Impostando il valore 0 si disabilita il controllo della connettività.</string>
-    <string name="usage_notification_pin_title">Utilizzo PIN FMD</string>
     <string name="log_view_clear">Cancella voci</string>
     <string name="Settings_FMDServer_Check_Notify_After_Title">Tempo massimo consentito senza connettività</string>
     <string name="server_connectivity_lost_title">Connettività Server FMD persa</string>
@@ -300,4 +297,36 @@
     <string name="multiple_unified_push_distributors_title">Multiple app di distribuzione UnifiedPush</string>
     <string name="multiple_unified_push_distributors_description">Hai installato più app di distribuzione UnifiedPush. Seleziona quella che desideri utilizzare per FMD.</string>
     <string name="invalid_url">URL non valido</string>
+    <string name="access_add_password_label_message"></string>
+    <string name="access_password_empty"></string>
+    <string name="access_password_exists"></string>
+    <string name="allowlist_delete_title_password"></string>
+    <string name="cmd_missing_android_permissions"></string>
+    <string name="cmd_missing_fmd_permissions"></string>
+    <string name="Settings_FMDServer" translatable="false"></string>
+    <string name="access_phone_number_empty"></string>
+    <string name="copy" translatable="false" tools:override="true"></string>
+    <string name="access_sms_password_add"></string>
+    <string name="access_sms_password_hint"></string>
+    <string name="access_sms_password_expiry"></string>
+    <string name="debugging_recent_jobs" translatable="false"></string>
+    <string name="access_sms_password_granted_info"></string>
+    <string name="back"></string>
+    <string name="access_notification_password_add"></string>
+    <string name="Settings_FMDServer_Push_Title" translatable="false"></string>
+    <string name="OpenCellId_OpenCellId" translatable="false"></string>
+    <string name="paste" translatable="false"></string>
+    <string name="Ok" translatable="false"></string>
+    <string name="access_sms_password_used_by"></string>
+    <string name="OpenCellId_API_Key_Description" translatable="false"></string>
+    <string name="debugging_pending_jobs_auto_refresh" translatable="false"></string>
+    <string name="access_notification_password_hint"></string>
+    <string name="access_phone_number_hint"></string>
+    <string name="cancel" translatable="false"></string>
+    <string name="access_tab_phone_number"></string>
+    <string name="label"></string>
+    <string name="debugging_pending_jobs_title" translatable="false"></string>
+    <string name="access_tab_notification_password"></string>
+    <string name="app_name" translatable="false"></string>
+    <string name="access_tab_sms_password"></string>
 </resources>
