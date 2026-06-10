@@ -13,14 +13,13 @@
     <string name="Locked_Lock_Screen">FMD \nCet appareil est verrouillé ! \nMessage du propriétaire :</string>
     <string name="Notification_Usage_Description">Notifications lorsque FMD reçoit des commandes</string>
     <string name="Notification_Pin_Usage_Description">Notifications lorsque FMD est utilisé avec le code PIN</string>
-    <string name="LockScreen_Usage_detectd">LockScreenMessage : Usage detecté.</string>
-    <string name="LockScreen_Backbutton_pressed">LockScreenMessage : Bouton retour pressé.</string>
+    <string name="LockScreen_Usage_detectd">LockScreenMessage : Usage detecté.</string>
+    <string name="LockScreen_Backbutton_pressed">LockScreenMessage : Bouton retour pressé.</string>
     <string name="Settings_Ringer_Tone_Description">Sélectionnez une sonnerie pour la commande \"ring\".</string>
     <string name="Settings_Select_Ringtone">Sélectionnez une sonnerie</string>
     <string name="Settings_FMDServer_Update_Interval_Description">FMD envoi la localisation de l\'appareil toutes les X minutes.</string>
     <string name="accept">Accepter</string>
-    <string name="Settings_FMDServer_Location_Type_Description">La ou les sources à partir desquelles les données de localisation sont envoyées à intervalles réguliers en arrière-plan.
-\nSi aucune n\'est sélectionnée, aucune localisation n\'est envoyée régulièrement. (Vous pouvez toujours utiliser l\'interface web pour forcer un envoi. Cela nécessite les notifications push.)</string>
+    <string name="Settings_FMDServer_Location_Type_Description">La ou les sources à partir desquelles les données de localisation sont envoyées à intervalles réguliers en arrière-plan. \nSi aucune n\'est sélectionnée, aucune localisation n\'est envoyée régulièrement. (Vous pouvez toujours utiliser l\'interface web pour forcer un envoi. Cela nécessite les notifications push.)</string>
     <string name="Settings_Settings">Paramètres</string>
     <string name="Pin_Usage">Utilisation du code PIN</string>
     <string name="loading">Chargement…</string>
@@ -77,23 +76,21 @@
     <string name="app_description">FMD (Find My Device) vous permet de localiser à distance votre appareil. Vous pouvez communiquer avec FMD via SMS, des messageries instantanées, ou en utilisant le serveur FMD. Localisez votre appareil, faites-le sonner, verrouillez-le ou effacez son contenu - le tout à distance.</string>
     <string name="Permission_POST_NOTIFICATIONS">FMD vous enverra occasionnellement des notifications, par exemple pour vous avertir que quelqu\'un est en train de localiser votre appareil.</string>
     <string name="server_unregister_failed_title">Échec de la désinscription</string>
-    <string name="server_unregister_failed_body">La désinscription a échoué avec l\'erreur suivante : {ERROR}
-\n
-\nVous pouvez continuer quand même, mais votre compte pourrait ne pas avoir été supprimé du serveur. Si vous continuez, votre compte sera supprimé localement de cet appareil.</string>
+    <string name="server_unregister_failed_body">La désinscription a échoué avec l\'erreur suivante : {ERROR} \n \nVous pouvez continuer quand même, mais votre compte pourrait ne pas avoir été supprimé du serveur. Si vous continuez, votre compte sera supprimé localement de cet appareil.</string>
     <string name="OpenCellId_test_opencellid">Test de connexion à OpenCelliD</string>
     <string name="Settings_FMDServer_Info">Avec le serveur FMD, vous pouvez envoyer des commandes via Internet, du serveur vers l\'application. Vous pouvez également visualiser la localisation de l\'appareil sur une carte ou consulter les photos prises par l\'appareil. Pour les instructions sur la manière de configurer votre propre serveur, veuillez consulter le site.</string>
-    <string name="OpenCellId_privacy">Confidentialité : gardez à l\'esprit qu\'OpenCelliD enregistre votre antenne-relais actuelle et donc votre emplacement à chaque requête API.</string>
+    <string name="OpenCellId_privacy">Confidentialité : gardez à l\'esprit qu\'OpenCelliD enregistre votre antenne-relais actuelle et donc votre emplacement à chaque requête API.</string>
     <string name="Permission_IGNORE_BATTERY_OPTIMIZATION">Cette application est censée fonctionner en arrière-plan. Pour garantir son fonctionnement même lorsque votre appareil est en veille, vous devez désactiver l\'optimisation de la batterie pour cette application.</string>
     <string name="Toast_Empty_FMDCommand">Commande vide non autorisée, utilisation de la valeur par défaut.</string>
     <string name="Settings_FMDServer_Server_Url">URL du serveur</string>
     <string name="cmd_camera_description_short">Prendre une photo</string>
-    <string name="cmd_camera_response_no_fmd_server">Impossible de prendre une photo : aucun compte FMD n\'existe.</string>
+    <string name="cmd_camera_response_no_fmd_server">Impossible de prendre une photo : aucun compte FMD n\'existe.</string>
     <string name="cmd_camera_response_success">L\'appareil prend une photo et l\'enverra au serveur FMD. Vous pourrez bientôt la voir ici : %s</string>
     <string name="cmd_delete_description_short">Réinitialiser l\'appareil aux paramètres d\'usine</string>
-    <string name="cmd_delete_response_disabled">Réinitialisation impossible : la commande de réinitialisation n\'est pas activée dans les paramètres.</string>
-    <string name="cmd_delete_response_pwd_missing">Réinitialisation impossible : mot de passe manquant. Utilisation : %s.</string>
-    <string name="cmd_delete_response_pwd_wrong">Réinitialisation impossible : mot de passe incorrect.</string>
-    <string name="cmd_delete_response_success">L\'appareil devrait maintenant avoir été réinitialisé aux paramètres d\'usine. Au revoir !</string>
+    <string name="cmd_delete_response_disabled">Réinitialisation impossible : la commande de réinitialisation n\'est pas activée dans les paramètres.</string>
+    <string name="cmd_delete_response_pwd_missing">Réinitialisation impossible : mot de passe manquant. Utilisation : %s.</string>
+    <string name="cmd_delete_response_pwd_wrong">Réinitialisation impossible : mot de passe incorrect.</string>
+    <string name="cmd_delete_response_success">L\'appareil devrait maintenant avoir été réinitialisé aux paramètres d\'usine. Au revoir !</string>
     <string name="cmd_gps_description_short">Activer ou désactiver le GPS</string>
     <string name="cmd_gps_response_on">GPS activé.</string>
     <string name="cmd_gps_response_off">GPS désactivé.</string>
@@ -126,7 +123,7 @@
     <string name="allowlist_add_phone_number">Ajouter un numéro de téléphone</string>
     <string name="perm_camera_name">Appareil photo</string>
     <string name="perm_sms_name">SMS</string>
-    <string name="WhiteList_no_contact_picker">Aucune application de contacts trouvée !</string>
+    <string name="WhiteList_no_contact_picker">Aucune application de contacts trouvée !</string>
     <string name="cmd_locate_last_known_location_text">Dernière localisation connue</string>
     <string name="perm_battery_optimizations_name">Ignorer l\'optimisation de la batterie</string>
     <string name="cmd_locate_last_known_location_not_available">Aucune localisation connue. Demandez la dernière localisation pour forcer une mise à jour de la localisation.</string>
@@ -136,7 +133,7 @@
     <string name="export_failed">Échec de l\'exportation</string>
     <string name="Settings_Import_Success">Importation réussie</string>
     <string name="allowlist_phone_number">Numéro de téléphone</string>
-    <string name="cmd_locate_response_location_off">Impossible de localiser : la localisation est désactivée.</string>
+    <string name="cmd_locate_response_location_off">Impossible de localiser : la localisation est désactivée.</string>
     <string name="perm_unused_app_description">Android met en pause les applications qui sont inutilisées pendant quelques mois et supprime leurs autorisations. Cependant, FMD est censé fonctionner en arrière-plan. Après l\'avoir configuré, vous avez rarement besoin de l\'ouvrir. Vous devez donc l\'exonérer, sinon il pourrait ne pas fonctionner dans quelques mois.</string>
     <string name="transport_sms_title">SMS</string>
     <string name="transport_sms_description_auth">Seuls les numéros de téléphone qui sont dans la liste peuvent envoyer des commandes. Pour envoyer des commandes à partir d\'un numéro de téléphone qui n\'est pas dans la liste blanche, vous devez inclure le code PIN : \"%s monpin help\". Pour plus de commodité, afin que vous n\'ayez pas à réécrire le code PIN à chaque fois, ce nouveau numéro de téléphone est ajouté à une liste blanche temporaire pour les 10 prochaines minutes.</string>
@@ -322,4 +319,5 @@
     <string name="access_tab_sms_password">Mots de passe de SMS</string>
     <string name="Settings_OpenCellId" translatable="false"></string>
     <string name="transport_fmd_server_title" translatable="false"></string>
+    <string name="Notification_Server" translatable="false"></string>
 </resources>
