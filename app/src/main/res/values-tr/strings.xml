@@ -326,4 +326,7 @@
     <string name="access_tab_sms_password"></string>
     <string name="Settings_Debugging"></string>
     <string name="fmd_permission_allowed_commands_description_server"></string>
+    <string name="transport_fmd_server_title" translatable="false"></string>
+    <string name="Notification_Server" translatable="false"></string>
+    <string name="transport_notification_reply_description"></string>
 </resources>
