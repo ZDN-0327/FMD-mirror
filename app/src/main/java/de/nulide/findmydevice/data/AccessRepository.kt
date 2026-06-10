@@ -2,13 +2,20 @@ package de.nulide.findmydevice.data
 
 import android.content.Context
 import androidx.room.Room
+import de.nulide.findmydevice.R
 import de.nulide.findmydevice.commands.FmdPermission
 import de.nulide.findmydevice.database.ACCESS_DB_FILENAME
 import de.nulide.findmydevice.database.AccessDatabase
 import de.nulide.findmydevice.database.NotificationPassword
 import de.nulide.findmydevice.database.PhoneNumber
 import de.nulide.findmydevice.database.SmsPassword
+import de.nulide.findmydevice.database.SmsPasswordWithTempPhoneNumbers
+import de.nulide.findmydevice.database.TEMP_USAGE_VALIDITY_MILLIS
+import de.nulide.findmydevice.database.TempPhoneNumber
+import de.nulide.findmydevice.database.TempPhoneNumberWithSmsPassword
+import de.nulide.findmydevice.transports.SmsTransport
 import de.nulide.findmydevice.utils.SingletonHolder
+import de.nulide.findmydevice.utils.log
 import de.nulide.findmydevice.utils.normalizePhoneNumber
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -48,6 +55,10 @@ class AccessRepository private constructor(private val context: Context) {
         db.openHelper.setWriteAheadLoggingEnabled(true)
     }
 
+    /*
+     * WARNING: All phone numbers MUST be normalized before being inserted or being looked up!
+     */
+
     /* ------- Phone numbers ------- */
 
     fun getPhoneNumbers(): Flow<List<PhoneNumber>> {
@@ -85,7 +96,7 @@ class AccessRepository private constructor(private val context: Context) {
 
     /* ------- SMS Passwords ------- */
 
-    fun getSmsPasswords(): Flow<List<SmsPassword>> {
+    fun getSmsPasswords(): Flow<List<SmsPasswordWithTempPhoneNumbers>> {
         return db.smsPasswordDao().getAll()
     }
 
@@ -103,6 +114,44 @@ class AccessRepository private constructor(private val context: Context) {
 
     suspend fun deleteSmsPassword(password: SmsPassword) = withContext(Dispatchers.IO) {
         db.smsPasswordDao().delete(password)
+    }
+
+    /* ------- Temporary Phone Numbers ------- */
+
+    suspend fun getTempPhoneNumber(number: String): TempPhoneNumberWithSmsPassword? {
+        val number = normalizePhoneNumber(context, number) ?: return null
+        return db.tempPhoneNumberDao().get(number)
+    }
+
+    suspend fun insertTempPhoneNumber(
+        number: String,
+        subscriptionId: Int,
+        smsPassword: SmsPassword,
+    ) = withContext(Dispatchers.IO) {
+        val normNumber = normalizePhoneNumber(context, number) ?: return@withContext
+        val addedMillis = System.currentTimeMillis()
+        val tempNumber =
+            TempPhoneNumber(0, normNumber, subscriptionId, addedMillis, smsPassword.rowId)
+
+        db.tempPhoneNumberDao().insert(tempNumber)
+    }
+
+    private suspend fun deleteExpiredTempPhoneNumbers(): List<TempPhoneNumber> =
+        withContext(Dispatchers.IO) {
+            val cutoffTimeMillis = System.currentTimeMillis() - TEMP_USAGE_VALIDITY_MILLIS
+            val toDelete = db.tempPhoneNumberDao().getExpired(cutoffTimeMillis)
+            db.tempPhoneNumberDao().delete(toDelete)
+            return@withContext toDelete
+        }
+
+    suspend fun removeAndNotifyExpiredTempPhoneNumbers() {
+        val expired = deleteExpiredTempPhoneNumbers()
+
+        for (item in expired) {
+            val transport = SmsTransport(context, item.number, item.subscriptionId)
+            transport.send(context, context.getString(R.string.temporary_allowlist_expired))
+            context.log().i(TAG, "Phone number expired ${item.number}")
+        }
     }
 
     /* ------- Notification Passwords ------- */

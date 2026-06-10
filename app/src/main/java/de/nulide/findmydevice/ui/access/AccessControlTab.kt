@@ -1,6 +1,7 @@
 package de.nulide.findmydevice.ui.access
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,8 +27,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,7 +38,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.database.AccessItem
 import de.nulide.findmydevice.database.PhoneNumber
+import de.nulide.findmydevice.database.SmsPassword
+import de.nulide.findmydevice.database.SmsPasswordWithTempPhoneNumbers
+import de.nulide.findmydevice.database.TempPhoneNumber
 import de.nulide.findmydevice.ui.theme.AppTheme
+import de.nulide.findmydevice.utils.Utils
 
 // Help class so that we can both:
 // 1. Pass a ViewModel to create a tab to keep the upper code simple.
@@ -103,7 +111,7 @@ fun <T : AccessItem> AccessControlTab(
                     HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
                 }
                 items(accessItems) { item ->
-                    ItemRow(
+                    ItemElement(
                         item,
                         onEditPermissionsClicked = { permissionToEdit = item },
                         onDeleteClicked = { itemToDelete = item })
@@ -142,16 +150,89 @@ fun <T : AccessItem> AccessControlTab(
 }
 
 @Composable
+private fun <T : AccessItem> ItemElement(
+    item: T,
+    onEditPermissionsClicked: (T) -> Unit,
+    onDeleteClicked: (T) -> Unit,
+) {
+    if (item is SmsPasswordWithTempPhoneNumbers) {
+        Column {
+            ItemRow(item, onEditPermissionsClicked, onDeleteClicked)
+
+            // Header
+            if (item.tempPhoneNumbers.isNotEmpty()) {
+                val style = MaterialTheme.typography.bodySmall.copy(
+                    fontStyle = FontStyle.Italic,
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 6.dp)
+                ) {
+                    Text(
+                        modifier = Modifier.weight(1f),
+                        text = stringResource(R.string.access_sms_password_used_by),
+                        style = style,
+                    )
+                    Text(
+                        text = stringResource(R.string.access_sms_password_expiry),
+                        style = style,
+                    )
+                }
+            }
+
+            // Table items
+            val context = LocalContext.current
+            for (num in item.tempPhoneNumbers) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .weight(1f)
+                            .combinedClickable(
+                                onClick = {},
+                                onLongClick = { Utils.copyToClipboard(context, "", num.number) },
+                            )
+                            // Make click area larger
+                            .padding(vertical = 6.dp),
+                        text = num.number,
+                        style = MaterialTheme.typography.bodySmall
+                    )
+                    Text(num.expiryPretty(), style = MaterialTheme.typography.bodySmall)
+                }
+            }
+        }
+    } else {
+        ItemRow(item, onEditPermissionsClicked, onDeleteClicked)
+    }
+}
+
+@Composable
 private fun <T : AccessItem> ItemRow(
     item: T,
     onEditPermissionsClicked: (T) -> Unit,
     onDeleteClicked: (T) -> Unit,
 ) {
+    val context = LocalContext.current
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 2.dp)
+        modifier = Modifier.padding(vertical = 6.dp)
     ) {
-        Text(text = item.toDisplayLabel(), modifier = Modifier.weight(1f))
+        Text(
+            modifier = Modifier
+                .weight(1f)
+                .combinedClickable(
+                    onClick = {},
+                    onLongClick = { Utils.copyToClipboard(context, "", item.toDisplayLabel()) },
+                )
+                // Make click area larger
+                .padding(vertical = 8.dp),
+            text = item.toDisplayLabel(),
+        )
         Spacer(Modifier.width(8.dp))
         OutlinedIconButton({ onEditPermissionsClicked(item) }) {
             Icon(
@@ -200,7 +281,7 @@ private fun <T> DeleteDialog(
 
 @Preview
 @Composable
-private fun TabEmptyPreview() {
+private fun TabPreviewEmpty() {
     AppTheme {
         Surface {
             AccessControlTab(
@@ -213,7 +294,7 @@ private fun TabEmptyPreview() {
 
 @Preview
 @Composable
-private fun TabPreview() {
+private fun TabPreviewNumber() {
     AppTheme {
         Surface {
             AccessControlTab(
@@ -221,6 +302,32 @@ private fun TabPreview() {
                 accessItems = listOf(
                     PhoneNumber(0, "John Doe", "+1 234 567 89"),
                     PhoneNumber(0, "Max Muster", "+49 79 123 456 78"),
+                )
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun TabPreviewPassword() {
+    val now = System.currentTimeMillis()
+    AppTheme {
+        Surface {
+            AccessControlTab(
+                accessType = ACCESS_SMS_PASS,
+                accessItems = listOf(
+                    SmsPasswordWithTempPhoneNumbers(
+                        smsPassword = SmsPassword(0, "Label 1", "Password 1"),
+                        tempPhoneNumbers = listOf(
+                            TempPhoneNumber(0, "+1 111 222 33", 42, now - 24 * 60 * 1000L, 0),
+                            TempPhoneNumber(0, "+1 444 555 66", 42, now - 7 * 60 * 1000L, 0),
+                        ),
+                    ),
+                    SmsPasswordWithTempPhoneNumbers(
+                        smsPassword = SmsPassword(0, "Label 2", "Password 2"),
+                        tempPhoneNumbers = emptyList(),
+                    ),
                 )
             )
         }
