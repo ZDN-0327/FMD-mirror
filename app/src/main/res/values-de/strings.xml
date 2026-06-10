@@ -326,22 +326,4 @@
     <string name="access_password_exists">Dieses Passwort ist bereits vorhanden: %s</string>
     <string name="access_add_password_label_message">Wähle eine Bezeichnung, damit du das Passwort wiedererkennen kannst. Das Passwort wird nach dem Speichern dieses Eintrags nicht mehr angezeigt.</string>
     <string name="allowlist_delete_title_password">Passwort löschen?</string>
-    <string name="Settings_OpenCellId" translatable="false"></string>
-    <string name="transport_fmd_server_title" translatable="false"></string>
-    <string name="Notification_Server" translatable="false"></string>
-    <string name="Settings_FMDServer" translatable="false"></string>
-    <string name="copy" translatable="false" tools:override="true"></string>
-    <string name="access_sms_password_expiry"></string>
-    <string name="debugging_recent_jobs" translatable="false"></string>
-    <string name="access_sms_password_granted_info"></string>
-    <string name="Settings_FMDServer_Push_Title" translatable="false"></string>
-    <string name="OpenCellId_OpenCellId" translatable="false"></string>
-    <string name="paste" translatable="false"></string>
-    <string name="Ok" translatable="false"></string>
-    <string name="access_sms_password_used_by"></string>
-    <string name="OpenCellId_API_Key_Description" translatable="false"></string>
-    <string name="debugging_pending_jobs_auto_refresh" translatable="false"></string>
-    <string name="cancel" translatable="false"></string>
-    <string name="debugging_pending_jobs_title" translatable="false"></string>
-    <string name="app_name" translatable="false"></string>
 </resources>
