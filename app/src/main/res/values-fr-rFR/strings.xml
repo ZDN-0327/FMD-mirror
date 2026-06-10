@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ringer_stop_ringing">ARRETER DE SONNER</string>
-    <string name="MH_Pin_Accepted">Code PIN accepté !</string>
     <string name="cmd_help_message_start">les commandes de FMD :</string>
     <string name="cmd_locate_response_gps_will_follow">Les coordonnées GPS seront envoyées bientôt.</string>
     <string name="Toast_Duplicate_contact">Ce contact existe déjà.</string>
@@ -9,7 +8,7 @@
     <string name="Settings_About">A propos de</string>
     <string name="WhiteList_Add_Contact">Ajouter un contact</string>
     <string name="Settings_FMDCommand_Description">La commande utilisée pour communiquer avec FMD.</string>
-    <string name="Settings_Lockscreenmessage_Description">Message sur l\'écran de verrouillage : \nLors du verrouillage de l\'appareil, ce message apparaitra sur l\'écran de verrouillage.</string>
+    <string name="Settings_Lockscreenmessage_Description">Message sur l\'écran de verrouillage : \nLors du verrouillage de l\'appareil, ce message apparaitra sur l\'écran de verrouillage.</string>
     <string name="Enable">Activer</string>
     <string name="Locked_Lock_Screen">FMD
 \nCet appareil est verrouillé !
@@ -37,7 +36,7 @@
     <string name="Settings_FMD_Server_Server_URL">URL du serveur :</string>
     <string name="Settings_FMDServer_Change_Password_Button">Changer le mot de passe</string>
     <string name="Settings_FMDServer_Location_Type_Title">Lieu source</string>
-    <string name="Settings_FMDServer_Alert_DeleteData_Desc">Cela supprimera toutes les données du serveur ! Êtes-vous sûr ?</string>
+    <string name="Settings_FMDServer_Alert_DeleteData_Desc">Cela supprimera toutes les données du serveur ! Êtes-vous sûr ?</string>
     <string name="Settings_FMDServer_LOW_BAT_Upload_Title">Envoyer lorsque la batterie est faible</string>
     <string name="password_old">Ancien mot de passe</string>
     <string name="password_new">Nouveau mot de passe</string>
@@ -56,7 +55,7 @@
     <string name="Notification_FAIL">Échecs</string>
     <string name="Notification_Fail_Description">Notifications en cas d\'échec, comme la connexion au serveur FMD</string>
     <string name="notify_crypto_update_title">Action requise</string>
-    <string name="Settings_FMD_Server_User_ID">Nom d\'utilisateur :</string>
+    <string name="Settings_FMD_Server_User_ID">Nom d\'utilisateur :</string>
     <string name="about_wiki">Wiki</string>
     <string name="Settings_FMDServer_use_default_server">Utiliser le serveur public</string>
     <string name="copied">Copié</string>
@@ -65,7 +64,7 @@
     <string name="Settings_FMDServer_LOW_BAT_Upload_Description">Envoi la localisation de l\'appareil lorsque le niveau de la batterie est faible.</string>
     <string name="help">Aide</string>
     <string name="Settings_FMDServer_Login">Se connecter</string>
-    <string name="Settings_FMDServer_AddAccount">Serveur FMD : Se connecter</string>
+    <string name="Settings_FMDServer_AddAccount">Serveur FMD : Se connecter</string>
     <string name="Settings_FMDServer_open_website">Ouvrir le site web du serveur FMD</string>
     <string name="OpenCellId_open_website">Ouvrir le site web de OpenCelliD</string>
     <string name="OpenCellId_test_no_connection">Aucune connection mobile</string>
@@ -200,7 +199,7 @@
     <string name="Settings_Appearance">Apparence</string>
     <string name="appearance_language">Langue</string>
     <string name="usage_notification_text_source">La commande « %1$s » a été exécutée par « %2$s ».</string>
-    <string name="Settings_FMD_Server_Connection_Status">État de la connexion :</string>
+    <string name="Settings_FMD_Server_Connection_Status">État de la connexion :</string>
     <string name="Settings_FMD_Server_Connection_Status_Success">Succès</string>
     <string name="server_version_upgrade_required_title">Mise à jour du Serveur FMD requise</string>
     <string name="temporary_allowlist_expired">Votre accès temporaire à FMD a expiré. Pour continuer à utiliser FMD, renvoyez le code PIN.</string>
@@ -227,8 +226,6 @@
     <string name="cmd_locate_response_opencellid_failed">Impossible d’obtenir la localisation depuis OpenCelliD. Cela peut arriver si l’antenne-relai n’est pas dans la base de données.\n\nVeuillez essayez de suivre le lien suivant : %1$s\n\n%2$s</string>
     <string name="cmd_locate_response_gps_fail">Impossible de récupérer une nouvelle localisation GPS. Peut-être à cause d’un délai d’expiration.</string>
     <string name="Notification_InApp_Description">Notifications intégrées à l’application</string>
-    <string name="usage_notification_pin_text">Le code PIN a été utilisé par le numéro « %s ». Il est recommandé de changer le code PIN.</string>
-    <string name="usage_notification_pin_title">Code PIN FMD utilisé</string>
     <string name="Settings_FMDServer_Logout_Text">Voulez-vous vraiment vous déconnecter de cotre compte Serveur FMD ?</string>
     <string name="server_registration_token_error">Requête réseau échouée avec le code HTTP 401. Cela peut arriver si le serveur nécessite un jeton d’enregistrement et que le jeton que vous avez fourni est incorrect.</string>
     <string name="appearance_theme_follow_system">Suivre le thème système</string>
@@ -244,8 +241,8 @@
     <string name="Settings_FMDServer_Push_Description">Envoyer des commandes depuis le serveur FMD vers votre appareil nécessite une application publiant grâce à UnifiedPush.</string>
     <string name="allowlist_reset_title">Réinitialisation des contacts autorisés</string>
     <string name="allowlist_reset_text">A cause d\'un plantage, les contacts autorisés ont été réinitialisés. Merci de les configurer à nouveau.</string>
-    <string name="Settings_FMDServer_Push_Distributor">Publication : %s</string>
-    <string name="Settings_FMDServer_Push_Url">URL de publication : %s</string>
+    <string name="Settings_FMDServer_Push_Distributor">Publication : %s</string>
+    <string name="Settings_FMDServer_Push_Url">URL de publication : %s</string>
     <string name="Settings_FMDServer_Push_Register">S\'enregistrer</string>
     <string name="Settings_FMDServer_Push_Register_Again">Enregistrer à nouveau</string>
     <string name="server_fmd_id_hint">Le nom d\'utilisateur permet d\'identifier votre compte sur le serveur FMD. L\'administrateur du serveur peut voir le nom d\'utilisateur.</string>
@@ -259,7 +256,7 @@
     <string name="setup_recommendations_title">Recommandations</string>
     <string name="Settings_FMDServer_Push_Open_Help">Plus d\'informations sur les publications</string>
     <string name="server_password_hint">Choisissez un mot de passe qui ne puisse pas être deviné mais dont vous pourrez vous rappeler si vous perdez votre téléphone. Le mot de passe donne accès au lancement de commande à distance sur votre appareil. L\'administrateur du serveur ne peut pas accéder à votre mot de passe ou le réinitialiser.</string>
-    <string name="allowlist_invalid_number">Ce numéro de téléphone est invalide !</string>
+    <string name="allowlist_invalid_number">Ce numéro de téléphone est invalide !</string>
     <string name="password_min_length">Le mot de passe doit faire au moins 8 caractères. Il est recommandé d\'en avoir 16 ou plus.</string>
     <string name="Settings_FMDServer_Push_Info_Sunup">L\'application de distribution UnifiedPush recommandée est Sunup. Sunup se paramètre facilement et utilise les serveurs de notification de Mozilla.</string>
     <string name="Settings_FMDServer_Push_Install_Sunup">Installer Sunup</string>
@@ -273,19 +270,19 @@
     <string name="executing_title">Commande en cours d\'exécution</string>
     <string name="executing_text">La commande \"%1$s\" est actuellement en train d\'être exécutée par \"%2$s\".</string>
     <string name="dont_show_again">Ne plus afficher</string>
-    <string name="delete_pw_warning_no_backup">Avertissement : le mot de passe n\'est pas inclus dans la sauvegarde de l\'application.</string>
-    <string name="delete_pw_warning_empty">Avertissement : la réinitialisation ne fonctionnera pas, car le mot de passe de réinitialisation est vide.</string>
+    <string name="delete_pw_warning_no_backup">Avertissement : le mot de passe n\'est pas inclus dans la sauvegarde de l\'application.</string>
+    <string name="delete_pw_warning_empty">Avertissement : la réinitialisation ne fonctionnera pas, car le mot de passe de réinitialisation est vide.</string>
     <string name="password_set">Définir le mot de passe</string>
     <string name="password_change">Modifier le mot de passe</string>
     <string name="password_enter">Entrer le mot de passe</string>
-    <string name="password_match_command_keyword">Le mot de passe ne peut pas être identique à une des commandes !</string>
+    <string name="password_match_command_keyword">Le mot de passe ne peut pas être identique à une des commandes !</string>
     <string name="fmd_edge_info_message">Ceci est la variante \"expérimental\" de FMD. Ici, le mot-clé par défaut pour les commandes est \"fmde\" (au lieu de \"fmd\"). Par exemple, pour envoyer la commande de localisation, utilisez \" fmde locate\". Cela permet d\'avoir à la fois la variante expérimentale et de production sur le même appareil, et de cibler les commandes pour l\'une des deux.</string>
     <string name="Fused">Fusionné</string>
     <string name="cmd_bluetooth_response_is_on">Le Bluetooth est activé.</string>
     <string name="cmd_bluetooth_response_is_off">Le Bluetooth est désactivé.</string>
     <string name="cmd_gps_response_is_on">Les services de localisation sont activés.</string>
     <string name="cmd_gps_response_is_off">Les services de localisation sont désactivés.</string>
-    <string name="tip_first_contact_added">Félicitations, vous avez ajouté votre premier contact ! Vous pouvez maintenant communiquer avec FMD en envoyant un SMS qui commence par \"%1$s\" depuis le numéro de téléphone autorisé. Par exemple, envoyez \"%2$s help\" ou \"%3$s flash\". Lorsque tout fonctionne, l\'application devrait répondre.</string>
+    <string name="tip_first_contact_added">Félicitations, vous avez ajouté votre premier contact ! Vous pouvez maintenant communiquer avec FMD en envoyant un SMS qui commence par \"%1$s\" depuis le numéro de téléphone autorisé. Par exemple, envoyez \"%2$s help\" ou \"%3$s flash\". Lorsque tout fonctionne, l\'application devrait répondre.</string>
     <string name="select">Sélectionnez</string>
     <string name="export_password_enter_title">Saisissez le mot de passe de chiffrement</string>
     <string name="export_password_message">Choisissez un mot de passe pour chiffrer l\'export de la sauvegarde.</string>
@@ -306,8 +303,23 @@
     <string name="Settings_Access_Control">Contrôle d\'accès</string>
     <string name="fmd_permission_allowed_commands_title">Choisir les commandes autorisées</string>
     <string name="fmd_permission_allowed_commands_description_server">Décider quelles commandes ce compte du serveur est autorisé à exécuter (et lesquelles il ne l\'est pas).</string>
-    <string name="allowlist_delete_title_phone_number">Supprimer le numéro de téléphone ?</string>
+    <string name="allowlist_delete_title_phone_number">Supprimer le numéro de téléphone ?</string>
     <string name="allowlist_delete_message">Une fois cet élément supprimé, il ne sera plus autorisé à accéder à FMD. Vous pouvez le rajouter plus tard si vous changez d\'avis.</string>
-    <string name="cmd_missing_fmd_permissions">Impossible d\'exécuter la commande \"%s\" : vous n\'êtes pas autorisés à exécuter cette commande.</string>
-    <string name="cmd_missing_android_permissions">Impossible d\'exécuter la commande \"%1$s\" : les autorisations Android suivantes ne sont pas autorisées pour l\'appli FMD : %2$s.</string>
+    <string name="cmd_missing_fmd_permissions">Impossible d\'exécuter la commande \"%s\" : vous n\'êtes pas autorisés à exécuter cette commande.</string>
+    <string name="cmd_missing_android_permissions">Impossible d\'exécuter la commande \"%1$s\" : les autorisations Android suivantes ne sont pas autorisées pour l\'appli FMD : %2$s.</string>
+    <string name="access_add_password_label_message">Choisissez un libellé pour identifier ce mot de passe. Le mot de passe ne sera plus jamais affiché une fois enregistré.</string>
+    <string name="access_password_empty">Aucun mot de passe. Cliquez sur le bouton ci-dessous pour en ajouter un !</string>
+    <string name="access_password_exists">Ce mot de passe existe déjà : %s</string>
+    <string name="allowlist_delete_title_password">Supprimer le mot de passe ?</string>
+    <string name="access_phone_number_empty">Aucun numéro de téléphone. Cliquez sur le bouton ci-dessous pour en ajouter un !</string>
+    <string name="access_sms_password_add">Ajouter un mot de passe de SMS</string>
+    <string name="access_sms_password_hint">Les mots de passe de cette liste peuvent être utilisés pour accéder à FMD depuis n\'importe quel numéro de téléphone, via SMS, en envoyant un message \"%s password command\".</string>
+    <string name="back">Retour</string>
+    <string name="access_notification_password_add">Ajouter un mot de passe de notification</string>
+    <string name="access_notification_password_hint">Les mots de passe de cette liste peuvent être utilisés pour accéder à FMD depuis n\'importe quelle application qui peut afficher une notification avec une action rapide \"Répondre\" (comme une application de messagerie). Le texte de notification doit être \"%s password command\".</string>
+    <string name="access_phone_number_hint">Les numéros de téléphone de cette liste sont autorisés à accéder à FMD via SMS, en envoyant un message \"%s command\".</string>
+    <string name="access_tab_phone_number">Numéros de téléphone</string>
+    <string name="label">Libellé</string>
+    <string name="access_tab_notification_password">Mots de passe de notification</string>
+    <string name="access_tab_sms_password">Mots de passe de SMS</string>
 </resources>
