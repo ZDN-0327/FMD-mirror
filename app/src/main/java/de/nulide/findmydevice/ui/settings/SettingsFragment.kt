@@ -11,6 +11,9 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemClickListener
 import android.widget.ListView
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.biometric.BiometricPrompt
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -88,13 +91,7 @@ class SettingsFragment : TaggedFragment() {
             2 -> settingIntent = Intent(context, AccessControlActivity::class.java)
             3 -> settingIntent = Intent(context, OpenCellIdActivity::class.java)
             4 -> settingIntent = Intent(context, AppearanceActivity::class.java)
-            5 -> {
-                val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
-                intent.putExtra(Intent.EXTRA_TITLE, filenameForExport())
-                intent.setType("*/*")
-                startActivityForResult(intent, EXPORT_REQ_CODE)
-            }
-
+            5 -> authenticateForBackup(context)
             6 -> {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.setType("*/*")
@@ -236,4 +233,28 @@ class SettingsFragment : TaggedFragment() {
             .setCancelable(false)
             .show()
     }
+
+    private fun authenticateForBackup(context: Context) {
+        val title = context.getString(R.string.export_authenticate_title)
+        val promptInfo = BiometricPrompt.PromptInfo.Builder()
+            .setAllowedAuthenticators(BIOMETRIC_STRONG or DEVICE_CREDENTIAL)
+            .setTitle(title)
+            .build()
+
+        val callback = object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                exportBackup()
+            }
+        }
+        val biometricPrompt = BiometricPrompt(this, callback)
+        biometricPrompt.authenticate(promptInfo)
+    }
+
+    private fun exportBackup() {
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+        intent.putExtra(Intent.EXTRA_TITLE, filenameForExport())
+        intent.setType("*/*")
+        startActivityForResult(intent, EXPORT_REQ_CODE)
+    }
+
 }
