@@ -61,9 +61,7 @@
     <string name="Notification_Security">安全性</string>
     <string name="Notification_FAIL">失败信息</string>
     <string name="notify_crypto_update_title">需要行为</string>
-    <string name="server_unregister_failed_body">以下错误导致取消注册失败：{ERROR}
-\n
-\n您可以继续操作，但您的账号可能未从服务器中移除。如果您继续操作，您的账号将会在此设备本地删除。</string>
+    <string name="server_unregister_failed_body">以下错误导致取消注册失败：{ERROR} \n \n您可以继续操作，但您的账号可能未从服务器中移除。如果您继续操作，您的账号将会在此设备本地删除。</string>
     <string name="server_unregister_continue_anyway">仍旧继续</string>
     <string name="server_unregister_dont_continue">不要继续</string>
     <string name="notify_crypto_update_text">您需要更新某些设置来继续使用 FMD。点击以打开。</string>
@@ -330,4 +328,5 @@
     <string name="fmd_permission_allowed_commands_description_server"></string>
     <string name="transport_fmd_server_title" translatable="false"></string>
     <string name="Notification_Server" translatable="false"></string>
+    <string name="Settings_OpenCellId" translatable="false"></string>
 </resources>
