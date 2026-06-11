@@ -137,6 +137,8 @@
     <string name="access_tab_sms_password">SMS passwords</string>
     <string name="access_tab_notification_password">Notification passwords</string>
 
+    <string name="access_permission_hint">For each entry, you can choose which commands are allowed. By default, new entries are restricted to the most basic commands.</string>
+
     <string name="access_phone_number_hint">The phone numbers in this list are allowed to access FMD via SMS, by texting \"%s command\".</string>
     <string name="access_phone_number_empty">No phone numbers. Click to the button below to add one!</string>
 
