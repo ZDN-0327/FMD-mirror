@@ -82,7 +82,8 @@ class SettingsRepository private constructor(private val context: Context) {
         }
     }
 
-    private fun saveSettings() {
+    // Synchronize to avoid to threads writing to the file at the same time.
+    private fun saveSettings() = synchronized(settings) {
         val file = File(context.filesDir, SETTINGS_FILENAME)
         FileWriter(file).use { writer ->
             gson.toJson(settings, Settings::class.java, writer)
