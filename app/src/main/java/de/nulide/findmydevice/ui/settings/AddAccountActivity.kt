@@ -79,7 +79,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
 
         // Actively opt-in to using the "official" server
         val btnUseDefaultServer = findViewById<Button>(R.id.buttonUseDefaultServer)
-        btnUseDefaultServer.setOnClickListener { _ -> editTextServerUrl.setText(BuildConfig.DEFAULT_FMD_SERVER_URL) }
+        btnUseDefaultServer.setOnClickListener { _ -> editTextServerUrl.setText(BuildConfig.DEFAULT_FMD_SERVER_URL.removePrefix("https://")) }
 
         editTextServerUrl = findViewById(R.id.editTextServerUrl)
         editTextServerUrl.addTextChangedListener(this)
@@ -104,7 +104,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
 
         // This must be after btnRegister and btnLogin are assigned,
         // because it causes a call to afterTextChanged, which then accesses btnRegister.
-        editTextServerUrl.setText(lastKnownServerUrl)
+        editTextServerUrl.setText(lastKnownServerUrl.removePrefix("https://"))
 
         getAndShowServerVersion(this, lastKnownServerUrl)
     }
@@ -222,8 +222,8 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
             domStorageEnabled = true
         }
 
-        val url = editTextServerUrl.text.toString().removeSuffix("/") + "/privacy?embedded=true"
-        webView.loadUrl(url)
+        val fmdServerUrl = ensureHttps(editTextServerUrl.text.toString())
+        webView.loadUrl("$fmdServerUrl/privacy?embedded=true")
 
         MaterialAlertDialogBuilder(context)
             .setTitle(getString(R.string.Settings_FMDServer_Alert_PrivacyPolicy_Title))
@@ -251,11 +251,12 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
 
     override fun afterTextChanged(editable: Editable) {
         if (editable === editTextServerUrl.text) {
-            onNewUrlEntered(editTextServerUrl.text.toString().removeSuffix("/"))
+            onNewUrlEntered(editTextServerUrl.text.toString())
         }
     }
 
     private fun onNewUrlEntered(url: String) {
+        val url = ensureHttps(url)
         if (!URLUtil.isValidUrl(url)) {
             textViewServerVersion.text = getString(R.string.invalid_url)
             btnRegister.isEnabled = false
@@ -374,5 +375,14 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
                 }
             }
         }
+    }
+
+    private fun ensureHttps(url: String): String {
+        if (url.isBlank()) return ""
+        val url = url.removeSuffix("/")
+        return if (url.startsWith("https://") || url.startsWith("http://"))
+            url
+        else
+            "https://$url"
     }
 }
