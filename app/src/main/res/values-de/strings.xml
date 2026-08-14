@@ -56,7 +56,6 @@
     <!-- Settings: About -->
     <string name="about">Über</string>
     <string name="about_source_code">Quellcode</string>
-    <string name="about_wiki">Wiki</string>
     <!-- Crypto Update Boarding -->
     <string name="server_unregister_failed_title">Deregistrierung fehlgeschlagen</string>
     <string name="server_unregister_failed_body">Die Deregistrierung ist mit folgendem Fehler fehlgeschlagen: {ERROR} \n \nDu kannst trotzdem fortsetzen, aber es könnte sein, dass dein Konto nicht vom Server gelöscht wurde. Falls du fortsetzt, wird dein Konto lokal von diesem Gerät gelöscht.</string>
@@ -333,4 +332,7 @@
     <string name="network_crowdsourcing_button">Dokumentation öffnen</string>
     <string name="opencellid_api_key_description">Für OpenCelliD musst du ein Konto auf der OpenCelliD-Webseite erstellen und dir ein eigenes API-Access-Token holen.</string>
     <string name="Settings_FMD_Server_Fingerprint">Schlüsselfingerabdruck:</string>
+    <string name="about_app_icon_description">App-Icon</string>
+    <string name="about_documentation">Dokumentation</string>
+    <string name="about_donate">Spenden</string>
 </resources>
