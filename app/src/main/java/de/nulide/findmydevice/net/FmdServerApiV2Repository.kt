@@ -144,6 +144,10 @@ class FmdServerApiV2Repository private constructor(
         )
     }
 
+    override fun getKeyFingerprint(): String {
+        return ltk.getFingerprint()
+    }
+
     override fun checkConnection(
         listener: Listener<Unit>,
         errorListener: ErrorListener

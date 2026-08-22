@@ -87,6 +87,10 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         queue.add(request)
     }
 
+    override fun getKeyFingerprint(): String {
+        return settingsRepo.getKeysV1()?.fingerprint ?: ""
+    }
+
     /**
      * This MUST be wrapped in a Thread() because it does password hashing.
      */

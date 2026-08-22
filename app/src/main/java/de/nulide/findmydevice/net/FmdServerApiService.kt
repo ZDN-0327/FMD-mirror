@@ -57,6 +57,8 @@ data class ServerError(
 
 interface FmdServerApiService {
 
+    fun getKeyFingerprint(): String
+
     fun checkConnection(listener: Listener<Unit>, errorListener: ErrorListener)
 
     /* ----- Account management ----- */
