@@ -1,6 +1,8 @@
 package de.nulide.findmydevice.net
 
 import android.content.Context
+import de.nulide.findmydevice.data.Settings
+import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.net.interceptor.UserAgentInterceptor
 import okhttp3.Call
 import okhttp3.Callback
@@ -18,19 +20,13 @@ internal const val ACCESS_TOKEN_VALIDITY_SECS = 7 * 24 * 60 * 60 // 1 week
 class FmdServerRepository(
     private val context: Context,
 ) {
-    // private val settingsRepo = SettingsRepository.getInstance(context)
+    private val settingsRepo = SettingsRepository.getInstance(context)
 
     fun getApiService(): FmdServerApiService {
-        val spec = FmdServerApiV1RepoSpec(context)
-        return FmdServerApiV1Repository.getInstance(spec)
-    }
+        val protoVersion =
+            (settingsRepo.get(Settings.SET_FMD_CRYPT_PROTO) as Number).toInt() as ProtoVersion
 
-    /*
-    fun getApiService(): FmdServerApiService {
-        // TODO: Store proto version during register/login
-        val accountProtocolVersion = (settingsRepo.get(Settings.SET_FMD_CRYPT_PROTO) as Number).toInt() as ProtoVersion
-
-        if (accountProtocolVersion == FMD_SERVER_PROTO_V1) {
+        if (protoVersion == FMD_SERVER_PROTO_V1) {
             val spec = FmdServerApiV1RepoSpec(context)
             return FmdServerApiV1Repository.getInstance(spec)
         } else {
@@ -38,7 +34,6 @@ class FmdServerRepository(
             return FmdServerApiV2Repository.getInstance(spec)
         }
     }
-     */
 
     /**
      * Gets the version of the FMD Server running at the given base URL.
