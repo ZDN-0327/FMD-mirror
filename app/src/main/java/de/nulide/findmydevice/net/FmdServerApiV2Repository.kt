@@ -1,6 +1,7 @@
 package de.nulide.findmydevice.net
 
 import android.content.Context
+import de.nulide.findmydevice.BuildConfig
 import de.nulide.findmydevice.crypto.CryptoV2
 import de.nulide.findmydevice.crypto.CryptoV2.Companion.CLIENT_ITEM_ID_SIZE_BYTES
 import de.nulide.findmydevice.crypto.DataBlobType
@@ -28,6 +29,7 @@ import de.nulide.findmydevice.utils.encodeBase64
 import de.nulide.findmydevice.utils.log
 import de.nulide.findmydevice.utils.toIsoDateTimeString
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -79,6 +81,12 @@ class FmdServerApiV2Repository private constructor(
 
         if (accessToken.isNotBlank()) {
             okHttpBuilder.addInterceptor(AuthorizationInterceptor(accessToken))
+        }
+        if (BuildConfig.DEBUG) {
+            val logging = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.BODY
+            }
+            okHttpBuilder.addNetworkInterceptor(logging)
         }
 
         val retrofit = Retrofit.Builder()
