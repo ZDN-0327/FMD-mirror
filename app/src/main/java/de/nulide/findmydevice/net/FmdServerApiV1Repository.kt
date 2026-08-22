@@ -206,7 +206,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         queue.add(request)
     }
 
-    fun <T> doRequestWithCachedToken(
+    private fun <T> doRequestWithCachedToken(
         doRequest: (String, Listener<T>, ErrorListener) -> Unit,
         listener: Listener<T>,
         errorListener: ErrorListener,
