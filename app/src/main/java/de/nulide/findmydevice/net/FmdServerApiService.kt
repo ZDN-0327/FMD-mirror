@@ -70,8 +70,7 @@ interface FmdServerApiService {
         errorListener: ErrorListener,
     )
 
-    // TODO: Explicitly revoke session
-    // fun logout(listener: Listener<Unit>, errorListener: ErrorListener)
+    fun logout()
 
     fun register(
         username: String,

@@ -232,6 +232,10 @@ class FmdServerApiV2Repository private constructor(
         service.login(loginRequest).enqueue(listener, errorListener)
     }
 
+    override fun logout() {
+        service.logout().enqueue({}, {})
+    }
+
     override fun register(
         username: String,
         password: String,

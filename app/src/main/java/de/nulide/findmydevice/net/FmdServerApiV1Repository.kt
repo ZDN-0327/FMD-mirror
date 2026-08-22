@@ -406,6 +406,10 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
             })
     }
 
+    override fun logout() {
+        context.log().i(TAG, "No-op logout")
+    }
+
     override fun unregister(
         listener: Listener<Unit>,
         errorListener: ErrorListener,

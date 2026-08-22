@@ -288,8 +288,8 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 .setTitle(getString(R.string.Settings_FMDServer_Logout_Button))
                 .setMessage(R.string.Settings_FMDServer_Logout_Text)
                 .setPositiveButton(getString(R.string.Ok), (dialog, whichButton) -> {
+                    fmdServerRepo.logout();
                     settings.removeServerAccount(false);
-                    // TODO: API to invalidate access tokens. Maybe combine with session management.
                     EncryptedSettingsRepository encryptedSettingsRepo = EncryptedSettingsRepository.Companion.getInstance(this);
                     encryptedSettingsRepo.setCachedAccessToken("");
                     ServerLocationUploadService.cancelJob(this);
