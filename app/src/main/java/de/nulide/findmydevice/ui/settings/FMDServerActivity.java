@@ -38,7 +38,6 @@ import java.util.Objects;
 
 import de.nulide.findmydevice.R;
 import de.nulide.findmydevice.data.BackgroundLocationType;
-import de.nulide.findmydevice.data.EncryptedSettingsRepository;
 import de.nulide.findmydevice.data.Settings;
 import de.nulide.findmydevice.data.SettingsRepository;
 import de.nulide.findmydevice.net.FmdServerApiService;
@@ -290,8 +289,6 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 .setPositiveButton(getString(R.string.Ok), (dialog, whichButton) -> {
                     fmdServerRepo.logout();
                     settings.removeServerAccount(false);
-                    EncryptedSettingsRepository encryptedSettingsRepo = EncryptedSettingsRepository.Companion.getInstance(this);
-                    encryptedSettingsRepo.setCachedAccessToken("");
                     ServerLocationUploadService.cancelJob(this);
                     ServerConnectivityCheckService.cancelJob(this);
                     unregisterWithUnifiedPush(this);

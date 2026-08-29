@@ -267,6 +267,8 @@ class SettingsRepository private constructor(private val context: Context) {
         // Proto v2
         encSettings.putString(KEY_FMDSERVER_V2_PASSWORD_KEY, "")
         encSettings.putString(KEY_FMDSERVER_V2_MASTER_KEY, "")
+
+        encSettings.setCachedAccessToken("")
     }
 
     fun storeLastKnownLocation(loc: FmdLocation) {

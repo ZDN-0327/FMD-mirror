@@ -284,7 +284,6 @@ class FmdServerApiV2Repository private constructor(
     ) {
         doRequestWithCachedToken({ srv -> srv.deleteAccount() }, {
             settings.removeServerAccount()
-            encryptedSettings.setCachedAccessToken("")
             listener.onResponse(Unit)
         }, errorListener)
     }
