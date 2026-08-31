@@ -23,6 +23,7 @@ import de.nulide.findmydevice.net.model.LoginResponse
 import de.nulide.findmydevice.net.model.PasswordRequest
 import de.nulide.findmydevice.net.model.PushUrlRequestResponse
 import de.nulide.findmydevice.net.model.RegisterRequest
+import de.nulide.findmydevice.net.model.ServerMessage
 import de.nulide.findmydevice.utils.SingletonHolder
 import de.nulide.findmydevice.utils.decodeBase64
 import de.nulide.findmydevice.utils.encodeBase64
@@ -423,6 +424,21 @@ class FmdServerApiV2Repository private constructor(
 
     fun deleteSingleDatum(dataType: String, clientItemIdHex: String) {
         doRequestWithCachedToken({ srv -> srv.deleteData(dataType, clientItemIdHex) }, {}, {})
+    }
+
+    fun getMessages(
+        listener: Listener<List<ServerMessage>>,
+        errorListener: ErrorListener
+    ) {
+        doRequestWithCachedToken(
+            { srv -> srv.getMessages() },
+            listener = { listener.onResponse(it.messages) },
+            errorListener
+        )
+    }
+
+    fun deleteSingleMessage(uuid: String) {
+        doRequestWithCachedToken({ srv -> srv.deleteSingleMessage(uuid) }, {}, {})
     }
 }
 

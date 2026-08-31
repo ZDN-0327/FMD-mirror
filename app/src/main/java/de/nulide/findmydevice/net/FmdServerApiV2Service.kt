@@ -3,6 +3,7 @@ package de.nulide.findmydevice.net
 import de.nulide.findmydevice.net.model.DataRequestResponse
 import de.nulide.findmydevice.net.model.LoginRequest
 import de.nulide.findmydevice.net.model.LoginResponse
+import de.nulide.findmydevice.net.model.MessagesResponse
 import de.nulide.findmydevice.net.model.PasswordRequest
 import de.nulide.findmydevice.net.model.PasswordResponse
 import de.nulide.findmydevice.net.model.PushUrlRequestResponse
@@ -61,5 +62,15 @@ interface FmdServerApiV2Service {
     fun deleteData(
         @Path("type") dataType: String,
         @Path("id") id: String,
+    ): Call<Unit>
+
+    /* ----- Server messages ----- */
+
+    @GET("messages")
+    fun getMessages(): Call<MessagesResponse>
+
+    @DELETE("messages/{id}")
+    fun deleteSingleMessage(
+        @Path("id") uuid: String,
     ): Call<Unit>
 }

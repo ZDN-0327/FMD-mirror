@@ -10,8 +10,12 @@ import androidx.work.WorkRequest
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
+import de.nulide.findmydevice.net.model.MSG_ACCOUNT_LOCKED
+import de.nulide.findmydevice.net.model.MSG_OTHER
+import de.nulide.findmydevice.net.model.ServerMessage
 import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
+import de.nulide.findmydevice.utils.toIsoDateTimeString
 import de.nulide.findmydevice.workers.CommandExecutionWorker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -39,6 +43,17 @@ class ServerCommandDownloader(
 
         val fmdServerRepo = FmdServerRepository(context).getApiService()
         fmdServerRepo.getCommand(::onResponse, ::onError)
+
+        if ((settingsRepo.get(Settings.SET_FMD_CRYPT_PROTO) as Number).toInt() == FMD_SERVER_PROTO_V2) {
+            (fmdServerRepo as FmdServerApiV2Repository).getMessages(
+                listener = ::onMessageResponse,
+                errorListener = { error ->
+                    val msg =
+                        "Error downloading server messages: statusCode=${error.statusCode ?: 0} msg=${error.message}"
+                    context.log().e(TAG, msg)
+                },
+            )
+        }
     }
 
     private fun onError(error: ServerError) {
@@ -49,6 +64,11 @@ class ServerCommandDownloader(
         val msg =
             "Error downloading command: statusCode=$statusCode msg=${error.message} attempt=$tryCount retrying=$shouldRetry"
         context.log().e(TAG, msg)
+
+        if (statusCode == 423) {
+            // Account is locked for 10 minutes, no need to retry
+            return
+        }
 
         if (shouldRetry) {
             ProcessLifecycleOwner.get().lifecycleScope.launch {
@@ -64,7 +84,7 @@ class ServerCommandDownloader(
         }
 
         if (remoteCommand.startsWith("423")) {
-            showLoginBruteForceWarning()
+            showLoginBruteForceWarning(0) // APIv1 doesn't tell us the timestamp
             return
         }
 
@@ -90,9 +110,36 @@ class ServerCommandDownloader(
         WorkManager.getInstance(context).enqueue(workRequest)
     }
 
-    private fun showLoginBruteForceWarning() {
+    private fun onMessageResponse(messages: List<ServerMessage>) {
+        val fmdServerRepo = FmdServerRepository(context).getApiService()
+
+        for (m in messages) {
+            when (m.code) {
+                MSG_OTHER -> {
+                    context.log().i(TAG, "Received server message, other, text=${m.text}")
+                    Notifications.notify(
+                        context,
+                        context.getString(R.string.server_message_other_title),
+                        context.getString(R.string.server_message_other_text, m.text),
+                        Notifications.CHANNEL_SERVER
+                    )
+                }
+
+                MSG_ACCOUNT_LOCKED -> showLoginBruteForceWarning(m.unixMillis)
+                else -> context.log().w(TAG, "Unknown message code=${m.code} text=${m.text}")
+            }
+
+            (fmdServerRepo as FmdServerApiV2Repository).deleteSingleMessage(m.uuid)
+        }
+    }
+
+    private fun showLoginBruteForceWarning(time: Long) {
         val account = settingsRepo.get(Settings.SET_FMDSERVER_ID) as String
-        val msg: String = context.getString(R.string.server_login_attempts_text, account)
+        val msg: String = context.getString(
+            R.string.server_login_attempts_text_time,
+            account,
+            time.toIsoDateTimeString()
+        )
         context.log().w(TAG, msg)
 
         Notifications.notify(
