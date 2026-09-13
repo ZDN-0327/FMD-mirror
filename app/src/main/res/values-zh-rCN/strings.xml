@@ -321,4 +321,9 @@
     <string name="about_app_icon_description">应用图标</string>
     <string name="about_documentation">文档</string>
     <string name="about_donate">赞助</string>
+    <string name="cmd_bluetoothscan_description_short">扫描蓝牙设备</string>
+    <string name="cmd_bluetoothscan_description_long">获取当前附近的蓝牙设备列表。</string>
+    <string name="cmd_bluetoothscan_response">附近的蓝牙设备：\n\n%1$s</string>
+    <string name="cmd_bluetoothscan_response_item">名称：%1$s\n地址：%2$s</string>
+    <string name="perm_bluetooth_scan_name">扫描蓝牙</string>
 </resources>
