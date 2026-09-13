@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
@@ -267,9 +268,14 @@ fun AppTheme(
     content: @Composable() () -> Unit
 ) {
     val context = LocalContext.current
-    val settings = SettingsRepository.getInstance(context)
+    val isPreview = LocalInspectionMode.current
 
-    val dynamicColor = settings.get(Settings.SET_DYNAMIC_COLORS) as Boolean
+    val dynamicColor = if (isPreview) {
+        false
+    } else {
+        val settings = SettingsRepository.getInstance(context)
+        settings.get(Settings.SET_DYNAMIC_COLORS) as Boolean
+    }
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
