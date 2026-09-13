@@ -167,9 +167,18 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
     }
 
     fun getAccessToken(
-        listener: Listener<String>,
+        listener: Listener<Unit>,
         errorListener: ErrorListener,
     ) {
+        // For the proto v2 data migration, we need to call APIv1 functions after the account already uses proto v2.
+        // To support that, refresh the token via the APIv2 repo.
+        val protoVersion = (settingsRepo.get(Settings.SET_FMD_CRYPT_PROTO) as Number).toInt()
+        if (protoVersion == FMD_SERVER_PROTO_V2) {
+            val apiV2 = FmdServerApiV2Repository.getInstance(FmdServerApiV2RepoSpec(context))
+            apiV2.refreshAccessToken(listener, errorListener)
+            return
+        }
+
         getAccessToken(
             settingsRepo.get(Settings.SET_FMDSERVER_ID) as String,
             settingsRepo.get(Settings.SET_FMD_CRYPT_HPW) as String,
@@ -181,7 +190,7 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
     fun getAccessToken(
         userId: String,
         hashedPW: String,
-        listener: Listener<String>,
+        listener: Listener<Unit>,
         errorListener: ErrorListener,
     ) {
         val jsonObject = JSONObject()
@@ -199,7 +208,9 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
             { response ->
                 try {
                     val accessToken = response["Data"] as String
-                    listener.onResponse(accessToken)
+                    // If refreshing succeeds, store it and retry the original request
+                    encryptedSettingsRepo.setCachedAccessToken(accessToken)
+                    listener.onResponse(Unit)
                 } catch (e: JSONException) {
                     context.log().w(TAG, "getAccessToken: ${e.stackTraceToString()}")
                     errorListener.onError("Access Token response has no Data field")
@@ -223,10 +234,9 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
                 // Try to refresh the access token
                 context.log().i(TAG, "Refreshing access token")
                 getAccessToken(
-                    { newAccessToken ->
-                        // If refreshing succeeds, store it and retry the original request
-                        encryptedSettingsRepo.setCachedAccessToken(newAccessToken)
-                        doRequest(newAccessToken, listener, errorListener)
+                    {
+                        val token = encryptedSettingsRepo.getCachedAccessToken()
+                        doRequest(token, listener, errorListener)
                     },
                     // If refreshing fails, use the original error handler
                     errorListener,
@@ -385,8 +395,8 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
             username,
             authPassword,
             errorListener = errorListener,
-            listener = { accessToken: String ->
-                encryptedSettingsRepo.setCachedAccessToken(accessToken)
+            listener = {
+                val accessToken = encryptedSettingsRepo.getCachedAccessToken()
                 getPrivateKey(
                     password,
                     accessToken,
