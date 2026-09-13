@@ -400,24 +400,34 @@ class FmdServerApiV2Repository private constructor(
     }
 
     override fun sendLocation(location: FmdLocation) {
-        val raw = location.encodeToJson().encodeToByteArray()
+        sendLocations(listOf(location))
+    }
+
+    fun sendLocations(locations: List<FmdLocation>) {
+        val raw = locations.map { it.encodeToJson().encodeToByteArray() }
         sendData(raw, DataBlobType.Location)
     }
 
     override fun sendPicture(picture: FmdPicture) {
-        val raw = picture.encodeToJson().encodeToByteArray()
+        sendPictures(listOf(picture))
+    }
+
+    fun sendPictures(pictures: List<FmdPicture>) {
+        val raw = pictures.map { it.encodeToJson().encodeToByteArray() }
         sendData(raw, DataBlobType.Picture)
     }
 
-    fun sendData(raw: ByteArray, type: DataBlobType) {
-        val enc = ltk.encryptDataBlob(raw, type)
+    private fun sendData(rawItems: List<ByteArray>, type: DataBlobType) {
+        val encItems = rawItems.map { raw ->
+            val enc = ltk.encryptDataBlob(raw, type)
+            EncryptedItem(
+                clientItemIdHex = enc.uniqueId.toHexString(),
+                unixMillis = enc.unixMillis,
+                ciphertext64 = enc.ciphertext.encodeBase64(),
+            )
+        }
 
-        val item = EncryptedItem(
-            clientItemIdHex = enc.uniqueId.toHexString(),
-            unixMillis = enc.unixMillis,
-            ciphertext64 = enc.ciphertext.encodeBase64(),
-        )
-        val request = DataRequestResponse(listOf(item))
+        val request = DataRequestResponse(encItems)
         doRequestWithCachedToken(
             { srv -> srv.postData(type.label, request) },
             listener = {},
