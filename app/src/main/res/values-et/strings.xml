@@ -321,4 +321,9 @@
     <string name="about_app_icon_description">Rakenduse ikoon</string>
     <string name="about_documentation">Dokumentatsioon</string>
     <string name="about_donate">Toeta meid rahaliselt</string>
+    <string name="cmd_bluetoothscan_description_short">Otsi Bluetoothi seadmeid</string>
+    <string name="cmd_bluetoothscan_description_long">Saad loendi Bluetoothi seadmetest, mis töötavad lähikonnas.</string>
+    <string name="cmd_bluetoothscan_response">Bluetoothi seadmed läheduses:\n\n%1$s</string>
+    <string name="cmd_bluetoothscan_response_item">Nimi: %1$s\nAadress: %2$s</string>
+    <string name="perm_bluetooth_scan_name">Otsing Bluetoothi võrgust</string>
 </resources>
