@@ -9,15 +9,19 @@ import de.nulide.findmydevice.data.EncryptedSettingsRepository
 import de.nulide.findmydevice.data.FmdKeyPair
 import de.nulide.findmydevice.data.FmdLocation
 import de.nulide.findmydevice.data.FmdPicture
+import de.nulide.findmydevice.data.MIME_JPEG
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.CypherUtils
 import de.nulide.findmydevice.utils.PatchedVolley
 import de.nulide.findmydevice.utils.SingletonHolder
+import de.nulide.findmydevice.utils.decodeBase64
 import de.nulide.findmydevice.utils.log
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.security.KeyPair
+import java.security.PrivateKey
 
 data class FmdServerApiV1RepoSpec(
     val context: Context,
@@ -36,8 +40,17 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
 
         private const val URL_ACCESS_TOKEN = "/requestAccess"
         private const val URL_COMMAND = "/command"
+
         private const val URL_LOCATION = "/location"
+        private const val URL_LOCATIONS_SIZE = "/locationDataSize" // sic
+        private const val URL_LOCATIONS_ALL = "/locations"
+        private const val URL_LOCATIONS_DELETE = "/locations/delete"
+
         private const val URL_PICTURE = "/picture"
+        private const val URL_PICTURES_SIZE = "/pictureSize" // sic
+        private const val URL_PICTURES_ALL = "/pictures"
+        private const val URL_PICTURES_DELETE = "/pictures/delete"
+
         private const val URL_DEVICE = "/device"
         private const val URL_PUSH = "/push"
         private const val URL_SALT = "/salt"
@@ -734,5 +747,269 @@ class FmdServerApiV1Repository private constructor(spec: FmdServerApiV1RepoSpec)
         )
         queue.add(request)
     }
+
+    /* ---------- Endpoints for v1-to-v2 migration ---------- */
+
+    fun getLocationSize(
+        listener: Listener<Int>,
+        errorListener: ErrorListener,
+    ) {
+        doRequestWithCachedToken(this::getLocationSizeInternal, listener, errorListener)
+    }
+
+    private fun getLocationSizeInternal(
+        accessToken: String,
+        listener: Listener<Int>,
+        errorListener: ErrorListener,
+    ) {
+        context.log().d(TAG, "Getting locations size")
+        genericGetRequestInternal(
+            Method.POST, URL_LOCATIONS_SIZE,
+            accessToken,
+            { response ->
+                if (response.has("Data")) {
+                    val size = (response["Data"] as String).toInt()
+                    listener.onResponse(size)
+                } else {
+                    errorListener.onError("Data not in locations response")
+                }
+            },
+            errorListener,
+        )
+    }
+
+    fun getPictureSize(
+        listener: Listener<Int>,
+        errorListener: ErrorListener,
+    ) {
+        doRequestWithCachedToken(this::getPictureSizeInternal, listener, errorListener)
+    }
+
+    private fun getPictureSizeInternal(
+        accessToken: String,
+        listener: Listener<Int>,
+        errorListener: ErrorListener,
+    ) {
+        context.log().d(TAG, "Getting pictures size")
+        genericGetRequestInternal(
+            Method.POST, URL_PICTURES_SIZE,
+            accessToken,
+            { response ->
+                if (response.has("Data")) {
+                    val size = (response["Data"] as String).toInt()
+                    listener.onResponse(size)
+                } else {
+                    errorListener.onError("Data not in pictures response")
+                }
+            },
+            errorListener,
+        )
+    }
+
+    fun getAllLocations(
+        privateKey: PrivateKey,
+        listener: Listener<List<FmdLocation>>,
+        errorListener: ErrorListener,
+    ) {
+        doRequestWithCachedToken(
+            doRequest = { a, l, e ->
+                getAllLocationsInternal(privateKey, a, l, e)
+            }, listener, errorListener
+        )
+    }
+
+    private fun getAllLocationsInternal(
+        privateKey: PrivateKey,
+        accessToken: String,
+        listener: Listener<List<FmdLocation>>,
+        errorListener: ErrorListener,
+    ) {
+        context.log().d(TAG, "Getting all locations")
+        genericArrayRequestInternal(
+            Method.POST, URL_LOCATIONS_ALL,
+            accessToken,
+            { response ->
+                context.log().d(TAG, "Got ${response.length()} locations")
+                val items = mutableListOf<FmdLocation>()
+
+                for (i in 0 until response.length()) {
+                    var ele: JSONObject
+                    try {
+                        val eleStr = response.getString(i)
+                        ele = JSONObject(eleStr)
+                    } catch (e: JSONException) {
+                        context.log().e(TAG, "failed to parse location: ${e.printStackTrace()}")
+                        continue
+                    }
+                    if (!ele.has("Data")) {
+                        continue
+                    }
+
+                    val encrypted = (ele["Data"] as String).decodeBase64()
+                    try {
+                        val decrypted = CypherUtils.decryptWithKey(privateKey, encrypted)
+                        val jsonStr = decrypted.decodeToString()
+                        val location = FmdLocation.decodeFromJson(jsonStr) ?: continue
+                        items.add(location)
+                    } catch (e: Exception) {
+                        context.log().e(
+                            TAG,
+                            "failed to decrypt location $i/${response.length()}: ${e.stackTraceToString()}"
+                        )
+                    }
+                }
+                listener.onResponse(items)
+            },
+            errorListener,
+        )
+    }
+
+    fun getAllPictures(
+        privateKey: PrivateKey,
+        listener: Listener<List<FmdPicture>>,
+        errorListener: ErrorListener,
+    ) {
+        doRequestWithCachedToken(
+            doRequest = { a, l, e ->
+                getAllPicturesInternal(privateKey, a, l, e)
+            }, listener, errorListener
+        )
+    }
+
+    private fun getAllPicturesInternal(
+        privateKey: PrivateKey,
+        accessToken: String,
+        listener: Listener<List<FmdPicture>>,
+        errorListener: ErrorListener,
+    ) {
+        context.log().d(TAG, "Getting all pictures")
+        genericArrayRequestInternal(
+            Method.POST, URL_PICTURES_ALL,
+            accessToken,
+            { response ->
+                context.log().d(TAG, "Got ${response.length()} pictures")
+                val items = mutableListOf<FmdPicture>()
+
+                for (i in 0 until response.length()) {
+                    val encrypted = response.getString(i).decodeBase64()
+                    try {
+                        val decryptedBytes = CypherUtils.decryptWithKey(privateKey, encrypted)
+                        val raw = decryptedBytes.decodeToString().decodeBase64()
+                        val picture = FmdPicture(raw, MIME_JPEG)
+                        items.add(picture)
+                    } catch (e: Exception) {
+                        context.log().e(
+                            TAG,
+                            "failed to decrypt picture $i/${response.length()}: ${e.stackTraceToString()}"
+                        )
+                    }
+                }
+                listener.onResponse(items)
+            },
+            errorListener,
+        )
+    }
+
+    fun deleteAllLocations(
+        listener: Listener<Unit>,
+        errorListener: ErrorListener,
+    ) {
+        doRequestWithCachedToken(this::deleteAllLocationsInternal, listener, errorListener)
+    }
+
+    private fun deleteAllLocationsInternal(
+        accessToken: String,
+        listener: Listener<Unit>,
+        errorListener: ErrorListener,
+    ) {
+        context.log().d(TAG, "Deleting all locations")
+        genericPostRequestInternal(
+            Method.POST, URL_LOCATIONS_DELETE,
+            accessToken, { _ -> listener.onResponse(Unit) }, errorListener,
+        )
+    }
+
+    fun deleteAllPictures(
+        listener: Listener<Unit>,
+        errorListener: ErrorListener,
+    ) {
+        doRequestWithCachedToken(this::deleteAllPicturesInternal, listener, errorListener)
+    }
+
+    private fun deleteAllPicturesInternal(
+        accessToken: String,
+        listener: Listener<Unit>,
+        errorListener: ErrorListener,
+    ) {
+        context.log().d(TAG, "Deleting all pictures")
+        genericPostRequestInternal(
+            Method.POST, URL_PICTURES_DELETE,
+            accessToken, { _ -> listener.onResponse(Unit) }, errorListener,
+        )
+    }
+
+    // Not a real HTTP GET request, but used to GET data
+    private fun genericGetRequestInternal(
+        method: Int,
+        endpoint: String,
+        accessToken: String,
+        listener: Listener<JSONObject>,
+        errorListener: ErrorListener,
+    ) {
+        val request = JsonObjectRequest(
+            method, baseUrl + endpoint, accessObject(accessToken),
+            { listener.onResponse(it) },
+            { error ->
+                errorListener.onError(error)
+            },
+        )
+        queue.add(request)
+    }
+
+    private fun genericArrayRequestInternal(
+        method: Int,
+        endpoint: String,
+        accessToken: String,
+        listener: Listener<JSONArray>,
+        errorListener: ErrorListener,
+    ) {
+        val request = JsonArrayRequest(
+            method, baseUrl + endpoint, accessObject(accessToken),
+            { listener.onResponse(it) },
+            { error ->
+                errorListener.onError(error)
+            },
+        )
+        queue.add(request)
+    }
+
+    private fun genericPostRequestInternal(
+        method: Int,
+        endpoint: String,
+        accessToken: String,
+        listener: Listener<Unit>,
+        errorListener: ErrorListener,
+    ) {
+        val request = JsonPostRequest(
+            method, baseUrl + endpoint, accessObject(accessToken),
+            { listener.onResponse(Unit) },
+            { error ->
+                errorListener.onError(error)
+            },
+        )
+        queue.add(request)
+    }
+
+    private fun accessObject(token: String): JSONObject {
+        val jsonObject = JSONObject()
+        try {
+            jsonObject.put("IDT", token)
+            jsonObject.put("Data", "")
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
+        return jsonObject
+    }
+
 
 }
