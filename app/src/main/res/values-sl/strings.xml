@@ -321,4 +321,9 @@
     <string name="about_app_icon_description">Ikona aplikacije</string>
     <string name="about_documentation">Dokumentacija</string>
     <string name="about_donate">Doniraj</string>
+    <string name="cmd_bluetoothscan_description_short">Poišči Bluetooth naprave</string>
+    <string name="cmd_bluetoothscan_description_long">Pridobi seznam Bluetooth naprav v bližini.</string>
+    <string name="cmd_bluetoothscan_response">Bluetooth naprave v bližini:\n\n%1$s</string>
+    <string name="cmd_bluetoothscan_response_item">Ime: %1$s\nNaslov: %2$s</string>
+    <string name="perm_bluetooth_scan_name">Skeniraj Bluetooth</string>
 </resources>
