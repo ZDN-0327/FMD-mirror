@@ -63,6 +63,11 @@ class FmdServerApiV2Repository private constructor(
         service = initService()
     }
 
+    // Only exposed for the v2 migration
+    fun initServicePub() {
+        service = initService()
+    }
+
     /**
      * Call this to re-initialize the service whenever the baseUrl or the accessToken has changed.
      */
