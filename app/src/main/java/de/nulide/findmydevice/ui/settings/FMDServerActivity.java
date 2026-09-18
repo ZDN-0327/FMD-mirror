@@ -38,8 +38,6 @@ import java.util.Objects;
 
 import de.nulide.findmydevice.R;
 import de.nulide.findmydevice.data.BackgroundLocationType;
-import de.nulide.findmydevice.data.EncryptedSettingsRepository;
-import de.nulide.findmydevice.data.FmdKeyPair;
 import de.nulide.findmydevice.data.Settings;
 import de.nulide.findmydevice.data.SettingsRepository;
 import de.nulide.findmydevice.net.FmdServerApiService;
@@ -97,10 +95,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         textViewUserId.setText((String) settings.get(Settings.SET_FMDSERVER_ID));
 
         TextView textViewFingerprint = findViewById(R.id.textViewFingerprint);
-        FmdKeyPair keyPair = settings.getKeysV1();
-        if (keyPair != null) {
-            textViewFingerprint.setText(keyPair.getFingerprint());
-        }
+        textViewFingerprint.setText(fmdServerRepo.getKeyFingerprint());
 
         findViewById(R.id.buttonOpenWebClient).setOnClickListener(this::onOpenWebClientClicked);
         findViewById(R.id.buttonCopyServerUrl).setOnClickListener(this::onCopyServerUrlClicked);
@@ -275,12 +270,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
 
     private void onCopyFingerprintClicked(View view) {
         String label = getString(R.string.Settings_FMD_Server_Fingerprint).replace(":", "");
-        String text = "";
-        FmdKeyPair keyPair = settings.getKeysV1();
-        if (keyPair != null) {
-            text = keyPair.getFingerprint();
-        }
-        Utils.copyToClipboard(this, label, text);
+        Utils.copyToClipboard(this, label, fmdServerRepo.getKeyFingerprint());
     }
 
     private void onDeleteClicked(View view) {
@@ -297,10 +287,8 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
                 .setTitle(getString(R.string.Settings_FMDServer_Logout_Button))
                 .setMessage(R.string.Settings_FMDServer_Logout_Text)
                 .setPositiveButton(getString(R.string.Ok), (dialog, whichButton) -> {
+                    fmdServerRepo.logout();
                     settings.removeServerAccount(false);
-                    // TODO: API to invalidate access tokens. Maybe combine with session management.
-                    EncryptedSettingsRepository encryptedSettingsRepo = EncryptedSettingsRepository.Companion.getInstance(this);
-                    encryptedSettingsRepo.setCachedAccessToken("");
                     ServerLocationUploadService.cancelJob(this);
                     ServerConnectivityCheckService.cancelJob(this);
                     unregisterWithUnifiedPush(this);

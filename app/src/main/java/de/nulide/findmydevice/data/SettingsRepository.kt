@@ -10,6 +10,8 @@ import com.google.gson.stream.JsonReader
 import de.nulide.findmydevice.BuildConfig
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.commands.FmdPermission
+import de.nulide.findmydevice.data.EncryptedSettingsRepository.Companion.KEY_FMDSERVER_V2_MASTER_KEY
+import de.nulide.findmydevice.data.EncryptedSettingsRepository.Companion.KEY_FMDSERVER_V2_PASSWORD_KEY
 import de.nulide.findmydevice.database.NotificationPassword
 import de.nulide.findmydevice.database.SmsPassword
 import de.nulide.findmydevice.utils.CypherUtils
@@ -59,13 +61,16 @@ class SettingsRepository private constructor(private val context: Context) {
 
     // Should only be accessed via the getters/setters in this repository
     private var settings: Settings
+    private var encSettings: EncryptedSettingsRepository
 
     init {
         settings = loadNoSet()
+        encSettings = EncryptedSettingsRepository.getInstance(context)
     }
 
     fun load() {
         settings = loadNoSet()
+        encSettings = EncryptedSettingsRepository.getInstance(context)
     }
 
     private fun loadNoSet(): Settings {
@@ -146,7 +151,6 @@ class SettingsRepository private constructor(private val context: Context) {
     private fun migrateDeletePassword() {
         // For users that upgrade, initialize the new delete password with the existing FMD PIN
         context.log().i(TAG, "Migrating to separate delete password")
-        val encSettings = EncryptedSettingsRepository.getInstance(context)
         val pin = encSettings.getFmdPin()
         encSettings.setDeletePassword(pin)
     }
@@ -160,7 +164,6 @@ class SettingsRepository private constructor(private val context: Context) {
     }
 
     suspend fun migrateFmdPinToDb() {
-        val encSettings = EncryptedSettingsRepository.getInstance(context)
         val pin = encSettings.getFmdPin()
         if (pin.isNotBlank()) {
             context.log().i(TAG, "Migrating FMD PIN to database")
@@ -215,8 +218,9 @@ class SettingsRepository private constructor(private val context: Context) {
         // The SET_FMDSERVER_ID is remembered during logout.
         // Therefore, check both (to be sure).
         val id = get(Settings.SET_FMDSERVER_ID) as String
-        val pw = get(Settings.SET_FMD_CRYPT_HPW) as String
-        return id.isNotEmpty() && pw.isNotEmpty()
+        val pwV1 = get(Settings.SET_FMD_CRYPT_HPW) as String
+        val pwV2 = encSettings.getString(KEY_FMDSERVER_V2_PASSWORD_KEY)
+        return id.isNotEmpty() && (pwV1.isNotEmpty() || pwV2.isNotEmpty())
     }
 
     fun setKeys(keys: FmdKeyPair) {
@@ -255,9 +259,16 @@ class SettingsRepository private constructor(private val context: Context) {
             set(Settings.SET_FMDSERVER_ID, "")
         }
 
+        // Proto v1
         set(Settings.SET_FMD_CRYPT_HPW, "")
         set(Settings.SET_FMD_CRYPT_PRIVKEY, "")
         set(Settings.SET_FMD_CRYPT_PUBKEY, "")
+
+        // Proto v2
+        encSettings.putString(KEY_FMDSERVER_V2_PASSWORD_KEY, "")
+        encSettings.putString(KEY_FMDSERVER_V2_MASTER_KEY, "")
+
+        encSettings.setCachedAccessToken("")
     }
 
     fun storeLastKnownLocation(loc: FmdLocation) {
