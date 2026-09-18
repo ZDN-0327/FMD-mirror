@@ -22,7 +22,7 @@ import de.nulide.findmydevice.database.PhoneNumber
 import de.nulide.findmydevice.database.SmsPassword
 import de.nulide.findmydevice.ui.FmdActivity
 import de.nulide.findmydevice.ui.common.validatePassword
-import de.nulide.findmydevice.utils.normalizePhoneNumber
+import de.nulide.findmydevice.utils.normalizeNumberForStorage
 import kotlinx.coroutines.launch
 
 class AccessControlActivity : FmdActivity(), AccessControlFuns {
@@ -145,7 +145,7 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
     }
 
     private suspend fun addContactToAllowList(rawNumber: String, name: String) {
-        val normNumber = normalizePhoneNumber(this, rawNumber)
+        val normNumber = normalizeNumberForStorage(this, rawNumber)
         if (normNumber == null) {
             Toast.makeText(this, R.string.allowlist_invalid_number, Toast.LENGTH_LONG).show()
             return
