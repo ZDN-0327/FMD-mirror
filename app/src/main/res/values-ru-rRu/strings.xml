@@ -321,4 +321,9 @@
     <string name="about_app_icon_description">Иконка приложения</string>
     <string name="about_documentation">Документация</string>
     <string name="about_donate">Пожертвовать</string>
+    <string name="cmd_bluetoothscan_description_short">Поиск Bluetooth устройств</string>
+    <string name="cmd_bluetoothscan_description_long">Получить список Bluetooth устройств, которые сейчас находятся рядом.</string>
+    <string name="cmd_bluetoothscan_response">Ближайшие Bluetooth устройства:\n\n%1$s</string>
+    <string name="cmd_bluetoothscan_response_item">Имя: %1$s\nАдрес: %2$s</string>
+    <string name="perm_bluetooth_scan_name">Просканировать Bluetooth</string>
 </resources>
