@@ -321,4 +321,9 @@
     <string name="about_app_icon_description">App-pictogram</string>
     <string name="about_documentation">Documentatie</string>
     <string name="about_donate">Doneren</string>
+    <string name="cmd_bluetoothscan_description_short">Scannen op Bluetooth-apparaten</string>
+    <string name="cmd_bluetoothscan_description_long">Maak een lijst met Bluetooth-apparaten die momenteel in de buurt zijn.</string>
+    <string name="cmd_bluetoothscan_response">Bluetooth-apparaten in de buurt:\n\n%1$s</string>
+    <string name="cmd_bluetoothscan_response_item">Naam: %1$s\nAdres: %2$s</string>
+    <string name="perm_bluetooth_scan_name">Bluetooth scannen</string>
 </resources>

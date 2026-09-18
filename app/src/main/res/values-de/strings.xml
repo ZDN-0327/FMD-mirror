@@ -270,7 +270,7 @@
     <string name="dont_show_again">Nicht mehr anzeigen</string>
     <string name="delete_pw_warning_no_backup">Achtung: Das Passwort ist nicht im App-Backup enthalten.</string>
     <string name="delete_pw_warning_empty">Achtung: Löschen wird nicht funktionieren, da das Lösch-Passwort leer ist. Du musst sowohl die Funktion aktivieren als auch ein Passwort setzen.</string>
-    <string name="password_set">Passwort setzen</string>
+    <string name="password_set">Passwort festlegen</string>
     <string name="password_change">Passwort ändern</string>
     <string name="password_enter">Passwort eingeben</string>
     <string name="password_match_command_keyword">Das Passwort darf nicht mit einem der Befehle übereinstimmen!</string>
@@ -335,4 +335,9 @@
     <string name="about_app_icon_description">App-Icon</string>
     <string name="about_documentation">Dokumentation</string>
     <string name="about_donate">Spenden</string>
+    <string name="cmd_bluetoothscan_response_item">Name: %1$s\nAdresse: %2$s</string>
+    <string name="cmd_bluetoothscan_description_short">Nach Bluetooth-Geräten scannen</string>
+    <string name="cmd_bluetoothscan_description_long">Eine Liste der Bluetooth-Geräte, die sich derzeit in der Nähe befinden, abrufen.</string>
+    <string name="cmd_bluetoothscan_response">Bluetooth-Geräte in der Nähe:\n\n%1$s</string>
+    <string name="perm_bluetooth_scan_name">Bluetooth scannen</string>
 </resources>

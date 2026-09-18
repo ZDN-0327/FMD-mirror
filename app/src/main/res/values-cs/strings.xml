@@ -321,4 +321,9 @@
     <string name="about_app_icon_description">Ikona aplikace</string>
     <string name="about_documentation">Dokumentace</string>
     <string name="about_donate">Přispějte</string>
+    <string name="cmd_bluetoothscan_description_short">Skenovat Bluetooth zařízení</string>
+    <string name="cmd_bluetoothscan_description_long">Získat seznam Bluetooth zařízení, která se nacházejí v okolí.</string>
+    <string name="cmd_bluetoothscan_response">Bluetooth zařízení v okolí:\n\n%1$s</string>
+    <string name="cmd_bluetoothscan_response_item">Název: %1$s\nAdresa: %2$s</string>
+    <string name="perm_bluetooth_scan_name">Skenovat Bluetooth</string>
 </resources>

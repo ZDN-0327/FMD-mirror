@@ -321,4 +321,9 @@
     <string name="about_app_icon_description">Icône d\'appli</string>
     <string name="about_documentation">Documentation</string>
     <string name="about_donate">Faire un don</string>
+    <string name="cmd_bluetoothscan_description_short">Scanner des appareils Bluetooth</string>
+    <string name="cmd_bluetoothscan_description_long">Obtenir la liste des appareils Bluetooth qui sont actuellement à proximité.</string>
+    <string name="cmd_bluetoothscan_response">Appareild Bluetooth à proximité :\n\n%1$s</string>
+    <string name="cmd_bluetoothscan_response_item">Nom : %1$s\nAdresse : %2$s</string>
+    <string name="perm_bluetooth_scan_name">Scanner le Bluetooth</string>
 </resources>
