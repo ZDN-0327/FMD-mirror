@@ -1,0 +1,6 @@
+0.17.0:
+- FMD Server API v2 and Protocol v2
+- Migration assistant for FMD Server Protocol v2 (!531)
+- Add "bluetoothscan" command (!524), thanks to @pandlab!
+- Fix national phone numbers in allowlist not working (#445)
+- Fix reply loop when "fmd help" received (#442)
