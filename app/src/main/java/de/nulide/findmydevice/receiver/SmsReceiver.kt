@@ -11,7 +11,7 @@ import androidx.work.workDataOf
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.utils.log
-import de.nulide.findmydevice.utils.normalizePhoneNumber
+import de.nulide.findmydevice.utils.normalizeNumberForStorage
 import de.nulide.findmydevice.workers.CommandExecutionWorker
 
 
@@ -47,7 +47,7 @@ class SmsReceiver : BroadcastReceiver() {
             context.log().i(TAG, "Cannot handle SMS: phoneNumber is empty!")
             return
         }
-        phoneNumber = normalizePhoneNumber(context, phoneNumber) ?: phoneNumber
+        phoneNumber = normalizeNumberForStorage(context, phoneNumber) ?: phoneNumber
 
         val msg = fullMessageBuilder.toString()
 
