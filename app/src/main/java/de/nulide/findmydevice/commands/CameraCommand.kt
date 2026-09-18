@@ -7,6 +7,7 @@ import androidx.annotation.StringRes
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.permissions.CameraPermission
+import de.nulide.findmydevice.permissions.OverlayPermission
 import de.nulide.findmydevice.transports.Transport
 import de.nulide.findmydevice.ui.DummyCameraxActivity
 import de.nulide.findmydevice.utils.log
@@ -30,7 +31,7 @@ class CameraCommand(context: Context) : Command(context) {
 
     override val longDescription = R.string.cmd_camera_description_long
 
-    override val requiredPermissions = listOf(CameraPermission())
+    override val requiredPermissions = listOf(CameraPermission(), OverlayPermission())
 
     override suspend fun <T> executeInternal(
         args: List<String>,
