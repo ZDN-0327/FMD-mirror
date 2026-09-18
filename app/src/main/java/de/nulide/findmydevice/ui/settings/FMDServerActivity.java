@@ -1,6 +1,7 @@
 package de.nulide.findmydevice.ui.settings;
 
 import static org.unifiedpush.android.connector.ConstantsKt.INSTANCE_DEFAULT;
+import static de.nulide.findmydevice.net.FmdServerRepositoryKt.FMD_SERVER_PROTO_V2;
 import static de.nulide.findmydevice.services.UnifiedPushServiceKt.unregisterWithUnifiedPush;
 import static de.nulide.findmydevice.ui.UiUtil.setupEdgeToEdgeAppBar;
 import static de.nulide.findmydevice.ui.UiUtil.setupEdgeToEdgeScrollView;
@@ -28,9 +29,11 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.apache.maven.artifact.versioning.ComparableVersion;
 import org.unifiedpush.android.connector.UnifiedPush;
 import org.unifiedpush.android.connector.data.ResolvedDistributor;
 
@@ -48,6 +51,7 @@ import de.nulide.findmydevice.services.ServerConnectivityCheckService;
 import de.nulide.findmydevice.services.ServerLocationUploadService;
 import de.nulide.findmydevice.ui.FmdActivity;
 import de.nulide.findmydevice.ui.access.FmdPermissionDialogFragment;
+import de.nulide.findmydevice.ui.protov2wizard.ProtoV2WizardActivity;
 import de.nulide.findmydevice.utils.FmdLogKt;
 import de.nulide.findmydevice.utils.UnregisterUtil;
 import de.nulide.findmydevice.utils.Utils;
@@ -62,6 +66,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
+    private FmdServerViewModel viewModel;
     private SettingsRepository settings;
     private FmdServerApiService fmdServerRepo;
 
@@ -86,6 +91,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
         setupEdgeToEdgeAppBar(findViewById(R.id.appBar));
         setupEdgeToEdgeScrollView(findViewById(R.id.scrollView));
 
+        viewModel = new ViewModelProvider(this, FmdServerViewModel.Companion.getFactory()).get(FmdServerViewModel.class);
         settings = SettingsRepository.Companion.getInstance(this);
         fmdServerRepo = new FmdServerRepository(this).getApiService();
 
@@ -148,13 +154,14 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
             FmdBatteryLowService.scheduleJobNow(this);
         }
 
-        getServerVersion();
+        viewModel.getServerVersion().observe(this, this::onNewServerVersion);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+        viewModel.queryServerVersion();
         checkConnection();
         updatePushSection();
         new ServerCommandDownloader(this).download();
@@ -449,21 +456,37 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
     }
 
     @SuppressLint("SetTextI18n")
-    private void getServerVersion() {
+    private void onNewServerVersion(String version) {
         TextView serverVersion = findViewById(R.id.serverVersion);
+        serverVersion.setText(getString(R.string.server_version) + ": " + version);
 
-        String baseUrl = (String) settings.get(Settings.SET_FMDSERVER_URL);
-        new FmdServerRepository(this).getServerVersion(baseUrl, response -> {
-            runOnUiThread(() -> {
-                serverVersion.setText(getString(R.string.server_version) + ": " + response);
-                serverVersion.setVisibility(View.VISIBLE);
-            });
-        }, error -> {
-            runOnUiThread(() -> {
-                // Silently ignore
-                serverVersion.setVisibility(View.GONE);
-            });
-        });
+        updateProtocolMigration(version);
+    }
+
+    private void updateProtocolMigration(String version) {
+        int protoVersion = ((Number) settings.get(Settings.SET_FMD_CRYPT_PROTO)).intValue();
+        ComparableVersion minRequired = new ComparableVersion("0.17.0");
+        ComparableVersion currentVersion = new ComparableVersion(version);
+
+        TextView textMigrationV2 = findViewById(R.id.textMigrationV2);
+        Button buttonMigrationV2 = findViewById(R.id.buttonMigrationV2);
+        buttonMigrationV2.setOnClickListener(this::onMigrationV2Clicked);
+
+        if (protoVersion == FMD_SERVER_PROTO_V2) {
+            textMigrationV2.setText(R.string.proto_v2_start_text_already_done);
+            buttonMigrationV2.setEnabled(false);
+        } else if (currentVersion.compareTo(minRequired) >= 0) {
+            textMigrationV2.setText(R.string.proto_v2_start_text);
+            buttonMigrationV2.setEnabled(true);
+        } else {
+            textMigrationV2.setText(R.string.proto_v2_start_text_not_available);
+            buttonMigrationV2.setEnabled(false);
+        }
+    }
+
+    private void onMigrationV2Clicked(View v) {
+        Intent intent = new Intent(v.getContext(), ProtoV2WizardActivity.class);
+        startActivity(intent);
     }
 
     private void updatePushSection() {
