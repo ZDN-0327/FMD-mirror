@@ -1,5 +1,8 @@
 package de.nulide.findmydevice.net.model
 
-data class RegisterResponse (
+import androidx.annotation.Keep
+
+@Keep
+data class RegisterResponse(
     val accessToken: String,
 )
