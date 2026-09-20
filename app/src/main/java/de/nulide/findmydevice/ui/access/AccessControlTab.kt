@@ -91,10 +91,8 @@ fun <T : AccessItem> AccessControlTab(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         if (accessItems.isEmpty()) {
-            Text(stringResource(accessType.hintText, commandKeyword))
-            Spacer(Modifier.height(8.dp))
-            Text(stringResource(R.string.access_permission_hint))
-            HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+            InfoHeader(accessType.hintText, commandKeyword)
+
             Box(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center,
@@ -103,6 +101,7 @@ fun <T : AccessItem> AccessControlTab(
                     text = stringResource(accessType.emptyText),
                     modifier = Modifier.padding(horizontal = 16.dp),
                     textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
             }
         } else {
@@ -110,10 +109,7 @@ fun <T : AccessItem> AccessControlTab(
                 modifier = Modifier.weight(1f),
             ) {
                 item {
-                    Text(stringResource(accessType.hintText, commandKeyword))
-                    Spacer(Modifier.height(8.dp))
-                    Text(stringResource(R.string.access_permission_hint))
-                    HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+                    InfoHeader(accessType.hintText, commandKeyword)
                 }
                 items(accessItems) { item ->
                     ItemElement(
@@ -151,6 +147,26 @@ fun <T : AccessItem> AccessControlTab(
     }
     itemToDelete?.let { toDelete ->
         DeleteDialog(toDelete, dismissDialog, onDeleteClicked, accessType.deleteTitle)
+    }
+}
+
+@Composable
+private fun InfoHeader(
+    @StringRes hintTextId: Int,
+    commandKeyword: String,
+) {
+    return Column {
+        Text(
+            stringResource(hintTextId, commandKeyword),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Spacer(Modifier.height(8.dp))
+
+        Text(
+            stringResource(R.string.access_permission_hint),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
     }
 }
 
@@ -239,6 +255,7 @@ private fun <T : AccessItem> ItemRow(
                 // Make click area larger
                 .padding(vertical = 8.dp),
             text = itemText,
+            style = MaterialTheme.typography.bodyLarge,
         )
         Spacer(Modifier.width(8.dp))
         OutlinedIconButton({ onEditPermissionsClicked(item) }) {
