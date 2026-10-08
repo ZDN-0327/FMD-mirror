@@ -147,6 +147,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
             .setTitle(context.getString(R.string.Settings_FMDServer_Register))
             .setView(registerLayout)
             .setCancelable(false)
+            .setNegativeButton(getString(R.string.cancel), null)
             .setPositiveButton(getString(R.string.Ok)) { _, _ ->
                 showLoadingIndicator(context)
 
@@ -195,6 +196,7 @@ class AddAccountActivity : FmdActivity(), TextWatcher {
             .setTitle(context.getString(R.string.Settings_FMDServer_Login))
             .setView(loginLayout)
             .setCancelable(false)
+            .setNegativeButton(getString(R.string.cancel), null)
             .setPositiveButton(getString(R.string.Ok)) { _, _ ->
                 showLoadingIndicator(context)
 
