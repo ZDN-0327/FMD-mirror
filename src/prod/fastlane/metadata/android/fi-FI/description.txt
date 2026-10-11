@@ -1,0 +1,33 @@
+Kadotin uuden puhelimeni.
+Ja koska en käytä Googlen palveluita, en pystynyt paikantamaan sitä, ja puhelimeni oli mennyttä.
+Jotta näin ei kävisi uudelleen, kehitin tämän sovelluksen, jotta voin paikantaa puhelimen tekstiviestillä.
+
+Ominaisuudet:
+
+- Laitteen paikantaminen (GPS:n tai matkapuhelinverkon sijaintitietojen avulla)
+- Laitteen lukitseminen
+- Laitteen soittaminen
+- Kuvien ottaminen laitteen kameralla sen ympäristön näkemiseksi
+- Tehdasasetusten palauttaminen laitteessa
+
+Käyttö:
+
+Voit ohjata FMD:tä (ja siten puhelintasi) joko tekstiviestillä tai FMD Serverin kautta.
+Lähetät puhelimeen komennon (esim. "fmd ring"), ja puhelin suorittaa sen.
+
+Tekstiviestejä varten voit joko määrittää luettelon luotetuista yhteystiedoista (puhelinnumeroista), joilla on lupa lähettää komentoja.
+Tai voit määrittää PIN-koodin, joka mahdollistaa käytön anonyymisti.
+Tällöin myös luottamattomista puhelinnumeroista voi lähettää komentoja lisäämällä PIN-koodin viestiin.
+Tästä on hyötyä, sillä jos kadotat puhelimesi, voit pyytää satunnaista henkilöä tyhjentämään puhelimesi etänä.
+Jos lähetät puhelimeesi pelkän tekstiviestin "fmd", FMD vastaa viestillä, jossa luetellaan käytettävissä olevat komennot.
+
+FMD Server tarjoaa verkkokäyttöliittymän, jolla voit lähettää komentoja, tarkastella laitteen sijaintia kartalla
+ja katsoa laitteen ottamia kuvia.
+Voit ylläpitää FMD Serveriä itse.
+Lisätietoja: https://gitlab.com/fmd-foss/fmd-server
+
+Vastuuvapauslauseke:
+
+Tämä sovellus tarjotaan parhaan kykymme mukaan.
+Toivomme, että siitä on hyötyä; käytämme sitä itsekin, mutta kyseessä on harrastusprojekti,
+emmekä voi taata, että se toimii silloin, kun tarvitset sitä eniten.
