@@ -26,7 +26,7 @@ import kotlinx.coroutines.launch
  * FmdPermission.DEFAULT, same as new passwords).
  */
 class PebbleKit2Transport(
-    context: Context,
+    private val context: Context,
     private val watchappUuid: String,
 ) : Transport<String>(watchappUuid) {
 
@@ -42,7 +42,8 @@ class PebbleKit2Transport(
 
     override val requiredPermissions: List<Permission> = emptyList()
 
-    override fun getDestinationString(): String = watchappUuid
+    override fun getDestinationString(): String =
+        context.getString(R.string.pk2_destination_name)
 
     override suspend fun isAllowed(parsed: ParserResult.Success): AccessResponse {
         val grantedPerms = (settings.get(Settings.SET_PK2_PERMISSIONS) as Number).toLong()
