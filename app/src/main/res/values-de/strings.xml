@@ -179,8 +179,6 @@
     <string name="crashed_send_log">Protokoll senden</string>
     <string name="crashed_copy_log">Protokoll kopieren</string>
     <string name="crashed_open_issuetracker">Issue-Tracker öffnen</string>
-    <string name="transport_pk2_title">Pebble-Watchapp</string>
-    <string name="transport_pk2_description">FMD-Befehle von einer Pebble-Watchapp ausführen, übermittelt von der Pebble-App (PebbleKit-2-Companion-Dienst). Standardmäßig deaktiviert; in den FMD-Einstellungen aktivieren.</string>
     <string name="transport_inapp_title">In-App</string>
     <string name="transport_inapp_send_command_title">In-App-Befehl senden</string>
     <string name="transport_inapp_send_command_command_placeholder">Befehl</string>
@@ -366,6 +364,4 @@
     <string name="proto_v2_wizard_step1_text_risk">Es besteht ein Risiko von Datenverlust, falls die Migration unterbrochen wird. Wir empfehlen, vor Beginn der Migration folgendes zu tun:\n1. Exportiere die FMD-Android-Einstellungen.\n2. Logge dich über die Web-Oberfläche ein und exportiere deine Daten (Standorte, Fotos).</string>
     <string name="proto_v2_wizard_step2_text_data">Wähle aus, was mit deinen bestehenden Daten auf FMD Server passieren soll (Standorte, Fotos). Du kannst entweder:\n1. Die Daten löschen (schnell)\n2. Die Daten migrieren (langsam)</string>
     <string name="proto_v2_wizard_step2_text_data_migration">Falls du die Daten migrierst, werden alle Standorte und Fotos heruntergeladen, mit v1 entschlüsselt, mit v2 neu verschlüsselt, und wieder hochgeladen. Dies kann einige Zeit dauern.</string>
-    <string name="Settings_PK2_Enabled">Steuerung durch Watch-App erlauben (PebbleKit 2)</string>
-    <string name="Settings_PK2_Section">Watch-Apps</string>
 </resources>
