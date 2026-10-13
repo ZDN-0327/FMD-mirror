@@ -117,6 +117,27 @@
                 android:layout_marginBottom="@dimen/margin_normal"
                 android:background="?android:attr/listDivider" />
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:background="?android:attr/listDivider" />
+
+            <TextView
+                style="@style/FMD.Text.SectionTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/Settings_PK2_Section" />
+
+            <CheckBox
+                android:id="@+id/checkBoxPebbleKit2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_small"
+                android:text="@string/Settings_PK2_Enabled" />
+
             <TextView
                 style="@style/FMD.Text.SectionTitle"
                 android:layout_width="match_parent"
@@ -129,12 +150,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/Enable" />
-
-            <CheckBox
-                android:id="@+id/checkBoxPebbleKit2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/Settings_PK2_Enabled" />
 
             <Button
                 android:id="@+id/buttonDeletePassword"

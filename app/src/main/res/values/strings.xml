@@ -165,6 +165,7 @@
 
     <!-- Settings: Access control -->
     <string name="Settings_PK2_Enabled">Allow watch app control (PebbleKit 2)</string>
+    <string name="Settings_PK2_Section">watch apps</string>
     <string name="access_tab_phone_number">Phone numbers</string>
     <string name="access_tab_sms_password">SMS passwords</string>
     <string name="access_tab_notification_password">Notification passwords</string>

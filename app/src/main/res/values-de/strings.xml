@@ -367,4 +367,5 @@
     <string name="proto_v2_wizard_step2_text_data">Wähle aus, was mit deinen bestehenden Daten auf FMD Server passieren soll (Standorte, Fotos). Du kannst entweder:\n1. Die Daten löschen (schnell)\n2. Die Daten migrieren (langsam)</string>
     <string name="proto_v2_wizard_step2_text_data_migration">Falls du die Daten migrierst, werden alle Standorte und Fotos heruntergeladen, mit v1 entschlüsselt, mit v2 neu verschlüsselt, und wieder hochgeladen. Dies kann einige Zeit dauern.</string>
     <string name="Settings_PK2_Enabled">Steuerung durch Watch-App erlauben (PebbleKit 2)</string>
+    <string name="Settings_PK2_Section">Watch-Apps</string>
 </resources>
