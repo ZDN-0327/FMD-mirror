@@ -138,6 +138,14 @@
                 android:layout_marginBottom="@dimen/margin_small"
                 android:text="@string/Settings_PK2_Enabled" />
 
+            <Button
+                android:id="@+id/buttonPebbleKit2Permissions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_normal"
+                android:ems="10"
+                android:text="@string/fmd_permission_allowed_commands_title" />
+
             <TextView
                 style="@style/FMD.Text.SectionTitle"
                 android:layout_width="match_parent"

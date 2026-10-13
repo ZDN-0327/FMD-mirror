@@ -128,7 +128,12 @@ public class Settings extends HashMap<Integer, Object> {
                 case SET_PK2_ENABLED:
                     return false;
                 case SET_PK2_PERMISSIONS:
-                    return FmdPermission.Companion.getDEFAULT();
+                    // Use ALL instead of DEFAULT for PebbleKit 2, same reasoning
+                    // as FMD Server above: 1) the watch has no channel for
+                    // "access denied" explanations, and 2) it is your own watch,
+                    // not a way of granting others access to the phone. The
+                    // transport itself is opt-in (off by default).
+                    return FmdPermission.Companion.getALL();
                 case SET_PK2_RESULT_KEY:
                     return 10001L;
                 case SET_FMDSERVER_PERMISSIONS:

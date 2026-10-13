@@ -24,16 +24,18 @@ import de.nulide.findmydevice.data.EncryptedSettingsRepository;
 import de.nulide.findmydevice.data.Settings;
 import de.nulide.findmydevice.data.SettingsRepository;
 import de.nulide.findmydevice.ui.FmdActivity;
+import de.nulide.findmydevice.ui.access.FmdPermissionDialogFragment;
 import de.nulide.findmydevice.ui.common.PasswordSetDialog;
 import kotlin.Unit;
 
-public class FMDConfigActivity extends FmdActivity implements CompoundButton.OnCheckedChangeListener, TextWatcher {
+public class FMDConfigActivity extends FmdActivity implements CompoundButton.OnCheckedChangeListener, TextWatcher, FmdPermissionDialogFragment.Listener {
 
     private SettingsRepository settings;
     private EncryptedSettingsRepository encSettings;
 
     private CheckBox checkBoxDeviceWipe;
     private CheckBox checkBoxPebbleKit2;
+    private FmdPermissionDialogFragment permissionDialog;
     private Button buttonSelectRingtone;
     private Button buttonDeletePassword;
     private EditText editTextLockScreenMessage;
@@ -64,6 +66,8 @@ public class FMDConfigActivity extends FmdActivity implements CompoundButton.OnC
         checkBoxPebbleKit2 = findViewById(R.id.checkBoxPebbleKit2);
         checkBoxPebbleKit2.setChecked((Boolean) settings.get(Settings.SET_PK2_ENABLED));
         checkBoxPebbleKit2.setOnCheckedChangeListener(this);
+
+        findViewById(R.id.buttonPebbleKit2Permissions).setOnClickListener(this::onChangePk2PermissionsClicked);
 
         editTextLockScreenMessage = findViewById(R.id.editTextTextLockScreenMessage);
         editTextLockScreenMessage.setText((String) settings.get(Settings.SET_LOCKSCREEN_MESSAGE));
@@ -173,4 +177,20 @@ public class FMDConfigActivity extends FmdActivity implements CompoundButton.OnC
         }
     }
 
+    private void onChangePk2PermissionsClicked(View view) {
+        long initialPermission = (long) settings.get(Settings.SET_PK2_PERMISSIONS);
+        permissionDialog = FmdPermissionDialogFragment.Companion.newInstance(initialPermission);
+        permissionDialog.show(getSupportFragmentManager(), "FmdPermissionDialogFragment");
+    }
+
+    @Override
+    public void onPermissionCancelClicked() {
+        permissionDialog.dismiss();
+    }
+
+    @Override
+    public void onPermissionSaveClicked(long newValue) {
+        settings.set(Settings.SET_PK2_PERMISSIONS, newValue);
+        permissionDialog.dismiss();
+    }
 }
