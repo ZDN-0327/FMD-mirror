@@ -51,6 +51,8 @@ class PebbleKit2Transport(
     }
 
     override fun send(context: Context, msg: String) {
+        super.send(context, msg)
+
         // Results (e.g. location data) are pushed to the watch asynchronously;
         // never block command execution on the watch connection.
         CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
