@@ -164,6 +164,7 @@
     <string name="proto_v2_wizard_step3_button_close">Finish assistant</string>
 
     <!-- Settings: Access control -->
+    <string name="Settings_PK2_Enabled">Allow watch app control (PebbleKit 2)</string>
     <string name="access_tab_phone_number">Phone numbers</string>
     <string name="access_tab_sms_password">SMS passwords</string>
     <string name="access_tab_notification_password">Notification passwords</string>
@@ -398,6 +399,8 @@
     <string name="transport_fmd_server_description_auth">Anyone who knows your username and password can log in to FMD Server and control your device.</string>
     <string name="transport_fmd_server_description_note">FMD Server requires an internet connection. This can be a mobile network (thus the SIM needs to be unlocked) or WiFi.</string>
 
+    <string name="transport_pk2_title">Pebble watchapp</string>
+    <string name="transport_pk2_description">Run FMD commands from a Pebble watchapp, delivered by the Pebble mobile app (PebbleKit 2 companion service). Disabled by default; enable it in FMD Settings.</string>
     <string name="transport_inapp_title">In-app</string>
     <string name="transport_inapp_description">Send commands locally from within FMD to your device. This is useful for testing. FMD will reply with a notification.</string>
     <string name="transport_inapp_send_command_title">Send in-app command</string>

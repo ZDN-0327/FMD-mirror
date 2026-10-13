@@ -33,6 +33,7 @@ public class FMDConfigActivity extends FmdActivity implements CompoundButton.OnC
     private EncryptedSettingsRepository encSettings;
 
     private CheckBox checkBoxDeviceWipe;
+    private CheckBox checkBoxPebbleKit2;
     private Button buttonSelectRingtone;
     private Button buttonDeletePassword;
     private EditText editTextLockScreenMessage;
@@ -60,6 +61,10 @@ public class FMDConfigActivity extends FmdActivity implements CompoundButton.OnC
         checkBoxDeviceWipe.setChecked((Boolean) settings.get(Settings.SET_WIPE_ENABLED));
         checkBoxDeviceWipe.setOnCheckedChangeListener(this);
 
+        checkBoxPebbleKit2 = findViewById(R.id.checkBoxPebbleKit2);
+        checkBoxPebbleKit2.setChecked((Boolean) settings.get(Settings.SET_PK2_ENABLED));
+        checkBoxPebbleKit2.setOnCheckedChangeListener(this);
+
         editTextLockScreenMessage = findViewById(R.id.editTextTextLockScreenMessage);
         editTextLockScreenMessage.setText((String) settings.get(Settings.SET_LOCKSCREEN_MESSAGE));
         editTextLockScreenMessage.addTextChangedListener(this);
@@ -86,6 +91,8 @@ public class FMDConfigActivity extends FmdActivity implements CompoundButton.OnC
         if (buttonView == checkBoxDeviceWipe) {
             settings.set(Settings.SET_WIPE_ENABLED, isChecked);
             updateDeletePasswordButton();
+        } else if (buttonView == checkBoxPebbleKit2) {
+            settings.set(Settings.SET_PK2_ENABLED, isChecked);
         }
     }
 
