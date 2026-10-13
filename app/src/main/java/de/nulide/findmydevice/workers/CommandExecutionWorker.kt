@@ -34,6 +34,11 @@ class CommandExecutionWorker(
         const val KEY_TRANSPORT_TYPE = "KEY_TRANSPORT_TYPE"
         const val KEY_DESTINATION = "KEY_DESTINATION"
 
+        // PebbleKit 2 watchapp UUIDs are UUID-shaped; used to display a
+        // friendly name instead of the raw UUID.
+        private val UUID_PATTERN =
+            Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
         // Command-specific
         const val KEY_SMS_SUBSCRIPTION_ID = "KEY_SMS_SUBSCRIPTION_ID"
         const val KEY_NOTIF_KEY = "KEY_NOTIF_KEY"
@@ -135,8 +140,14 @@ class CommandExecutionWorker(
     private fun createForegroundInfo(command: String, destination: String): ForegroundInfo {
         val intent = WorkManager.getInstance(applicationContext).createCancelPendingIntent(id)
 
+        val displayDestination = if (UUID_PATTERN.matches(destination)) {
+            // PK2 commands use the watchapp UUID as their destination
+            applicationContext.getString(R.string.pk2_destination_name)
+        } else {
+            destination
+        }
         val title = applicationContext.getString(R.string.executing_title)
-        val text = applicationContext.getString(R.string.executing_text, command, destination)
+        val text = applicationContext.getString(R.string.executing_text, command, displayDestination)
         val cancel = applicationContext.getString(android.R.string.cancel)
 
         val notification = NotificationCompat
