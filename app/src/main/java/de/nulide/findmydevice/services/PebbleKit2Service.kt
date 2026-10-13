@@ -44,6 +44,7 @@ class PebbleKit2Service : Service() {
         private const val KEY_RESULTS = "TRANSMISSION_RESULTS"
         private const val KEY_TYPE = "TYPE"
         private const val ACTION_RECEIVE_DATA_FROM_WATCH = "ACTION_RECEIVE_DATA_FROM_WATCH"
+        private const val ACTION_SEND_DATA_TO_WATCH = "io.rebble.pebblekit2.SEND_DATA_TO_WATCH"
     }
 
     private val binder = object : UniversalRequestResponse.Stub() {
@@ -66,7 +67,7 @@ class PebbleKit2Service : Service() {
                 return false
             }
             if (!callerIsPebbleApp()) {
-                log().w(TAG, "Rejecting PK2 request from non-Pebble caller")
+                log().w(TAG, "Rejecting PK2 request: caller failed identity check")
                 return false
             }
 
@@ -134,12 +135,35 @@ class PebbleKit2Service : Service() {
             return if (clean.isEmpty()) null else clean
         }
 
+        /**
+         * Identity by capability, not by name: a Pebble mobile app is an app
+         * that exposes the PK2 sender service. Name lists break - the current
+         * RePebble app's package is coredevices.coreapp (no "pebble"/"rebble"
+         * in it at all).
+         */
         private fun callerIsPebbleApp(): Boolean {
-            val packages = packageManager.getPackagesForUid(Binder.getCallingUid())
-                ?: return false
-            return packages.any {
-                it.lowercase().contains("pebble") || it.lowercase().contains("rebble")
+            val uid = Binder.getCallingUid()
+            val packages = try {
+                packageManager.getPackagesForUid(uid)
+            } catch (e: Exception) {
+                log().e(TAG, "PK2 getPackagesForUid failed: ${e.message}")
+                null
+            } ?: return false.also {
+                log().w(TAG, "Rejecting PK2 request: uid=$uid resolves to no packages")
             }
+
+            for (pkg in packages) {
+                val probe = Intent(ACTION_SEND_DATA_TO_WATCH).setPackage(pkg)
+                if (packageManager.queryIntentServices(probe, 0).isNotEmpty()) {
+                    return true
+                }
+            }
+            log().w(
+                TAG,
+                "Rejecting PK2 request from non-Pebble caller: uid=$uid " +
+                    "pkgs=${packages.joinToString(",")} (none exposes the PK2 sender service)"
+            )
+            return false
         }
     }
 

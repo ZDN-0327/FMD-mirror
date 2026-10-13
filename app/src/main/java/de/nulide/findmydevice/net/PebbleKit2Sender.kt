@@ -117,14 +117,9 @@ class PebbleKit2Sender(
     }
 
     private fun findPebbleApp(): String? {
+        // Any app exposing the PK2 sender service is a Pebble mobile app.
+        // (Do NOT filter by package name - coredevices.coreapp would be missed.)
         val services = context.packageManager.queryIntentServices(Intent(ACTION_SEND_DATA_TO_WATCH), 0)
-        for (info in services) {
-            val packageName = info.serviceInfo?.packageName ?: continue
-            val lower = packageName.lowercase()
-            if (lower.contains("pebble") || lower.contains("rebble")) {
-                return packageName
-            }
-        }
-        return null
+        return services.firstOrNull()?.serviceInfo?.packageName
     }
 }
