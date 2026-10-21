@@ -72,7 +72,12 @@ class FmdApplication : Application() {
 
     fun restartServices() {
         val settings = SettingsRepository.getInstance(this)
-        if (settings.serverAccountExists()) {
+        val hasFmdServer = settings.serverAccountExists()
+        val hasNextcloud = settings.get(Settings.SET_NEXTCLOUD_ENABLED) as? Boolean ?: false
+        // Either remote transport needs UnifiedPush to survive process restarts
+        val needsPush = hasFmdServer || hasNextcloud
+
+        if (hasFmdServer) {
             // Scheduling a job that is already running should be fine (?),
             // because they have the same, fixed JOB_ID.
             if (settings.get(Settings.SET_FMD_LOW_BAT_SEND) as Boolean) {
@@ -80,28 +85,35 @@ class FmdApplication : Application() {
             }
             ServerLocationUploadService.scheduleRecurring(this)
             ServerConnectivityCheckService.scheduleJob(this)
+        } else {
+            FmdBatteryLowService.cancelJob(this)
+            ServerLocationUploadService.cancelJob(this)
+            ServerConnectivityCheckService.cancelJob(this)
+        }
 
+        if (needsPush) {
             if (isRegisteredWithUnifiedPush(this)) {
                 if (isNetworkAvailable(this)) {
                     // Re-register with the saved distributor, to keep the registration fresh.
                     // Doing this on each Application start is important, because e.g. UP library upgrades
                     // can reset internal state. A re-registration resolves this automatically.
-                    this.log().i(TAG, "Renewing push registration")
+                    this.log().i(
+                        TAG,
+                        "Renewing push registration (fmdServer=$hasFmdServer nextcloud=$hasNextcloud)",
+                    )
                     UnifiedPush.register(this, INSTANCE_DEFAULT, null, null)
                 } else {
                     this.log().i(TAG, "Skipping push renewal (no network)")
                 }
             } else {
+                this.log().w(TAG, "Push needed but not registered with a distributor")
                 notifyWarnUnifiedPushRequired(this)
             }
 
-            // Do NOT try to register with UnifiedPush.
-            // This needs a UI context, and should thus happen in the MainActivity.
+            // Do NOT try a full first-time register with UnifiedPush here.
+            // That needs a UI context (distributor picker); use FMD Server / Nextcloud settings.
         } else {
-            FmdBatteryLowService.cancelJob(this)
-            ServerLocationUploadService.cancelJob(this)
-            ServerConnectivityCheckService.cancelJob(this)
-
+            // No remote transport configured — drop any leftover push registration
             unregisterWithUnifiedPush(this)
         }
     }
