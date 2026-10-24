@@ -53,6 +53,7 @@ import de.nulide.findmydevice.ui.FmdActivity;
 import de.nulide.findmydevice.ui.access.FmdPermissionDialogFragment;
 import de.nulide.findmydevice.ui.protov2wizard.ProtoV2WizardActivity;
 import de.nulide.findmydevice.utils.FmdLogKt;
+import de.nulide.findmydevice.utils.Notifications;
 import de.nulide.findmydevice.utils.UnregisterUtil;
 import de.nulide.findmydevice.utils.Utils;
 import de.nulide.findmydevice.warnings.PushWarningsKt;
@@ -242,6 +243,7 @@ public class FMDServerActivity extends FmdActivity implements CompoundButton.OnC
             settings.set(Settings.SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS, value);
 
             if (value > 0) {
+                Notifications.dismiss(this, Notifications.ID_SERVER_NUDGE_CONNECTIVITY_CHECK);
                 ServerConnectivityCheckService.scheduleJob(this);
             } else {
                 ServerConnectivityCheckService.cancelJob(this);
