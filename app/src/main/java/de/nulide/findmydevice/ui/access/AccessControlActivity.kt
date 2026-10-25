@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,7 +20,9 @@ import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.database.NotificationPassword
 import de.nulide.findmydevice.database.PhoneNumber
+import de.nulide.findmydevice.database.Plugin
 import de.nulide.findmydevice.database.SmsPassword
+import de.nulide.findmydevice.services.FmdPluginService
 import de.nulide.findmydevice.ui.FmdActivity
 import de.nulide.findmydevice.ui.common.validatePassword
 import de.nulide.findmydevice.utils.normalizeNumberForStorage
@@ -29,10 +32,10 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
 
     companion object {
         const val EXTRA_PAGE = "EXTRA_PAGE"
-
         const val PAGE_NOTIF = 2
-
         const val PAGE_PLUGIN = 3
+
+        const val EXTRA_ADD_PLUGIN = "EXTRA_ADD_PLUGIN"
     }
 
     private lateinit var accessRepo: AccessRepository
@@ -55,6 +58,11 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
                 initialPage,
             )
         }
+
+        val addPlugin = intent.extras?.getString(EXTRA_ADD_PLUGIN)
+        if (addPlugin != null) {
+            showAddPluginDialog(addPlugin)
+        }
     }
 
     /* ------- Phone numbers ------- */
@@ -72,8 +80,8 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
             .setPositiveButton(
                 getString(R.string.add),
                 { _, _ ->
-                    val name = nameInput.getText().toString()
-                    val number = phoneNumberInput.getText().toString()
+                    val name = nameInput.text.toString()
+                    val number = phoneNumberInput.text.toString()
                     lifecycleScope.launch {
                         addContactToAllowList(number, name)
                     }
@@ -246,6 +254,35 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
 
         val entry = NotificationPassword(0, label, passwordHash)
         accessRepo.insertNotificationPassword(entry)
+    }
+
+    /* ------- Plugins ------- */
+    private fun showAddPluginDialog(appId: String) {
+        val context = this
+        val layout = layoutInflater.inflate(R.layout.dialog_new_plugin, null)
+        val labelInput = layout.findViewById<TextView>(R.id.textNewPluginInfo)
+        labelInput.text = getString(R.string.dialog_plugin_info, appId, appId)
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle(title)
+            .setView(layout)
+            .setCancelable(false)
+            .setPositiveButton(
+                getString(R.string.yes),
+                { _, _ ->
+                    viewModel.setLoading(true)
+                    lifecycleScope.launch {
+                        accessRepo.insertPlugin(Plugin(0, appId, appId))
+                        val intent = Intent(context, FmdPluginService::class.java).apply {
+                            action = FmdPluginService.ACTION_GRANTED
+                            putExtra(FmdPluginService.EXTRA_CALLER, appId)
+                        }
+                        context.startService(intent)
+                        viewModel.setLoading(false)
+                    }
+                })
+            .setNegativeButton(getString(R.string.no), null)
+            .show()
     }
 
 }

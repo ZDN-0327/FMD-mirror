@@ -17,6 +17,8 @@
     <string name="label">Label</string>
     <string name="save">Save</string>
     <string name="select">Select</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
 
     <string name="Fused">Fused</string>
     <string name="GPS">GPS</string>
@@ -468,5 +470,6 @@
     <string name="access_plugins_hint">The apps in this list are allowed to access FMD via its plugin system.</string>
     <string name="allowlist_delete_title_plugin">Delete plugin?</string>
     <string name="access_plugins_empty">No plugins. Install a plugin and request access from within the app.</string>
+    <string name="dialog_plugin_info">The following plugin requests access to FMD.\n\nApp: %s\nApp-Id: %s\n\nDo you want to grant it?</string>
 
 </resources>

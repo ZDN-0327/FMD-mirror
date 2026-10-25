@@ -9,20 +9,16 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import de.nulide.findmydevice.IFmdPlugin
 import de.nulide.findmydevice.IFmdPluginCallback
-import de.nulide.findmydevice.data.AccessRepository
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
-import de.nulide.findmydevice.database.Plugin
+import de.nulide.findmydevice.ui.access.AccessControlActivity
 import de.nulide.findmydevice.workers.CommandExecutionWorker
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
 
 class FmdPluginService: Service() {
 
     companion object {
         const val ACTION_REPLY = "de.nulide.findmydevice.PLUGIN_REPLY"
+        const val ACTION_GRANTED = "de.nulide.findmydevice.PLUGIN_GRANTED"
         const val EXTRA_CALLER = "caller"
         const val EXTRA_MSG = "msg"
     }
@@ -32,8 +28,6 @@ class FmdPluginService: Service() {
     private var pluginCallbacks = mutableMapOf<String, IFmdPluginCallback>()
 
     private val settings: SettingsRepository = SettingsRepository.getInstance(this)
-
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     private val binder = object : IFmdPlugin.Stub() {
         override fun executeCommand(cmd: String?) {
@@ -57,11 +51,11 @@ class FmdPluginService: Service() {
         override fun requestPluginAccess() {
             val caller = getCaller()
             if (!caller.isNullOrEmpty()) {
-                scope.launch {
-                    val accessRepo = AccessRepository.getInstance(this@FmdPluginService)
-                    accessRepo.insertPlugin(Plugin(0,caller,caller))
-                    pluginCallbacks[caller]?.accessGranted()
-                }
+                val intent = Intent(this@FmdPluginService, AccessControlActivity::class.java)
+                intent.putExtra(AccessControlActivity.EXTRA_PAGE, AccessControlActivity.PAGE_PLUGIN)
+                intent.putExtra(AccessControlActivity.EXTRA_ADD_PLUGIN, caller)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
             }
         }
 
@@ -93,6 +87,12 @@ class FmdPluginService: Service() {
                 val msg = intent.getStringExtra(EXTRA_MSG)
                 if (!caller.isNullOrEmpty() && msg != null) {
                     pluginCallbacks[caller]?.onResponse(msg)
+                }
+            }
+            ACTION_GRANTED -> {
+                val caller = intent.getStringExtra(EXTRA_CALLER)
+                if(!caller.isNullOrEmpty()){
+                    pluginCallbacks[caller]?.accessGranted()
                 }
             }
         }
