@@ -43,7 +43,7 @@ class PluginTransport(
     override val actions = listOf(TransportAction(R.string.Settings_Access_Control) { activity ->
         val intent = Intent(context, AccessControlActivity::class.java)
         intent.putExtra(AccessControlActivity.EXTRA_PAGE, AccessControlActivity.PAGE_PLUGIN)
-        activity.startActivity(Intent(context, AccessControlActivity::class.java))
+        activity.startActivity(intent)
     })
 
     override fun getDestinationString(): String {
