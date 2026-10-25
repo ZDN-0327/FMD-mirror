@@ -7,6 +7,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import de.nulide.findmydevice.commands.FmdPermission
+import de.nulide.findmydevice.utils.normalizeNumberForDisplay
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -19,7 +20,7 @@ import kotlinx.parcelize.Parcelize
 data class Plugin(
     @PrimaryKey(autoGenerate = true) val rowId: Int = 0,
 
-    @ColumnInfo("app_name") val label: String,
+    @ColumnInfo("app_name") val appName: String,
 
     @ColumnInfo("app_id") val appId: String,
 
@@ -31,6 +32,6 @@ data class Plugin(
     }
 
     override fun toDisplayLabel(context: Context): String {
-        return label
+        return "$appName ($appId)"
     }
 }

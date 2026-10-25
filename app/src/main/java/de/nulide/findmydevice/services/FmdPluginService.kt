@@ -2,6 +2,7 @@ package de.nulide.findmydevice.services
 
 import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Binder
 import android.os.IBinder
 import androidx.work.OneTimeWorkRequestBuilder
@@ -14,7 +15,7 @@ import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.ui.access.AccessControlActivity
 import de.nulide.findmydevice.workers.CommandExecutionWorker
 
-class FmdPluginService: Service() {
+class FmdPluginService : Service() {
 
     companion object {
         const val ACTION_REPLY = "de.nulide.findmydevice.PLUGIN_REPLY"
@@ -33,7 +34,7 @@ class FmdPluginService: Service() {
         override fun executeCommand(cmd: String?) {
             enforceCallingPermission(PLUGIN_PERMISSION, "Missing Permission")
             val caller = getCaller()
-            if(caller == null || cmd == null){
+            if (caller == null || cmd == null) {
                 return
             }
             val fullCmd = (settings.get(Settings.SET_FMD_COMMAND) as String) + " " + cmd
@@ -50,10 +51,12 @@ class FmdPluginService: Service() {
 
         override fun requestPluginAccess() {
             val caller = getCaller()
-            if (!caller.isNullOrEmpty()) {
+            val appName = getAppName(caller ?: "")
+            if (!caller.isNullOrEmpty() && !appName.isNullOrEmpty()) {
                 val intent = Intent(this@FmdPluginService, AccessControlActivity::class.java)
                 intent.putExtra(AccessControlActivity.EXTRA_PAGE, AccessControlActivity.PAGE_PLUGIN)
-                intent.putExtra(AccessControlActivity.EXTRA_ADD_PLUGIN, caller)
+                intent.putExtra(AccessControlActivity.EXTRA_ADD_PLUGIN_NAME, appName)
+                intent.putExtra(AccessControlActivity.EXTRA_ADD_PLUGIN_ID, caller)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
@@ -67,13 +70,22 @@ class FmdPluginService: Service() {
         }
     }
 
-    fun getCaller(): String?{
+    fun getCaller(): String? {
         val callingUuid = Binder.getCallingUid()
         val callingPackages = packageManager.getPackagesForUid(callingUuid)
-        if(!callingPackages.isNullOrEmpty()){
+        if (!callingPackages.isNullOrEmpty()) {
             return callingPackages[0]
         }
         return null
+    }
+
+    fun getAppName(appId: String): String? {
+        return try {
+            val info = packageManager.getApplicationInfo(appId, 0)
+            packageManager.getApplicationLabel(info).toString()
+        } catch (e: PackageManager.NameNotFoundException) {
+            null
+        }
     }
 
     override fun onBind(intent: Intent?): IBinder {
@@ -81,7 +93,7 @@ class FmdPluginService: Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action){
+        when (intent?.action) {
             ACTION_REPLY -> {
                 val caller = intent.getStringExtra(EXTRA_CALLER)
                 val msg = intent.getStringExtra(EXTRA_MSG)
@@ -89,9 +101,10 @@ class FmdPluginService: Service() {
                     pluginCallbacks[caller]?.onResponse(msg)
                 }
             }
+
             ACTION_GRANTED -> {
                 val caller = intent.getStringExtra(EXTRA_CALLER)
-                if(!caller.isNullOrEmpty()){
+                if (!caller.isNullOrEmpty()) {
                     pluginCallbacks[caller]?.accessGranted()
                 }
             }

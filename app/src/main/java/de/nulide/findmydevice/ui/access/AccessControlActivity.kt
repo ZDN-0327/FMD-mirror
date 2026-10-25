@@ -35,7 +35,8 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
         const val PAGE_NOTIF = 2
         const val PAGE_PLUGIN = 3
 
-        const val EXTRA_ADD_PLUGIN = "EXTRA_ADD_PLUGIN"
+        const val EXTRA_ADD_PLUGIN_NAME = "EXTRA_ADD_PLUGIN_APP_NAME"
+        const val EXTRA_ADD_PLUGIN_ID = "EXTRA_ADD_PLUGIN_APP_ID"
     }
 
     private lateinit var accessRepo: AccessRepository
@@ -59,9 +60,10 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
             )
         }
 
-        val addPlugin = intent.extras?.getString(EXTRA_ADD_PLUGIN)
-        if (addPlugin != null) {
-            showAddPluginDialog(addPlugin)
+        val addPluginId = intent.extras?.getString(EXTRA_ADD_PLUGIN_ID)
+        val addPluginName = intent.extras?.getString(EXTRA_ADD_PLUGIN_NAME)
+        if (addPluginId != null && addPluginName != null) {
+            showAddPluginDialog(addPluginId, addPluginName)
         }
     }
 
@@ -202,8 +204,8 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
             .setPositiveButton(
                 getString(R.string.add),
                 { _, _ ->
-                    val label = labelInput.getText().toString()
-                    val password = passwordInput.getText().toString()
+                    val label = labelInput.text.toString()
+                    val password = passwordInput.text.toString()
 
                     validatePassword(context, password, forceMinLength = true, allowEmpty = false) {
                         viewModel.setLoading(true)
@@ -257,11 +259,11 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
     }
 
     /* ------- Plugins ------- */
-    private fun showAddPluginDialog(appId: String) {
+    private fun showAddPluginDialog(appId: String, appName: String) {
         val context = this
         val layout = layoutInflater.inflate(R.layout.dialog_new_plugin, null)
         val labelInput = layout.findViewById<TextView>(R.id.textNewPluginInfo)
-        labelInput.text = getString(R.string.dialog_plugin_info, appId, appId)
+        labelInput.text = getString(R.string.dialog_plugin_info, appName, appId)
 
         MaterialAlertDialogBuilder(context)
             .setTitle(title)
@@ -272,7 +274,7 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
                 { _, _ ->
                     viewModel.setLoading(true)
                     lifecycleScope.launch {
-                        accessRepo.insertPlugin(Plugin(0, appId, appId))
+                        accessRepo.insertPlugin(Plugin(0, appName, appId))
                         val intent = Intent(context, FmdPluginService::class.java).apply {
                             action = FmdPluginService.ACTION_GRANTED
                             putExtra(FmdPluginService.EXTRA_CALLER, appId)
