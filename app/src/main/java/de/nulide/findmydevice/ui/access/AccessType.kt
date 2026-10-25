@@ -42,7 +42,7 @@ object ACCESS_NOTIF_PASS : AccessType<NotificationPassword>(
 
 object ACCESS_PLUGINS : AccessType<Plugin>(
     hintText = R.string.access_plugins_hint,
-    emptyText = R.string.access_password_empty,
+    emptyText = R.string.access_plugins_empty,
     addText = R.string.access_notification_password_add,
     deleteTitle = R.string.allowlist_delete_title_plugin,
 )

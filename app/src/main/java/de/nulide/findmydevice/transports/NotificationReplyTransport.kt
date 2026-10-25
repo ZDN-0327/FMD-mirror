@@ -53,7 +53,7 @@ class NotificationReplyTransport(
 
     override val actions = listOf(TransportAction(R.string.Settings_Access_Control) { activity ->
         val intent = Intent(context, AccessControlActivity::class.java)
-        intent.putExtra(AccessControlActivity.EXTRA_NOTIF, true)
+        intent.putExtra(AccessControlActivity.EXTRA_PAGE, AccessControlActivity.PAGE_NOTIF)
         activity.startActivity(intent)
     })
 

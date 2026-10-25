@@ -28,7 +28,11 @@ import kotlinx.coroutines.launch
 class AccessControlActivity : FmdActivity(), AccessControlFuns {
 
     companion object {
-        const val EXTRA_NOTIF = "EXTRA_NOTIF"
+        const val EXTRA_PAGE = "EXTRA_PAGE"
+
+        const val PAGE_NOTIF = 2
+
+        const val PAGE_PLUGIN = 3
     }
 
     private lateinit var accessRepo: AccessRepository
@@ -42,7 +46,7 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
         accessRepo = AccessRepository.getInstance(this)
         settings = SettingsRepository.getInstance(this)
 
-        val initialPage = if (intent.extras?.getInt(EXTRA_NOTIF) != null) 2 else 0
+        val initialPage = intent.extras?.getInt(EXTRA_PAGE) ?: 0
 
         setContent {
             AccessControlTabsScreen(

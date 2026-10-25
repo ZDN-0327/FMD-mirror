@@ -13,6 +13,7 @@ import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.database.AccessItem
 import de.nulide.findmydevice.database.NotificationPassword
 import de.nulide.findmydevice.database.PhoneNumber
+import de.nulide.findmydevice.database.Plugin
 import de.nulide.findmydevice.database.SmsPassword
 import de.nulide.findmydevice.database.SmsPasswordWithTempPhoneNumbers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -72,6 +73,7 @@ class AccessControlViewModel(
                 is NotificationPassword -> accessRepo.updateNotificationPassword(
                     item.copy(permission = newPerm)
                 )
+                is Plugin -> accessRepo.updatePlugin(item.copy(permission = newPerm))
 
                 else -> throw IllegalStateException("Cannot update perms for unsupported item: $item")
             }
@@ -85,6 +87,7 @@ class AccessControlViewModel(
                 is SmsPassword -> accessRepo.deleteSmsPassword(item)
                 is SmsPasswordWithTempPhoneNumbers -> accessRepo.deleteSmsPassword(item.smsPassword)
                 is NotificationPassword -> accessRepo.deleteNotificationPassword(item)
+                is Plugin -> accessRepo.deletePlugin(item)
                 else -> throw IllegalStateException("Cannot delete unsupported item: $item")
             }
         }

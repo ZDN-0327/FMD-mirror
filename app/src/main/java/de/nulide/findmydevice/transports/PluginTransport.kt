@@ -11,6 +11,7 @@ import de.nulide.findmydevice.commands.ParserResult
 import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.permissions.Permission
 import de.nulide.findmydevice.services.FmdPluginService
+import de.nulide.findmydevice.ui.access.AccessControlActivity
 
 class PluginTransport(
     val context: Context,
@@ -36,6 +37,12 @@ class PluginTransport(
     override val descriptionAuth = context.getString(R.string.transport_plugin_description_auth)
 
     override val requiredPermissions = emptyList<Permission>()
+
+    override val actions = listOf(TransportAction(R.string.Settings_Access_Control) { activity ->
+        val intent = Intent(context, AccessControlActivity::class.java)
+        intent.putExtra(AccessControlActivity.EXTRA_PAGE, AccessControlActivity.PAGE_PLUGIN)
+        activity.startActivity(Intent(context, AccessControlActivity::class.java))
+    })
 
     override fun getDestinationString(): String {
         return caller ?: ""
