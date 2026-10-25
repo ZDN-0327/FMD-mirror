@@ -14,11 +14,13 @@ const val ACCESS_DB_FILENAME = "access.db"
         SmsPassword::class,
         TempPhoneNumber::class,
         NotificationPassword::class,
+        Plugin::class,
     ],
-    version = 3,
+    version = 4,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
         AutoMigration(from = 2, to = 3, spec = AccessDatabase.Migration2to3::class),
+        AutoMigration(from = 3, to = 4, spec = AccessDatabase.Migration3to4::class),
     ]
 )
 abstract class AccessDatabase : RoomDatabase() {
@@ -29,6 +31,8 @@ abstract class AccessDatabase : RoomDatabase() {
     abstract fun tempPhoneNumberDao(): TempPhoneNumberDao
 
     abstract fun notificationPasswordDao(): NotificationPasswordDao
+
+    abstract fun pluginDao(): PluginDao
 
     // ------- Migrations -------
     // https://developer.android.com/training/data-storage/room/migrating-db-versions
@@ -44,5 +48,7 @@ abstract class AccessDatabase : RoomDatabase() {
         )
     )
     class Migration2to3 : AutoMigrationSpec
+
+    class Migration3to4 : AutoMigrationSpec
 
 }

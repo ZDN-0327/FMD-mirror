@@ -52,7 +52,7 @@ import de.nulide.findmydevice.utils.Utils
 fun <T : AccessItem> AccessControlTab(
     accessType: AccessType<T>,
     accessItems: List<T>,
-    onAddClicked: () -> Unit,
+    onAddClicked: (() -> Unit)?,
     onAddSecondaryClicked: (() -> Unit)?,
     viewModel: AccessControlViewModel = viewModel(factory = AccessControlViewModel.Factory),
 ) {
@@ -73,7 +73,7 @@ fun <T : AccessItem> AccessControlTab(
 fun <T : AccessItem> AccessControlTab(
     accessType: AccessType<T>,
     accessItems: List<T>,
-    onAddClicked: () -> Unit = {},
+    onAddClicked: (() -> Unit)? = {},
     onAddSecondaryClicked: (() -> Unit)? = null,
     onDeleteClicked: (T) -> Unit = {},
     onSavePermissionClicked: (T, Long) -> Unit = { _, _ -> },
@@ -121,11 +121,13 @@ fun <T : AccessItem> AccessControlTab(
         }
 
         // Bottom buttons
-        Button(
-            onClick = onAddClicked,
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(stringResource(accessType.addText))
+        if(onAddClicked != null) {
+            Button(
+                onClick = onAddClicked,
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Text(stringResource(accessType.addText))
+            }
         }
 
         if (onAddSecondaryClicked != null && accessType.addSecondaryText != null) {

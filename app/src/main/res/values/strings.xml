@@ -464,5 +464,8 @@
 
     <!-- Varia -->
     <string name="invalid_url">Invalid URL</string>
+    <string name="access_tab_plugins">Plugins</string>
+    <string name="access_plugins_hint">The apps in this list are allowed to access FMD via its plugin system.</string>
+    <string name="allowlist_delete_title_plugin">Delete plugin?</string>
 
 </resources>

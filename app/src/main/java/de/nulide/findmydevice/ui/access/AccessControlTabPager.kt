@@ -35,6 +35,7 @@ private val TABS = listOf(
     TabItem(R.string.access_tab_phone_number, R.drawable.ic_phone),
     TabItem(R.string.access_tab_sms_password, R.drawable.ic_sms),
     TabItem(R.string.access_tab_notification_password, R.drawable.ic_notifications),
+    TabItem(R.string.access_tab_plugins, R.drawable.ic_plugin),
 )
 
 interface AccessControlFuns {
@@ -42,7 +43,6 @@ interface AccessControlFuns {
     fun onAddPhoneNumberClicked()
 
     fun onAddSmsPasswordClicked()
-
     fun onAddNotificationPasswordClicked()
 }
 
@@ -122,6 +122,17 @@ fun AccessControlTabsScreen(
                                 ACCESS_NOTIF_PASS,
                                 notificationPasswords,
                                 { accessFuns.onAddNotificationPasswordClicked() },
+                                null,
+                            )
+                        }
+
+                        3 -> {
+                            val plugins by viewModel.plugins
+                                .collectAsStateWithLifecycle(emptyList())
+                            AccessControlTab(
+                                ACCESS_PLUGINS,
+                                plugins,
+                                null,
                                 null,
                             )
                         }

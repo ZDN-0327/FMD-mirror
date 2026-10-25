@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.database.NotificationPassword
 import de.nulide.findmydevice.database.PhoneNumber
+import de.nulide.findmydevice.database.Plugin
 import de.nulide.findmydevice.database.SmsPassword
 import de.nulide.findmydevice.database.SmsPasswordWithTempPhoneNumbers
 
@@ -37,4 +38,11 @@ object ACCESS_NOTIF_PASS : AccessType<NotificationPassword>(
     emptyText = R.string.access_password_empty,
     addText = R.string.access_notification_password_add,
     deleteTitle = R.string.allowlist_delete_title_password,
+)
+
+object ACCESS_PLUGINS : AccessType<Plugin>(
+    hintText = R.string.access_plugins_hint,
+    emptyText = R.string.access_password_empty,
+    addText = R.string.access_notification_password_add,
+    deleteTitle = R.string.allowlist_delete_title_plugin,
 )

@@ -10,6 +10,7 @@ import de.nulide.findmydevice.database.ACCESS_DB_FILENAME
 import de.nulide.findmydevice.database.AccessDatabase
 import de.nulide.findmydevice.database.NotificationPassword
 import de.nulide.findmydevice.database.PhoneNumber
+import de.nulide.findmydevice.database.Plugin
 import de.nulide.findmydevice.database.SmsPassword
 import de.nulide.findmydevice.database.SmsPasswordWithTempPhoneNumbers
 import de.nulide.findmydevice.database.TEMP_USAGE_VALIDITY_MILLIS
@@ -218,4 +219,25 @@ class AccessRepository private constructor(private val context: Context) {
             db.notificationPasswordDao().delete(password)
         }
 
+    /* ------- PLUGINS ------- */
+
+    fun getPlugins(): Flow<List<Plugin>> {
+        return db.pluginDao().getAll()
+    }
+
+    suspend fun getPlugin(appId: String): Plugin? {
+        return db.pluginDao().get(appId)
+    }
+
+    suspend fun insertPlugin(plugin: Plugin) = withContext(Dispatchers.IO) {
+        db.pluginDao().insert(plugin)
+    }
+
+    suspend fun updatePlugin(plugin: Plugin) = withContext(Dispatchers.IO) {
+        db.pluginDao().update(plugin)
+    }
+
+    suspend fun deletePlugin(plugin: Plugin) = withContext(Dispatchers.IO) {
+        db.pluginDao().delete(plugin)
+    }
 }

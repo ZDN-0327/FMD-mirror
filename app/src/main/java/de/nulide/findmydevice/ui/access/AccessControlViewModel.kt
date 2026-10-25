@@ -54,6 +54,9 @@ class AccessControlViewModel(
     val notificationPasswords = accessRepo.getNotificationPasswords()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(1_000L), emptyList())
 
+    val plugins = accessRepo.getPlugins()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(1_000L), emptyList())
+
     // The AccessItem provides minimal type-safety. We don't use its interface methods.
     // But because only the entities listed here should implement AccessItem, it reduces the
     // risk of callers accidentally passing a wrong item.
