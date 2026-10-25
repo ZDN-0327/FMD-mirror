@@ -46,6 +46,9 @@
     <uses-feature
         android:name="android.hardware.telephony"
         android:required="false" />
+    
+    <permission android:name="de.nulide.findmydevice.permission.CONTROL_FMD"
+        android:protectionLevel="normal" />
 
     <application
         android:name=".FmdApplication"
@@ -210,6 +213,14 @@
             android:exported="false">
             <intent-filter>
                 <action android:name="org.unifiedpush.android.connector.PUSH_EVENT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".services.FmdPluginService"
+            android:exported="true"
+            android:permission="de.nulide.findmydevice.permission.CONTROL_FMD">
+            <intent-filter>
+                <action android:name="de.nulide.findmydevice.ACTION_BIND_PLUGIN" />
             </intent-filter>
         </service>
 

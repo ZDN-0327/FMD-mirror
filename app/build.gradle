@@ -99,6 +99,7 @@ android {
         buildConfig true
         compose true
         viewBinding true
+        aidl = true
     }
 }
 

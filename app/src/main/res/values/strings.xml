@@ -404,6 +404,10 @@
     <string name="transport_inapp_send_command_command_placeholder">Command</string>
     <string name="transport_inapp_send_command_button_send">Send</string>
 
+    <string name="transport_plugin_title">Plugins</string>
+    <string name="transport_plugin_description">Third party plugins can send commands to FMD.</string>
+    <string name="transport_plugin_description_auth">Each plugin must be granted individually. The request has to come from within the plugin you want to use.</string>
+
     <!-- Notification Channels -->
     <string name="Notification_Usage">Usage</string>
     <string name="Notification_Usage_Description">Notifications when FMD is receiving commands</string>

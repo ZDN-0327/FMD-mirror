@@ -16,7 +16,8 @@ fun availableTransports(context: Context): List<Transport<*>> = listOf(
     SmsTransport(context, "42", -1),
     NotificationReplyTransport(context, null),
     FmdServerTransport(context),
-    InAppTransport(context),
+    PluginTransport(context, null),
+    InAppTransport(context)
 )
 
 

@@ -17,6 +17,7 @@ import de.nulide.findmydevice.services.ServerLocationUploadService.SOURCE_REGULA
 import de.nulide.findmydevice.transports.FmdServerTransport
 import de.nulide.findmydevice.transports.InAppTransport
 import de.nulide.findmydevice.transports.NotificationReplyTransport
+import de.nulide.findmydevice.transports.PluginTransport
 import de.nulide.findmydevice.transports.SmsTransport
 import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
@@ -42,6 +43,7 @@ class CommandExecutionWorker(
         const val TRANS_NOTIFICATION_REPLY = "TRANS_NOTIFICATION_REPLY"
         const val TRANS_FMD_SERVER = "TRANS_FMD_SERVER"
         const val TRANS_INAPP = "TRANS_INAPP"
+        const val TRANS_PLUGIN = "TRANS_PLUGIN"
 
         private val TAG = CommandExecutionWorker::class.simpleName
     }
@@ -114,6 +116,11 @@ class CommandExecutionWorker(
             TRANS_INAPP -> {
                 val transport = InAppTransport(applicationContext)
                 CommandHandler<Unit>(transport, false)
+            }
+
+            TRANS_PLUGIN -> {
+                val transport = PluginTransport(applicationContext, destination)
+                CommandHandler<Unit>(transport, true)
             }
 
             else -> {
