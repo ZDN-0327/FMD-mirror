@@ -8,15 +8,17 @@ import androidx.annotation.StringRes
 import de.nulide.findmydevice.R
 import de.nulide.findmydevice.commands.AccessResponse
 import de.nulide.findmydevice.commands.ParserResult
-import de.nulide.findmydevice.data.SettingsRepository
+import de.nulide.findmydevice.commands.hasPermission
+import de.nulide.findmydevice.data.AccessRepository
 import de.nulide.findmydevice.permissions.Permission
 import de.nulide.findmydevice.services.FmdPluginService
 import de.nulide.findmydevice.ui.access.AccessControlActivity
+import de.nulide.findmydevice.utils.log
 
 class PluginTransport(
     val context: Context,
     private val caller: String?,
-    ) : Transport<Unit>(Unit) {
+) : Transport<Unit>(Unit) {
 
     constructor(context: Context) : this(context, "FMD Plugin")
 
@@ -24,7 +26,7 @@ class PluginTransport(
         private val TAG = PluginTransport::class.simpleName
     }
 
-    private val settings = SettingsRepository.getInstance(context)
+    private val accessRepo = AccessRepository.getInstance(context)
 
     @get:DrawableRes
     override val icon = R.drawable.ic_plugin
@@ -49,7 +51,30 @@ class PluginTransport(
     }
 
     override suspend fun isAllowed(parsed: ParserResult.Success): AccessResponse {
-        return AccessResponse.ALLOWED
+        if (caller.isNullOrEmpty()) {
+            return AccessResponse.DENIED_UNKNOWN
+        }
+        var isKnownButDenied = false
+        val storedPlugin = accessRepo.getPlugin(caller)
+        if (storedPlugin != null) {
+            val hasPermission = storedPlugin.permission.hasPermission(parsed.command.permission)
+            if (hasPermission) {
+                context.log().i(TAG, "$caller used FMD")
+                return AccessResponse.ALLOWED
+            } else {
+                context.log().i(
+                    TAG,
+                    "$caller denied access to ${parsed.command.keyword}."
+                )
+                isKnownButDenied = true
+            }
+        } else {
+            context.log().i(
+                TAG,
+                "$caller has no access"
+            )
+        }
+        return if (isKnownButDenied) AccessResponse.DENIED_EXISTS else AccessResponse.DENIED_UNKNOWN
     }
 
     @SuppressLint("MissingSuperCall")

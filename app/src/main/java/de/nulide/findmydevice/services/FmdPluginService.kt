@@ -9,9 +9,15 @@ import androidx.work.WorkManager
 import androidx.work.workDataOf
 import de.nulide.findmydevice.IFmdPlugin
 import de.nulide.findmydevice.IFmdPluginCallback
+import de.nulide.findmydevice.data.AccessRepository
 import de.nulide.findmydevice.data.Settings
 import de.nulide.findmydevice.data.SettingsRepository
+import de.nulide.findmydevice.database.Plugin
 import de.nulide.findmydevice.workers.CommandExecutionWorker
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 class FmdPluginService: Service() {
 
@@ -26,6 +32,9 @@ class FmdPluginService: Service() {
     private var pluginCallbacks = mutableMapOf<String, IFmdPluginCallback>()
 
     private val settings: SettingsRepository = SettingsRepository.getInstance(this)
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
     private val binder = object : IFmdPlugin.Stub() {
         override fun executeCommand(cmd: String?) {
             enforceCallingPermission(PLUGIN_PERMISSION, "Missing Permission")
@@ -46,7 +55,14 @@ class FmdPluginService: Service() {
         }
 
         override fun requestPluginAccess() {
-            pluginCallbacks[getCaller()]?.accessGranted()
+            val caller = getCaller()
+            if (!caller.isNullOrEmpty()) {
+                scope.launch {
+                    val accessRepo = AccessRepository.getInstance(this@FmdPluginService)
+                    accessRepo.insertPlugin(Plugin(0,caller,caller))
+                    pluginCallbacks[caller]?.accessGranted()
+                }
+            }
         }
 
         override fun registerCallBack(callback: IFmdPluginCallback?) {
@@ -81,7 +97,7 @@ class FmdPluginService: Service() {
             }
         }
 
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
 }
