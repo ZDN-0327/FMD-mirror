@@ -277,7 +277,7 @@ class AccessControlActivity : FmdActivity(), AccessControlFuns {
                         accessRepo.insertPlugin(Plugin(0, appName, appId))
                         val intent = Intent(context, FmdPluginService::class.java).apply {
                             action = FmdPluginService.ACTION_GRANTED
-                            putExtra(FmdPluginService.EXTRA_CALLER, appId)
+                            putExtra(FmdPluginService.EXTRA_APP_ID, appId)
                         }
                         context.startService(intent)
                         viewModel.setLoading(false)

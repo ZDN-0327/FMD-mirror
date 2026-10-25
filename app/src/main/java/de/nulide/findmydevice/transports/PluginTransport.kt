@@ -81,7 +81,7 @@ class PluginTransport(
     override fun send(context: Context, msg: String) {
         val intent = Intent(context, FmdPluginService::class.java).apply {
             action = FmdPluginService.ACTION_REPLY
-            putExtra(FmdPluginService.EXTRA_CALLER, caller)
+            putExtra(FmdPluginService.EXTRA_APP_ID, caller)
             putExtra(FmdPluginService.EXTRA_MSG, msg)
         }
         context.startService(intent)
