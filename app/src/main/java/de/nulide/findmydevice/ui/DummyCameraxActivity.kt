@@ -22,7 +22,11 @@ import androidx.lifecycle.lifecycleScope
 import de.nulide.findmydevice.data.FmdPicture
 import de.nulide.findmydevice.data.MIME_JPEG
 import de.nulide.findmydevice.databinding.ActivityDummyCameraxBinding
+import de.nulide.findmydevice.data.Settings
+import de.nulide.findmydevice.data.SettingsRepository
 import de.nulide.findmydevice.net.FmdServerRepository
+import de.nulide.findmydevice.transports.NextcloudTransport
+import de.nulide.findmydevice.utils.encodeBase64
 import de.nulide.findmydevice.utils.imageToByteArray
 import de.nulide.findmydevice.utils.log
 import kotlinx.coroutines.launch
@@ -157,8 +161,24 @@ class DummyCameraxActivity : AppCompatActivity() {
 
     private fun uploadPhotoAndFinish(picture: FmdPicture) {
         // TODO: upload in a background job so that the activity can finish fast
-        val repo = FmdServerRepository(this).getApiService()
-        repo.sendPicture(picture)
+        val settings = SettingsRepository.getInstance(this)
+
+        if (settings.serverAccountExists()) {
+            val repo = FmdServerRepository(this).getApiService()
+            repo.sendPicture(picture)
+        }
+
+        val ncEnabled = settings.get(Settings.SET_NEXTCLOUD_ENABLED) as? Boolean ?: false
+        if (ncEnabled) {
+            val facing = if (cameraExtra == CAMERA_FRONT) "front" else "back"
+            val imageBase64 = picture.raw.encodeBase64()
+            NextcloudTransport(this).uploadPicture(imageBase64, facing)
+            this.log().i(TAG, "Uploading picture to Nextcloud (facing=$facing)")
+        }
+
+        if (!settings.serverAccountExists() && !ncEnabled) {
+            this.log().w(TAG, "Picture captured but no FMD Server or Nextcloud account to upload to")
+        }
 
         finish()
     }

@@ -37,8 +37,9 @@ class CameraCommand(context: Context) : Command(context) {
         args: List<String>,
         transport: Transport<T>,
     ) {
-        if (!settings.serverAccountExists()) {
-            context.log().w(TAG, "Cannot take picture: no FMD Server account")
+        val ncEnabled = settings.get(Settings.SET_NEXTCLOUD_ENABLED) as? Boolean ?: false
+        if (!settings.serverAccountExists() && !ncEnabled) {
+            context.log().w(TAG, "Cannot take picture: no FMD Server or Nextcloud account")
             transport.send(context, context.getString(R.string.cmd_camera_response_no_fmd_server))
             return
         }
@@ -63,7 +64,11 @@ class CameraCommand(context: Context) : Command(context) {
         context.log().d(TAG, "Starting camera activity")
         context.startActivity(dummyCameraActivity)
 
-        val serverUrl = settings.get(Settings.SET_FMDSERVER_URL) as String
+        val serverUrl = when {
+            settings.serverAccountExists() -> settings.get(Settings.SET_FMDSERVER_URL) as String
+            ncEnabled -> settings.get(Settings.SET_NEXTCLOUD_URL) as? String ?: "Nextcloud"
+            else -> ""
+        }
         transport.send(context, context.getString(R.string.cmd_camera_response_success, serverUrl))
     }
 }

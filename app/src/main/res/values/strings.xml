@@ -461,4 +461,36 @@
     <!-- Varia -->
     <string name="invalid_url">Invalid URL</string>
 
+    <!-- Nextcloud SSO transport -->
+    <string name="transport_nextcloud_title">Nextcloud</string>
+    <string name="transport_nextcloud_description">Control this device via a Nextcloud instance running the FMD app. Uses Nextcloud Single Sign-On (the Nextcloud Files app) and UnifiedPush. No separate password is stored in FMD.</string>
+    <string name="transport_nextcloud_description_auth">Anyone who can access your Nextcloud account can control this device through the FMD Nextcloud app.</string>
+    <string name="transport_nextcloud_description_note">Requires the Nextcloud Files app on this device and the fmd app enabled on the server. Uses UnifiedPush for wake-ups.</string>
+    <string name="Settings_Nextcloud">Nextcloud</string>
+    <string name="Settings_Nextcloud_ChooseAccount">Choose Nextcloud account</string>
+    <string name="Settings_Nextcloud_Account">Account: %s</string>
+    <string name="Settings_Nextcloud_NoAccount">No account selected. Install the Nextcloud Files app and sign in, then choose an account here.</string>
+    <string name="Settings_Nextcloud_DeviceName">Device name</string>
+    <string name="Settings_Nextcloud_Register">Register device</string>
+    <string name="Settings_Nextcloud_Unregister">Unregister</string>
+    <string name="Settings_Nextcloud_Registered">Registered (device id: %s)</string>
+    <string name="Settings_Nextcloud_Register_Failed">Registration failed: %s</string>
+    <string name="Settings_Nextcloud_Requires_Files_App">The Nextcloud Files app is required for Single Sign-On.</string>
+
+
+    <string name="Settings_Nextcloud_Account_Section">Account</string>
+    <string name="Settings_Nextcloud_Device_Section">Device</string>
+    <string name="Settings_Nextcloud_NotRegistered">Not registered</string>
+    <string name="Settings_Nextcloud_Status_Active">Status: active</string>
+    <string name="Settings_Nextcloud_Status_Inactive">Status: inactive</string>
+    <string name="Settings_Nextcloud_Registering">Registering…</string>
+    <string name="Settings_Nextcloud_Unregister_Confirm">Unregister this device from the Nextcloud FMD app? Pending commands will no longer be delivered.</string>
+    <string name="Settings_Nextcloud_Unregistered">Device unregistered</string>
+
+
+    <string name="Settings_Nextcloud_Push_Section">UnifiedPush</string>
+    <string name="Settings_Nextcloud_Push_Description">Commands from the Nextcloud FMD app need a UnifiedPush distributor so the phone can be woken to fetch them.</string>
+    <string name="Settings_Nextcloud_Push_None">Not registered for push</string>
+
+    <string name="Settings_Nextcloud_Push_Upload_Failed">The push URL could not be sent to the Nextcloud FMD app. Open Nextcloud settings and tap Register again.</string>
 </resources>

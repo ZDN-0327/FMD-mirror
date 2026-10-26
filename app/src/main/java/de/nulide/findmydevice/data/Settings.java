@@ -47,6 +47,15 @@ public class Settings extends HashMap<Integer, Object> {
     public static final int SET_FMDSERVER_PERMISSIONS = 118;
     public static final int SET_FMD_CRYPT_PROTO = 119;
 
+    // Nextcloud SSO transport (no password stored)
+    public static final int SET_NEXTCLOUD_SSO_ACCOUNT = 801;
+    public static final int SET_NEXTCLOUD_URL = 802;
+    public static final int SET_NEXTCLOUD_USER = 803;
+    public static final int SET_NEXTCLOUD_DEVICE_ID = 804;
+    public static final int SET_NEXTCLOUD_ENABLED = 805;
+    public static final int SET_NEXTCLOUD_DEVICE_NAME = 806;
+    public static final int SET_NEXTCLOUD_PUSH_URL = 807;
+
     public static final int SET_FMD_SERVER_CONNECTIVITY_CHECK_INTERVAL_HOURS = 201;
     public static final int SET_FMD_SERVER_CONNECTIVITY_CHECK_NOTIFY_AFTER_HOURS = 202;
     public static final int SET_FMD_SERVER_LAST_CONNECTIVITY_UNIX_TIME = 203;
@@ -94,6 +103,8 @@ public class Settings extends HashMap<Integer, Object> {
                     //case SET_FMDSERVER_PASSWORD_SET:
                     //case SET_FMD_CRYPT_NEW_SALT:
                 case SET_UPDATEBOARDING_MODERN_CRYPTO_COMPLETED:
+                case SET_NEXTCLOUD_ENABLED:
+                    return false;
                 case SET_FMD_EDGE_INFO_SHOWN:
                     return false;
                 case SET_FMD_LOW_BAT_SEND:
@@ -118,6 +129,12 @@ public class Settings extends HashMap<Integer, Object> {
                 case SET_FMD_CRYPT_PRIVKEY:
                 case SET_FMD_CRYPT_PUBKEY:
                 case SET_FMDSERVER_URL:
+                case SET_NEXTCLOUD_SSO_ACCOUNT:
+                case SET_NEXTCLOUD_URL:
+                case SET_NEXTCLOUD_USER:
+                case SET_NEXTCLOUD_DEVICE_ID:
+                case SET_NEXTCLOUD_DEVICE_NAME:
+                case SET_NEXTCLOUD_PUSH_URL:
                 case SET_FMDSERVER_PUSH_URL:
                     return "";
                 case SET_FMDSERVER_LAST_CMD_MILLIS:
