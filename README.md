@@ -9,6 +9,9 @@ It aims to be a secure open source alternative to Google's Find My Device.
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
      alt="Get it on F-Droid"
      height="80">](https://f-droid.org/packages/de.nulide.findmydevice/)
+[<img src="https://raw.githubusercontent.com/ImranR98/Obtainium/refs/heads/main/assets/graphics/badge_obtainium.png"
+     alt="Get it on Obtainium"
+     height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://app/%7B%22id%22%3A%22de.nulide.findmydevice%22%2C%22url%22%3A%22https%3A%2F%2Fpackages.fmd-foss.org%2Ffdroid%2Frepo%22%2C%22author%22%3A%22FMD%20Team%22%2C%22name%22%3A%22FMD%22%2C%22additionalSettings%22%3A%22%7B%5C%22appIdOrName%5C%22%3A%5C%22de.nulide.findmydevice%5C%22%2C%5C%22pickHighestVersionCode%5C%22%3Afalse%2C%5C%22trySelectingSuggestedVersionCode%5C%22%3Atrue%2C%5C%22appName%5C%22%3A%5C%22FMD%5C%22%2C%5C%22allowInsecure%5C%22%3Afalse%2C%5C%22allowedSigningCertHashes%5C%22%3A%5C%2294f404bc4b9dcd2c7df4ce42000e8ecdd4cb6490e04ef7d76ca9967e6182ee71%5C%22%7D%22%2C%22overrideSource%22%3A%22FDroidRepo%22%7D)
 
 ## Why?
 
@@ -52,9 +55,10 @@ You can join the "Community" room for general discussions and the "Announcement"
 ## Donate
 
 <script src="https://liberapay.com/FMD/widgets/button.js"></script>
+
 <noscript><a href="https://liberapay.com/FMD/donate"><img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg"></a></noscript>
 
-<a href='https://ko-fi.com/H2H35JLOY' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi4.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a> 
+<a href='https://ko-fi.com/H2H35JLOY' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://cdn.ko-fi.com/cdn/kofi4.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 
 ## Funding
 
@@ -84,4 +88,3 @@ Nulide
 ## License
 
 FMD Android is published under [GPLv3-or-later](LICENSE).
-
