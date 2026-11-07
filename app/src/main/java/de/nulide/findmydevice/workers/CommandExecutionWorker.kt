@@ -17,6 +17,7 @@ import de.nulide.findmydevice.services.ServerLocationUploadService.SOURCE_REGULA
 import de.nulide.findmydevice.transports.FmdServerTransport
 import de.nulide.findmydevice.transports.InAppTransport
 import de.nulide.findmydevice.transports.NotificationReplyTransport
+import de.nulide.findmydevice.transports.PebbleKit2Transport
 import de.nulide.findmydevice.transports.SmsTransport
 import de.nulide.findmydevice.utils.Notifications
 import de.nulide.findmydevice.utils.log
@@ -33,6 +34,11 @@ class CommandExecutionWorker(
         const val KEY_TRANSPORT_TYPE = "KEY_TRANSPORT_TYPE"
         const val KEY_DESTINATION = "KEY_DESTINATION"
 
+        // PebbleKit 2 watchapp UUIDs are UUID-shaped; used to display a
+        // friendly name instead of the raw UUID.
+        private val UUID_PATTERN =
+            Regex("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$")
+
         // Command-specific
         const val KEY_SMS_SUBSCRIPTION_ID = "KEY_SMS_SUBSCRIPTION_ID"
         const val KEY_NOTIF_KEY = "KEY_NOTIF_KEY"
@@ -42,6 +48,7 @@ class CommandExecutionWorker(
         const val TRANS_NOTIFICATION_REPLY = "TRANS_NOTIFICATION_REPLY"
         const val TRANS_FMD_SERVER = "TRANS_FMD_SERVER"
         const val TRANS_INAPP = "TRANS_INAPP"
+        const val TRANS_PK2 = "TRANS_PK2"
 
         private val TAG = CommandExecutionWorker::class.simpleName
     }
@@ -116,6 +123,11 @@ class CommandExecutionWorker(
                 CommandHandler<Unit>(transport, false)
             }
 
+            TRANS_PK2 -> {
+                val transport = PebbleKit2Transport(applicationContext, destination)
+                CommandHandler<String>(transport, true)
+            }
+
             else -> {
                 applicationContext.log().e(TAG, "Invalid transport: $transportType")
                 return null
@@ -128,8 +140,14 @@ class CommandExecutionWorker(
     private fun createForegroundInfo(command: String, destination: String): ForegroundInfo {
         val intent = WorkManager.getInstance(applicationContext).createCancelPendingIntent(id)
 
+        val displayDestination = if (UUID_PATTERN.matches(destination)) {
+            // PK2 commands use the watchapp UUID as their destination
+            applicationContext.getString(R.string.pk2_destination_name)
+        } else {
+            destination
+        }
         val title = applicationContext.getString(R.string.executing_title)
-        val text = applicationContext.getString(R.string.executing_text, command, destination)
+        val text = applicationContext.getString(R.string.executing_text, command, displayDestination)
         val cancel = applicationContext.getString(android.R.string.cancel)
 
         val notification = NotificationCompat

@@ -47,6 +47,17 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
+    <!-- Package visibility (API 30+): see PK2-capable apps for companion
+         identity checks and the sender-service lookup -->
+    <queries>
+        <intent>
+            <action android:name="io.rebble.pebblekit2.SEND_DATA_TO_WATCH" />
+        </intent>
+        <intent>
+            <action android:name="io.rebble.pebblekit2.RECEIVE_DATA_FROM_WATCH" />
+        </intent>
+    </queries>
+
     <application
         android:name=".FmdApplication"
         android:allowBackup="true"
@@ -155,6 +166,14 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+        <service
+            android:name=".services.PebbleKit2Service"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="io.rebble.pebblekit2.RECEIVE_DATA_FROM_WATCH" />
+            </intent-filter>
+        </service>
+
         <receiver
             android:name=".receiver.AppUpdatedReceiver"
             android:exported="true">

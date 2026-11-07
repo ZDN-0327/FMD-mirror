@@ -16,6 +16,7 @@ fun availableTransports(context: Context): List<Transport<*>> = listOf(
     SmsTransport(context, "42", -1),
     NotificationReplyTransport(context, null),
     FmdServerTransport(context),
+    PebbleKit2Transport(context, ""),
     InAppTransport(context),
 )
 
